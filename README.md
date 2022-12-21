@@ -1,4 +1,4 @@
-# nestjs-app-template
+# products-service
 
 This is a template for a Nest.js TypeScript project.
 
