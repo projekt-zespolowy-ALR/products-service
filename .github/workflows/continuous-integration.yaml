@@ -86,6 +86,23 @@ jobs:
         with:
           name: coverage_report
           path: coverage_report
+  dockerlinter-check:
+    name: Dockerfile linter check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
+      - name: Install dependencies
+        run: |
+          npm ci
+      - name: Run Dockerfile linter
+        run: |
+          npm run dockerlinter:check
   npm-audit-check:
     name: npm audit check
     runs-on: ubuntu-latest
