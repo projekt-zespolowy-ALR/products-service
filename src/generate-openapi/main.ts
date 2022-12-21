@@ -15,9 +15,10 @@ import {SwaggerModule, DocumentBuilder} from "@nestjs/swagger";
 import * as path from "path";
 import * as fs from "fs/promises";
 import {Test} from "@nestjs/testing";
+import ProductsModule from "../features/products/ProductsModule.js";
 
 const appModule = await Test.createTestingModule({
-	imports: [],
+	imports: [ProductsModule],
 }).compile();
 
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());

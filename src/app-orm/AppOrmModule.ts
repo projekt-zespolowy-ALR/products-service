@@ -1,5 +1,6 @@
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AppConfig} from "../app-config/index.js";
+import {ProductEntity} from "../features/products/index.js";
 
 const AppOrmModule = TypeOrmModule.forRootAsync({
 	inject: [AppConfig],
@@ -10,7 +11,7 @@ const AppOrmModule = TypeOrmModule.forRootAsync({
 		username: config.POSTGRES_USERNAME,
 		password: config.POSTGRES_PASSWORD,
 		database: config.POSTGRES_DATABASE,
-		entities: [],
+		entities: [ProductEntity],
 		synchronize: false,
 	}),
 });
