@@ -16,11 +16,14 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import {Test} from "@nestjs/testing";
 import ProductsModule from "../features/products/ProductsModule.js";
+import ProductsService from "../features/products/ProductsService.js";
 
 const appModule = await Test.createTestingModule({
 	imports: [ProductsModule],
-}).compile();
-
+})
+	.overrideProvider(ProductsService)
+	.useValue(null)
+	.compile();
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
 app.enableVersioning({
 	type: VersioningType.URI,
