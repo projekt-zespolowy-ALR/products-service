@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+env:
+  SETUP_NODE_NODE_VERSION: 19
+
 jobs:
   eslint-check:
     name: ESLint check
@@ -14,6 +17,11 @@ jobs:
       - name: Switch to release tag
         run: |
           git checkout ${{github.event.release.tag_name}}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
       - name: Install dependencies
         run: |
           npm ci
@@ -46,6 +54,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
       - name: Switch to release tag
         run: |
           git checkout ${{github.event.release.tag_name}}
@@ -69,6 +82,11 @@ jobs:
       - name: Switch to release tag
         run: |
           git checkout ${{github.event.release.tag_name}}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
       - name: Run npm audit
         run: |
           npm run npm-audit:check
@@ -81,6 +99,11 @@ jobs:
       - name: Switch to release tag
         run: |
           git checkout ${{github.event.release.tag_name}}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
       - name: Install dependencies
         run: |
           npm ci
@@ -97,6 +120,11 @@ jobs:
       - name: Switch to release tag
         run: |
           git checkout ${{github.event.release.tag_name}}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
+          cache: "npm"
       - name: Install dependencies
         run: |
           npm ci
