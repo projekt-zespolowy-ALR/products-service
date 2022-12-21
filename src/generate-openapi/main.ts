@@ -16,12 +16,14 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import {Test} from "@nestjs/testing";
 import ProductsModule from "../features/products/ProductsModule.js";
-import ProductsService from "../features/products/ProductsService.js";
+
+import {getRepositoryToken} from "@nestjs/typeorm";
+import ProductEntity from "../features/products/ProductEntity.js";
 
 const appModule = await Test.createTestingModule({
 	imports: [ProductsModule],
 })
-	.overrideProvider(ProductsService)
+	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)
 	.compile();
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
