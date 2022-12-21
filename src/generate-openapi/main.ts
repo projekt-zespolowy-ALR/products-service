@@ -15,11 +15,17 @@ import {SwaggerModule, DocumentBuilder} from "@nestjs/swagger";
 import * as path from "path";
 import * as fs from "fs/promises";
 import {Test} from "@nestjs/testing";
+import ProductsModule from "../features/products/ProductsModule.js";
+
+import {getRepositoryToken} from "@nestjs/typeorm";
+import ProductEntity from "../features/products/ProductEntity.js";
 
 const appModule = await Test.createTestingModule({
-	imports: [],
-}).compile();
-
+	imports: [ProductsModule],
+})
+	.overrideProvider(getRepositoryToken(ProductEntity))
+	.useValue(null)
+	.compile();
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
 app.enableVersioning({
 	type: VersioningType.URI,
