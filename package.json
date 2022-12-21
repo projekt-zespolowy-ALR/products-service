@@ -1,7 +1,7 @@
 {
-	"name": "nestjs-app-template",
+	"name": "wlosiara-pl-products-service",
 	"version": "0.0.0",
-	"description": "Nest.js app template",
+	"description": "wlosiara.pl - Products service",
 	"main": "./src/main.ts",
 	"scripts": {
 		"start": "NODE_ENV=production node ./dist/src/main.js",
@@ -23,14 +23,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Rafal-Majewski/nestjs-app-template.git"
+		"url": "git+https://github.com/projekt-zespolowy-ALR/products-service.git"
 	},
-	"author": "Rafał Majewski",
-	"license": "CC0-1.0",
+	"author": "wlosiara.pl",
+	"license": "UNLICENSED",
+	"private": true,
 	"bugs": {
-		"url": "https://github.com/Rafal-Majewski/nestjs-app-template/issues"
+		"url": "https://github.com/projekt-zespolowy-ALR/products-service/issues"
 	},
-	"homepage": "https://github.com/Rafal-Majewski/nestjs-app-template#readme",
+	"homepage": "https://github.com/projekt-zespolowy-ALR/products-service#readme",
 	"devDependencies": {
 		"@nestjs/swagger": "^6.1.4",
 		"@nestjs/testing": "^9.2.0",

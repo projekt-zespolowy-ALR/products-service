@@ -4,8 +4,8 @@ const config: OpenApiConfig = {
 	outputFilePath: undefined,
 	openApiVersion: "3.0.0",
 	info: {
-		title: "Nest.js app template",
-		version: "2",
+		title: "Products service",
+		version: "1",
 	},
 };
 export default config;
