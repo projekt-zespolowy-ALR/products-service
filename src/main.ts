@@ -10,7 +10,7 @@ const bootstrap = async (): Promise<void> => {
 		type: VersioningType.URI,
 	});
 	const appConfig = app.get(AppConfig);
-	await app.listen(appConfig.PORT);
+	await app.listen(3000, "0.0.0.0");
 	console.log(`Next.js server listening at ${await app.getUrl()}`);
 };
 bootstrap();
