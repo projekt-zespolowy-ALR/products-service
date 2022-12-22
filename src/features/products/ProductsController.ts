@@ -49,7 +49,7 @@ class ProductsController {
 	@ApiNotFoundResponse({
 		description: "Product with given id not found",
 	})
-	@Version(["1", "2"])
+	@Version(["1"])
 	@Get("/:id")
 	public async getProductById(
 		@Param(
