@@ -9,7 +9,7 @@ const bootstrap = async (): Promise<void> => {
 	app.enableVersioning({
 		type: VersioningType.URI,
 	});
-	const appConfig = app.get(AppConfig);
+	// const appConfig = app.get(AppConfig);
 	await app.listen(3000, "0.0.0.0");
 	console.log(`Next.js server listening at ${await app.getUrl()}`);
 };
