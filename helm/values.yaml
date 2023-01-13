@@ -1,0 +1,8 @@
+image:
+  tag: null
+
+database:
+  auth:
+    username: postgres
+    password: postgres
+    postgresPassword: postgres
