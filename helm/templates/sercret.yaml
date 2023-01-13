@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "{{ .Release.Name }}-api-server"
+  labels:
+    app: api-server
+    microservice: "{{ .Release.Name }}"
+type: Opaque
+stringData:
+  POSTGRES_HOST: "{{ .Release.Name }}-database"
+  POSTGRES_PORT: "5432"
+  POSTGRES_USERNAME: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_DATABASE: "postgres"
