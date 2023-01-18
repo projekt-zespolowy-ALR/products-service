@@ -1,8 +1,7 @@
-name: Continuous integration
+name: Continuous integration on push
 
 on:
   push:
-  pull_request:
 
 env:
   SETUP_NODE_NODE_VERSION: 19
@@ -64,8 +63,8 @@ jobs:
       - name: Run eslint
         run: |
           npm run eslint:check
-  jest-check:
-    name: Jest check
+  jest-check-unit:
+    name: Jest check unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -80,29 +79,12 @@ jobs:
           npm ci
       - name: Run Jest
         run: |
-          npm run jest:check
+          npm run jest:check:unit
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage_report
           path: coverage_report
-  dockerlinter-check:
-    name: Dockerfile linter check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
-          cache: "npm"
-      - name: Install dependencies
-        run: |
-          npm ci
-      - name: Run Dockerfile linter
-        run: |
-          npm run dockerlinter:check
   npm-audit-check:
     name: npm audit check
     runs-on: ubuntu-latest
@@ -136,7 +118,7 @@ jobs:
           npm run typescript:check
   compile:
     name: Compile
-    needs: [eslint-check, jest-check, typescript-check]
+    needs: [eslint-check, jest-check-unit, typescript-check]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
