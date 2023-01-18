@@ -8,7 +8,7 @@
 		"test": "jest --passWithNoTests --coverage",
 		"compile": "tsc",
 		"dev": "ts-node-esm ./src/main.ts",
-		"generate-openapi": "ts-node-esm ./src/generate_openapi/main.ts",
+		"generate-openapi": "ts-node-esm ./scripts/generate_openapi/main.ts",
 		"jest:check": "jest --passWithNoTests --coverage",
 		"jest:check:unit": "jest --testRegex='.+\\.unit\\.test\\.(?:[mc]?js|ts)$' --passWithNoTests --coverage",
 		"jest:check:int": "jest --testRegex='.+.\\int.test\\.(?:[mc]?js|ts)$' --passWithNoTests --coverage",

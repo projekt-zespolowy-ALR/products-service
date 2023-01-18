@@ -1,12 +1,12 @@
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 import * as Testcontainers from "testcontainers";
-import {testsConfig} from "../../tests_config/index.js";
+import {testsConfig} from "../../config/index.js";
 import * as fs from "fs/promises";
 import * as TestsUtils from "../../utils/index.js";
 import {TypedConfigModule} from "nest-typed-config";
-import {AppConfig} from "../../../src/app_config/index.js";
+import {AppConfig} from "../../../src/config/index.js";
 import {Test} from "@nestjs/testing";
-import {AppOrmModule} from "../../../src/app_orm/index.js";
+import {AppOrmModule} from "../../../src/orm/index.js";
 import ProductsModule from "../../../src/features/products/ProductsModule.js";
 import {VersioningType} from "@nestjs/common";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";

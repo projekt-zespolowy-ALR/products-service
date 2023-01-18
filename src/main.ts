@@ -1,7 +1,7 @@
 import {NestFactory} from "@nestjs/core";
-import {AppModule} from "./app/index.js";
+import AppModule from "./AppModule.js";
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
-import {AppConfig} from "./app_config/index.js";
+import {AppConfig} from "./config/index.js";
 import {VersioningType} from "@nestjs/common";
 
 const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
