@@ -9,6 +9,7 @@ import {Test} from "@nestjs/testing";
 import {AppOrmModule} from "../../../src/app_orm/index.js";
 import ProductsModule from "../../../src/features/products/ProductsModule.js";
 import {VersioningType} from "@nestjs/common";
+import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
 
 let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer | null = null;
 let app: NestFastifyApplication | null = null;
