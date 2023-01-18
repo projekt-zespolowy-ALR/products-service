@@ -1,7 +1,7 @@
 import {NestFactory} from "@nestjs/core";
 import {AppModule} from "./app/index.js";
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
-// import {AppConfig} from "./app-config/index.js";
+// import {AppConfig} from "./app_config/index.js";
 import {VersioningType} from "@nestjs/common";
 
 const bootstrap = async (): Promise<void> => {

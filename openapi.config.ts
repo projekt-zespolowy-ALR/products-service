@@ -1,4 +1,4 @@
-import type {OpenApiConfig} from "./src/generate-openapi/index.js";
+import type {OpenApiConfig} from "./src/generate_openapi/index.js";
 
 const config: OpenApiConfig = {
 	outputFilePath: undefined,
