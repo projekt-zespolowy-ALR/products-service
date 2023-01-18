@@ -1,8 +1,6 @@
 import {IsInt, IsString, Min, Max} from "class-validator";
-import {Type} from "class-transformer";
 
 class AppConfig {
-	@Type(() => Number)
 	@IsInt()
 	@Min(1)
 	@Max(65535)
@@ -11,7 +9,6 @@ class AppConfig {
 	@IsString()
 	public readonly POSTGRES_HOST: string = "localhost";
 
-	@Type(() => Number)
 	@IsInt()
 	@Min(1)
 	@Max(65535)
