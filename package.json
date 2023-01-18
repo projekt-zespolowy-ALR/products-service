@@ -64,5 +64,10 @@
 		"typeorm": "^0.3.11",
 		"yup": "^0.32.11"
 	},
-	"type": "module"
+	"type": "module",
+	"overrides": {
+		"nest-typed-config": {
+			"class-validator": "^0.14.0"
+		}
+	}
 }
