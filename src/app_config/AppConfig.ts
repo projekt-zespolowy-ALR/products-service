@@ -10,6 +10,10 @@ class AppConfig {
 
 	@Type(() => String)
 	@IsString()
+	public readonly HOST: string = "0.0.0.0";
+
+	@Type(() => String)
+	@IsString()
 	public readonly POSTGRES_HOST: string = "localhost";
 
 	@Type(() => Number)
