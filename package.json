@@ -8,7 +8,7 @@
 		"compile": "tsc",
 		"preview": "node ./dist/src/main.js",
 		"dev": "ts-node-esm ./src/main.ts",
-		"generate-openapi": "ts-node-esm ./src/generate-openapi/main.ts",
+		"generate-openapi": "ts-node-esm ./src/generate_openapi/main.ts",
 		"jest:check": "jest --passWithNoTests --coverage",
 		"prettier:fix": "prettier --write .",
 		"prettier:check": "prettier --check .",
