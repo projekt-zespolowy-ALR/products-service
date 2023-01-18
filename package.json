@@ -4,12 +4,14 @@
 	"description": "wlosiara.pl - Products service",
 	"main": "./src/main.ts",
 	"scripts": {
-		"start": "NODE_ENV=production node ./dist/src/main.js",
+		"start": "node ./dist/src/main.js",
+		"test": "jest --passWithNoTests --coverage",
 		"compile": "tsc",
-		"preview": "node ./dist/src/main.js",
 		"dev": "ts-node-esm ./src/main.ts",
 		"generate-openapi": "ts-node-esm ./src/generate_openapi/main.ts",
 		"jest:check": "jest --passWithNoTests --coverage",
+		"jest:check:unit": "jest --testRegex='.+\\.unit\\.test\\.(?:[mc]?js|ts)$' --passWithNoTests --coverage",
+		"jest:check:int": "jest --testRegex='.+.\\int.test\\.(?:[mc]?js|ts)$' --passWithNoTests --coverage",
 		"prettier:fix": "prettier --write .",
 		"prettier:check": "prettier --check .",
 		"eslint:fix": "eslint --fix .",
@@ -20,7 +22,7 @@
 		"formatting:fix": "prettier --write .",
 		"formatting:check": "prettier --check .",
 		"compile:check": "tsc --noEmit",
-		"dockerlinter:check": "dockerlinter -f ./Dockerfile -e warning"
+		"hadolint:check": "hadolint --failure-threshold=ignore Dockerfile"
 	},
 	"repository": {
 		"type": "git",
@@ -39,7 +41,6 @@
 		"@types/node": "^18.11.18",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
 		"@typescript-eslint/parser": "^5.47.0",
-		"dockerlinter": "^1.2.2",
 		"dotenv": "^16.0.3",
 		"eslint": "^8.30.0",
 		"eslint-config-prettier": "^8.5.0",

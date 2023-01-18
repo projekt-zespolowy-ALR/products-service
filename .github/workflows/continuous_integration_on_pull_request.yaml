@@ -1,13 +1,22 @@
-name: Continuous integration
+name: Continuous integration on pull request
 
 on:
-  push:
   pull_request:
 
 env:
   SETUP_NODE_NODE_VERSION: 19
 
 jobs:
+  hadolint-check:
+    name: Hadolint check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: ignore
   prettier-check:
     name: Prettier check
     runs-on: ubuntu-latest
@@ -64,8 +73,8 @@ jobs:
       - name: Run eslint
         run: |
           npm run eslint:check
-  jest-check:
-    name: Jest check
+  jest-check-unit:
+    name: Jest check unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -80,14 +89,14 @@ jobs:
           npm ci
       - name: Run Jest
         run: |
-          npm run jest:check
+          npm run jest:check:unit
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage_report
           path: coverage_report
-  dockerlinter-check:
-    name: Dockerfile linter check
+  jest-check-int:
+    name: Jest check integration tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -100,9 +109,14 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-      - name: Run Dockerfile linter
+      - name: Run Jest
         run: |
-          npm run dockerlinter:check
+          npm run jest:check:int
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_report
+          path: coverage_report
   npm-audit-check:
     name: npm audit check
     runs-on: ubuntu-latest
@@ -136,7 +150,7 @@ jobs:
           npm run typescript:check
   compile:
     name: Compile
-    needs: [eslint-check, jest-check, typescript-check]
+    needs: [eslint-check, jest-check-unit, jest-check-int, typescript-check]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
