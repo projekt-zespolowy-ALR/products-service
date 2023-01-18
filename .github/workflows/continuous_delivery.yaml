@@ -8,6 +8,16 @@ env:
   SETUP_NODE_NODE_VERSION: 19
 
 jobs:
+  hadolint-check:
+    name: Hadolint check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: ignore
   eslint-check:
     name: ESLint check
     runs-on: ubuntu-latest
@@ -28,26 +38,6 @@ jobs:
       - name: Run eslint
         run: |
           npm run eslint:check
-  dockerlinter-check:
-    name: Dockerfile linter check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Switch to release tag
-        run: |
-          git checkout ${{github.event.release.tag_name}}
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
-          cache: "npm"
-      - name: Install dependencies
-        run: |
-          npm ci
-      - name: Run Dockerfile linter
-        run: |
-          npm run dockerlinter:check
   jest-check:
     name: Jest check
     runs-on: ubuntu-latest
@@ -138,7 +128,7 @@ jobs:
           path: dist
   publish:
     name: Publish
-    needs: [compile, dockerlinter-check]
+    needs: [compile, hadolint-check]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

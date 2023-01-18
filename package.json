@@ -22,7 +22,7 @@
 		"formatting:fix": "prettier --write .",
 		"formatting:check": "prettier --check .",
 		"compile:check": "tsc --noEmit",
-		"dockerlinter:check": "dockerlinter -f ./Dockerfile -e warning"
+		"hadolint:check": "hadolint --failure-threshold=ignore Dockerfile"
 	},
 	"repository": {
 		"type": "git",
@@ -41,7 +41,6 @@
 		"@types/node": "^18.11.18",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
 		"@typescript-eslint/parser": "^5.47.0",
-		"dockerlinter": "^1.2.2",
 		"dotenv": "^16.0.3",
 		"eslint": "^8.30.0",
 		"eslint-config-prettier": "^8.5.0",
