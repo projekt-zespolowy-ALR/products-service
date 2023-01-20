@@ -150,20 +150,20 @@ jobs:
           docker push ${{secrets.DOCKER_IMAGE_NAME}}:${{github.event.release.tag_name}}
   deploy:
     needs:
-    - publish
+      - publish
     name: Deploy publicly
     if: ${{github.event.release.tag_name == 'latest'}}
     runs-on: ubuntu-latest
     steps:
-    - name: SSH to gacko.pl
-      uses: appleboy/ssh-action@master
-      with:
-        key: ${{secrets.DEPLOY_SSH_PRIVATE_KEY}}
-        host: ${{secrets.DEPLOY_SSH_HOST}}
-        username: ${{secrets.DEPLOY_SSH_USERNAME}}
-        script: |
-          cd repositories/products-service
-          git pull
-          git checkout ${{github.event.release.tag_name}}
-          cd helm
-          helm upgrade products-service . --set image.tag=${{github.event.release.tag_name}}
+      - name: SSH to gacko.pl
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{secrets.DEPLOY_SSH_PRIVATE_KEY}}
+          host: ${{secrets.DEPLOY_SSH_HOST}}
+          username: ${{secrets.DEPLOY_SSH_USERNAME}}
+          script: |
+            cd repositories/products-service
+            git pull
+            git checkout ${{github.event.release.tag_name}}
+            cd helm
+            helm upgrade products-service . --set image.tag=${{github.event.release.tag_name}}
