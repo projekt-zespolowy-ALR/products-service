@@ -33,6 +33,10 @@ class AppConfig {
 	@Type(() => String)
 	@IsString()
 	public readonly POSTGRES_DATABASE: string = "postgres";
+
+	@Type(() => String)
+	@IsString()
+	public readonly ADMIN_TOKEN: string = "4dm1nT0k3n";
 }
 
 export default AppConfig;

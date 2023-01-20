@@ -12,3 +12,4 @@ stringData:
   POSTGRES_USERNAME: "postgres"
   POSTGRES_PASSWORD: "postgres"
   POSTGRES_DATABASE: "postgres"
+  ADMIN_TOKEN: "4dm1nT0k3n"
