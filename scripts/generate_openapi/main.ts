@@ -27,6 +27,10 @@ const appModule = await Test.createTestingModule({
 })
 	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)
+	.overrideProvider(getRepositoryToken(ProductEntity))
+	.useValue(null)
+	.overrideProvider(getRepositoryToken(ProductEntity))
+	.useValue(null)
 	.compile();
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
 app.enableVersioning({
