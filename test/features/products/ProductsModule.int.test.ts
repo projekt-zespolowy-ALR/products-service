@@ -10,6 +10,7 @@ import {AppOrmModule} from "../../../src/orm/index.js";
 import ProductsModule from "../../../src/features/products/ProductsModule.js";
 import {VersioningType} from "@nestjs/common";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
+import AddProductRequestBody from "../../../src/features/products/AddProductRequestBody.js";
 
 let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer | null = null;
 let app: NestFastifyApplication | null = null;
@@ -98,6 +99,77 @@ describe("ProductsModule", () => {
 				expect(response.json()).toEqual({
 					data: [],
 					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
+				});
+			});
+		});
+		describe("Database with one product", () => {
+			let addedProductId: string | null = null;
+			beforeEach(async () => {
+				if (!app) {
+					throw new Error("App is not initialized");
+				}
+				const someProductRequestBody: Readonly<AddProductRequestBody> = {
+					name: "Some product",
+					slug: "some-product",
+					mass: 100,
+				};
+				const ADMIN_TOKEN = "4dm1nT0k3n";
+				const response = await app.inject({
+					method: "POST",
+					url: "/v1/products",
+					headers: {
+						Authorization: `Bearer ${ADMIN_TOKEN}`,
+						"content-type": "application/json",
+					},
+					payload: someProductRequestBody,
+				});
+				addedProductId = response.json().data.id;
+			});
+			test("GET /products", async () => {
+				if (!app) {
+					throw new Error("App is not initialized");
+				}
+				if (addedProductId === null) {
+					throw new Error("Added product ID is not initialized");
+				}
+				const response = await app.inject({
+					method: "GET",
+					url: "/v1/products",
+				});
+				expect(response.statusCode).toBe(200);
+				expect(response.json()).toEqual({
+					data: [
+						{
+							id: addedProductId,
+							name: "Some product",
+							slug: "some-product",
+							mass: 100,
+							volume: null,
+						},
+					],
+					meta: {skip: 0, take: 10, totalItemsCount: 1, pageItemsCount: 1},
+				});
+			});
+			test("GET /products/:product-id", async () => {
+				if (!app) {
+					throw new Error("App is not initialized");
+				}
+				if (addedProductId === null) {
+					throw new Error("Added product ID is not initialized");
+				}
+				const response = await app.inject({
+					method: "GET",
+					url: `/v1/products/${addedProductId}`,
+				});
+				expect(response.statusCode).toBe(200);
+				expect(response.json()).toEqual({
+					data: {
+						id: addedProductId,
+						name: "Some product",
+						slug: "some-product",
+						mass: 100,
+						volume: null,
+					},
 				});
 			});
 		});

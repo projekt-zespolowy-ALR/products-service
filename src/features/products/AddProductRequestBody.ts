@@ -13,7 +13,7 @@ class AddProductRequestBody {
 
 	@IsNumber()
 	@IsOptional()
-	public readonly volume!: number | null;
+	public readonly volume?: number | undefined;
 }
 
 export default AddProductRequestBody;
