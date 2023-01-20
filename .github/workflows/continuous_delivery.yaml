@@ -152,7 +152,6 @@ jobs:
     needs:
       - publish
     name: Deploy publicly
-    if: ${{github.event.release.tag_name == 'latest'}}
     runs-on: ubuntu-latest
     steps:
       - name: SSH to gacko.pl
