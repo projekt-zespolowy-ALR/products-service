@@ -157,7 +157,7 @@ jobs:
       - name: SSH to gacko.pl
         uses: appleboy/ssh-action@master
         with:
-          password: ${{secrets.DEPLOY_SSH_PASSPHRASE}}
+          password: ${{secrets.DEPLOY_SSH_PASSWORD}}
           host: ${{secrets.DEPLOY_SSH_HOST}}
           username: ${{secrets.DEPLOY_SSH_USERNAME}}
           script: |
