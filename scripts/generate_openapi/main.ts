@@ -21,15 +21,17 @@ import {getRepositoryToken} from "@nestjs/typeorm";
 import ProductEntity from "../../src/features/products/ProductEntity.js";
 import CategoriesModule from "../../src/features/categories/CategoriesModule.js";
 import BrandsModule from "../../src/features/brands/BrandsModule.js";
+import CategoryEntity from "../../src/features/categories/CategoryEntity.js";
+import BrandEntity from "../../src/features/brands/BrandEntity.js";
 
 const appModule = await Test.createTestingModule({
 	imports: [ProductsModule, CategoriesModule, BrandsModule],
 })
 	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)
-	.overrideProvider(getRepositoryToken(ProductEntity))
+	.overrideProvider(getRepositoryToken(CategoryEntity))
 	.useValue(null)
-	.overrideProvider(getRepositoryToken(ProductEntity))
+	.overrideProvider(getRepositoryToken(BrandEntity))
 	.useValue(null)
 	.compile();
 const app = appModule.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
