@@ -123,7 +123,7 @@ describe("ProductsModule", () => {
 					},
 					payload: someProductRequestBody,
 				});
-				addedProductId = response.json().data.id;
+				addedProductId = response.json().id;
 			});
 			test("GET /products", async () => {
 				if (!app) {
@@ -163,13 +163,11 @@ describe("ProductsModule", () => {
 				});
 				expect(response.statusCode).toBe(200);
 				expect(response.json()).toEqual({
-					data: {
-						id: addedProductId,
-						name: "Some product",
-						slug: "some-product",
-						mass: 100,
-						volume: null,
-					},
+					id: addedProductId,
+					name: "Some product",
+					slug: "some-product",
+					mass: 100,
+					volume: null,
 				});
 			});
 		});

@@ -19,9 +19,11 @@ import ProductsModule from "../../src/features/products/ProductsModule.js";
 
 import {getRepositoryToken} from "@nestjs/typeorm";
 import ProductEntity from "../../src/features/products/ProductEntity.js";
+import CategoriesModule from "../../src/features/categories/CategoriesModule.js";
+import BrandsModule from "../../src/features/brands/BrandsModule.js";
 
 const appModule = await Test.createTestingModule({
-	imports: [ProductsModule],
+	imports: [ProductsModule, CategoriesModule, BrandsModule],
 })
 	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)
