@@ -37,7 +37,7 @@
 	"homepage": "https://github.com/projekt-zespolowy-ALR/products-service#readme",
 	"devDependencies": {
 		"@nestjs/testing": "^9.2.0",
-		"@types/jest": "^29.2.4",
+		"@types/jest": "^29.2.6",
 		"@types/node": "^18.11.18",
 		"@types/uuid": "^9.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.47.0",
