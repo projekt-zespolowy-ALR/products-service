@@ -23,9 +23,10 @@ import CategoriesModule from "../../src/features/categories/CategoriesModule.js"
 import BrandsModule from "../../src/features/brands/BrandsModule.js";
 import CategoryEntity from "../../src/features/categories/CategoryEntity.js";
 import BrandEntity from "../../src/features/brands/BrandEntity.js";
+import AppConfigModule from "../../src/config/AppConfigModule.js";
 
 const appModule = await Test.createTestingModule({
-	imports: [ProductsModule, CategoriesModule, BrandsModule],
+	imports: [ProductsModule, CategoriesModule, BrandsModule, AppConfigModule],
 })
 	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)
