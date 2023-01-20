@@ -1,5 +1,7 @@
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AppConfig} from "../config/index.js";
+import BrandEntity from "../features/brands/BrandEntity.js";
+import CategoryEntity from "../features/categories/CategoryEntity.js";
 import {ProductEntity} from "../features/products/index.js";
 
 const AppOrmModule = TypeOrmModule.forRootAsync({
@@ -11,7 +13,7 @@ const AppOrmModule = TypeOrmModule.forRootAsync({
 		username: config.POSTGRES_USERNAME,
 		password: config.POSTGRES_PASSWORD,
 		database: config.POSTGRES_DATABASE,
-		entities: [ProductEntity],
+		entities: [ProductEntity, CategoryEntity, BrandEntity],
 		synchronize: false,
 	}),
 });
