@@ -4,7 +4,7 @@ import CategoryEntity from "./CategoryEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PagingOptions} from "../../../paging/index.js";
 
-import {AddCategoryPayload, Category} from "../types.js";
+import {type AddCategoryPayload, type Category} from "../types.js";
 import * as Paging from "../../../paging/index.js";
 
 @Injectable()
