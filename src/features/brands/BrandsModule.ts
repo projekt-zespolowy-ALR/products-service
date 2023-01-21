@@ -1,8 +1,8 @@
 import {Module} from "@nestjs/common";
-import BrandsController from "./BrandsController.js";
-import BrandsService from "./BrandsService.js";
+import BrandsController from "./brands_controller/BrandsController.js";
+import BrandsService from "./brands_service/BrandsService.js";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import BrandEntity from "./BrandEntity.js";
+import BrandEntity from "./brands_service/BrandEntity.js";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([BrandEntity])],

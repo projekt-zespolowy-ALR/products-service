@@ -22,7 +22,7 @@ import ProductEntity from "../../src/features/products/ProductEntity.js";
 import CategoriesModule from "../../src/features/categories/CategoriesModule.js";
 import BrandsModule from "../../src/features/brands/BrandsModule.js";
 import CategoryEntity from "../../src/features/categories/CategoryEntity.js";
-import BrandEntity from "../../src/features/brands/BrandEntity.js";
+import BrandEntity from "../../src/features/brands/brands_service/BrandEntity.js";
 import AppConfigModule from "../../src/config/AppConfigModule.js";
 
 const appModule = await Test.createTestingModule({
