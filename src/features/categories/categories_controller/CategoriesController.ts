@@ -16,6 +16,7 @@ import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
 import * as Utils from "../../../utils/index.js";
 import {Category} from "../types.js";
 import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
+import * as Uuid from "uuid";
 @Controller()
 class CategoriesController {
 	private readonly categoriesService: CategoriesService;
@@ -36,13 +37,18 @@ class CategoriesController {
 	}
 	@ApiProduces("application/json")
 	@Version(["1"])
-	@Get("/categories/:category-id")
-	public async getCategoryById(
-		@Param("category-id", ParseUUIDPipe)
-		id: string
-	): Promise<Category> {
+	@Get("/categories/:idOrSlug")
+	public async getCategoryByIdOrSlug(
+		@Param("idOrSlug")
+		idOrSlug: string
+	): Promise<Readonly<Category>> {
+		console.log("idOrSlug", idOrSlug);
 		try {
-			return this.categoriesService.getCategoryById(id);
+			// return this.categoriesService.getCategoryByIdOrSlug(idOrSlug);
+			if (Uuid.validate(idOrSlug)) {
+				return this.categoriesService.getCategoryById(idOrSlug);
+			}
+			return this.categoriesService.getCategoryBySlug(idOrSlug);
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
 				throw new NotFoundException();

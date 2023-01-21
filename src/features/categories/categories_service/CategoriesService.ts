@@ -22,6 +22,9 @@ class CategoriesService {
 	public async getCategoryById(id: string): Promise<Readonly<Category>> {
 		return await this.categoriesRepository.findOneByOrFail({id});
 	}
+	public async getCategoryBySlug(slug: string): Promise<Readonly<Category>> {
+		return await this.categoriesRepository.findOneByOrFail({slug});
+	}
 	public async addCategory(addCategoryPayload: AddCategoryPayload): Promise<Readonly<Category>> {
 		const categoryEntity: CategoryEntity = this.categoriesRepository.create(addCategoryPayload);
 		const savedCategoryEntity: CategoryEntity = await this.categoriesRepository.save(
