@@ -1,3 +1,6 @@
+import {AppOrmModule} from "../../../src/orm/index.js";
+import {ProductsModule} from "../../../src/features/products/index.js";
+
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 import * as Testcontainers from "testcontainers";
 import {testsConfig} from "../../config/index.js";
@@ -6,8 +9,6 @@ import * as TestsUtils from "../../utils/index.js";
 import {TypedConfigModule} from "nest-typed-config";
 import {AppConfig} from "../../../src/config/index.js";
 import {Test} from "@nestjs/testing";
-import {AppOrmModule} from "../../../src/orm/index.js";
-import ProductsModule from "../../../src/features/products/ProductsModule.js";
 import {HttpStatus, ValidationPipe, VersioningType} from "@nestjs/common";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
 import AddProductRequestBody from "../../../src/features/products/AddProductRequestBody.js";

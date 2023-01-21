@@ -5,6 +5,9 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PageMeta, PagingOptions} from "../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import * as Uuid from "uuid";
+import {Product} from "./types.js";
+
+import * as Paging from "../../paging/index.js";
 
 @Injectable()
 class ProductsService {
@@ -16,26 +19,15 @@ class ProductsService {
 		this.productsRepository = productsRepository;
 	}
 	public async getProducts(pagingOptions: PagingOptions): Promise<Page<ProductEntity>> {
-		const [products, total] = await this.productsRepository.findAndCount({
-			take: pagingOptions.take,
-			skip: pagingOptions.skip,
-		});
-		const pageMeta: PageMeta = {
-			totalItemsCount: total,
-			pageItemsCount: products.length,
-			skip: pagingOptions.skip,
-			take: pagingOptions.take,
-		};
-		const page: Page<ProductEntity> = {
-			meta: pageMeta,
-			data: products,
-		};
-		return page;
+		return await Paging.paginatedFindAndCount(this.productsRepository, pagingOptions);
 	}
-	public async getProductById(id: string): Promise<ProductEntity> {
+	public async getProductById(id: string): Promise<Product> {
 		return this.productsRepository.findOneByOrFail({id});
 	}
-	public async addProduct(product: AddProductRequestBody): Promise<ProductEntity> {
+	public async getProductBySlug(slug: string): Promise<Product> {
+		return this.productsRepository.findOneByOrFail({slug});
+	}
+	public async addProduct(product: AddProductRequestBody): Promise<Product> {
 		const newProduct = this.productsRepository.create({
 			id: Uuid.v4(),
 			name: product.name ?? null,
