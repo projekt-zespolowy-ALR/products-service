@@ -1,8 +1,5 @@
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {AppConfig} from "../config/index.js";
-import BrandEntity from "../features/brands/brands_service/BrandEntity.js";
-import CategoryEntity from "../features/categories/categories_service/CategoryEntity.js";
-import {ProductEntity} from "../features/products/index.js";
 
 const AppOrmModule = TypeOrmModule.forRootAsync({
 	inject: [AppConfig],
