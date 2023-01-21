@@ -3,12 +3,11 @@ import ProductsController from "./ProductsController.js";
 import ProductsService from "./ProductsService.js";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import ProductEntity from "./ProductEntity.js";
-import ProductInCategoryEntity from "./ProductInCategoryEntity.js";
 import {CategoryEntity} from "../categories/index.js";
 // import AppConfigModule from "../../config/AppConfigModule.js";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([CategoryEntity, ProductEntity, ProductInCategoryEntity])],
+	imports: [TypeOrmModule.forFeature([CategoryEntity, ProductEntity])],
 	controllers: [ProductsController],
 	providers: [ProductsService],
 })

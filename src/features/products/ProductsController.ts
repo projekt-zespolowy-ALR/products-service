@@ -22,10 +22,10 @@ import AddProductRequestBody from "./AddProductRequestBody.js";
 import {AppConfig} from "../../config/index.js";
 
 import * as Utils from "../../utils/index.js";
-import {type Product} from "./types.js";
+import {type Product, type DetailedProduct} from "./types.js";
 import * as Uuid from "uuid";
 
-@Controller("/products")
+@Controller("/")
 class ProductsController {
 	private readonly productsService: ProductsService;
 	private readonly appConfig: AppConfig;
@@ -35,7 +35,7 @@ class ProductsController {
 	}
 
 	@Version(["1"])
-	@Get("/")
+	@Get("/products")
 	@ApiProduces("application/json")
 	public async getAllProducts(
 		@Query()
@@ -47,7 +47,19 @@ class ProductsController {
 	}
 
 	@Version(["1"])
-	@Get("/:idOrSlug")
+	@Get("/detailed-products")
+	@ApiProduces("application/json")
+	public async getAllDetailedProducts(
+		@Query()
+		pagingOptionsInRequest: PagingOptionsInRequest
+	): Promise<Page<Readonly<DetailedProduct>>> {
+		return this.productsService.getDetailedProducts(
+			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+		);
+	}
+
+	@Version(["1"])
+	@Get("/products/:idOrSlug")
 	public async getProductById(
 		@Param("idOrSlug")
 		idOrSlug: string
@@ -66,7 +78,7 @@ class ProductsController {
 	}
 
 	@Version(["1"])
-	@Post("/")
+	@Post("/products")
 	public async addProduct(
 		@Body(
 			new ValidationPipe({

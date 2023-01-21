@@ -5,9 +5,10 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PageMeta, PagingOptions} from "../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import * as Uuid from "uuid";
-import {Product} from "./types.js";
+import {DetailedProduct, Product} from "./types.js";
 
 import * as Paging from "../../paging/index.js";
+import {CategoryEntity} from "../categories/index.js";
 
 @Injectable()
 class ProductsService {
@@ -36,6 +37,18 @@ class ProductsService {
 			volume: product.volume ?? null,
 		});
 		return await this.productsRepository.save(newProduct);
+	}
+	public async getDetailedProducts(
+		pagingOptions: PagingOptions
+	): Promise<Page<Readonly<DetailedProduct>>> {
+		const ret = await Paging.paginatedFindAndCount(this.productsRepository, pagingOptions, {
+			relations: ["categories"],
+		});
+		ret.data.forEach((product) => {
+			console.log(product.categories);
+		});
+
+		return ret;
 	}
 }
 
