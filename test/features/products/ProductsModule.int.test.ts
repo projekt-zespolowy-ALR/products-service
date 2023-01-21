@@ -8,7 +8,7 @@ import {AppConfig} from "../../../src/config/index.js";
 import {Test} from "@nestjs/testing";
 import {AppOrmModule} from "../../../src/orm/index.js";
 import ProductsModule from "../../../src/features/products/ProductsModule.js";
-import {VersioningType} from "@nestjs/common";
+import {HttpStatus, ValidationPipe, VersioningType} from "@nestjs/common";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
 import AddProductRequestBody from "../../../src/features/products/AddProductRequestBody.js";
 
@@ -71,6 +71,13 @@ beforeEach(async () => {
 	app.enableVersioning({
 		type: VersioningType.URI,
 	});
+	app.useGlobalPipes(
+		new ValidationPipe({
+			transform: true,
+			whitelist: true,
+			errorHttpStatusCode: HttpStatus.BAD_REQUEST,
+		})
+	);
 	await app.init();
 	await app.getHttpAdapter().getInstance().ready();
 }, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
