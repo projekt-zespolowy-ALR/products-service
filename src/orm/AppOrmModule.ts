@@ -13,7 +13,7 @@ const AppOrmModule = TypeOrmModule.forRootAsync({
 		username: config.POSTGRES_USERNAME,
 		password: config.POSTGRES_PASSWORD,
 		database: config.POSTGRES_DATABASE,
-		entities: [ProductEntity, CategoryEntity, BrandEntity],
+		autoLoadEntities: true,
 		synchronize: false,
 	}),
 });
