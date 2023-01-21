@@ -2,7 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
 import CategoryEntity from "./CategoryEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PageMeta, PagingOptions} from "../../paging/index.js";
+import {Page, PageMeta, PagingOptions} from "../../../paging/index.js";
 
 @Injectable()
 class CategoriesService {
