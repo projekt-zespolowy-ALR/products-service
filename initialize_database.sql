@@ -38,11 +38,11 @@ CREATE TABLE ingredients_lists (
 CREATE TABLE ingredients (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
 	slug TEXT NOT NULL UNIQUE,
-	latin_name TEXT NOT NULL,
+	name TEXT NOT NULL,
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE products_in_ingredients_lists (
+CREATE TABLE ingredient_in_ingredients_lists (
 	ingredients_list_id UUID NOT NULL,
 	ingredient_id UUID NOT NULL,
 	PRIMARY KEY (ingredients_list_id, ingredient_id),
@@ -68,7 +68,7 @@ CREATE TABLE categories (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE products_categories (
+CREATE TABLE products_in_categories (
 	product_id UUID NOT NULL,
 	category_id UUID NOT NULL,
 	PRIMARY KEY (product_id, category_id),
