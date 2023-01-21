@@ -1,19 +1,19 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, Relation} from "typeorm";
+import {ProductInCategoryEntity} from "../../products/index.js";
 
 @Entity({name: "categories"})
 class CategoryEntity {
-	@ApiProperty()
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
 
-	@ApiProperty()
 	@Column({name: "slug", unique: true, type: "text"})
 	public readonly slug!: string;
 
-	@ApiProperty()
 	@Column({name: "name", type: "text"})
 	public readonly name!: string;
+
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.category)
+	public readonly products!: readonly Relation<ProductInCategoryEntity>[];
 }
 
 export default CategoryEntity;

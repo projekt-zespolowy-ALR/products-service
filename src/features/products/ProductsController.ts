@@ -21,6 +21,8 @@ import {Page, PagingOptionsInRequest, ApiPaginatedOkResponse} from "../../paging
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import {AppConfig} from "../../config/index.js";
 
+import * as Utils from "../../utils/index.js";
+
 @ApiTags("products")
 @ApiProduces("application/json")
 @Controller("/products")
@@ -47,8 +49,9 @@ class ProductsController {
 		)
 		pagingOptionsInRequest: PagingOptionsInRequest
 	): Promise<Page<ProductEntity>> {
-		const pagingOptions = pagingOptionsInRequest.toPagingOptions();
-		return this.productsService.getProducts(pagingOptions);
+		return this.productsService.getProducts(
+			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+		);
 	}
 	@ApiOkResponse({
 		description: "Product with given id",

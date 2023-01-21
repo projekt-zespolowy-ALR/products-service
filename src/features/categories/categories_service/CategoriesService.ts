@@ -3,6 +3,9 @@ import {Repository} from "typeorm";
 import CategoryEntity from "./CategoryEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PageMeta, PagingOptions} from "../../../paging/index.js";
+import * as Uuid from "uuid";
+import {AddCategoryPayload, Category} from "../types.js";
+import * as Paging from "../../../paging/index.js";
 
 @Injectable()
 class CategoriesService {
@@ -11,25 +14,20 @@ class CategoriesService {
 		this.categoriesRepository = categoriesRepository;
 	}
 
-	public async getCategories(pagingOptions: PagingOptions): Promise<Page<CategoryEntity>> {
-		const [categories, total] = await this.categoriesRepository.findAndCount({
-			take: pagingOptions.take,
-			skip: pagingOptions.skip,
-		});
-		const pageMeta: PageMeta = {
-			totalItemsCount: total,
-			pageItemsCount: categories.length,
-			skip: pagingOptions.skip,
-			take: pagingOptions.take,
-		};
-		const page: Page<CategoryEntity> = {
-			meta: pageMeta,
-			data: categories,
-		};
-		return page;
+	public async getCategories(
+		pagingOptions: PagingOptions
+	): Promise<Page<Readonly<CategoryEntity>>> {
+		return await Paging.paginatedFindAndCount(this.categoriesRepository, pagingOptions);
 	}
-	public async getCategoryById(id: string): Promise<CategoryEntity> {
-		return this.categoriesRepository.findOneByOrFail({id});
+	public async getCategoryById(id: string): Promise<Readonly<Category>> {
+		return await this.categoriesRepository.findOneByOrFail({id});
+	}
+	public async addCategory(addCategoryPayload: AddCategoryPayload): Promise<Readonly<Category>> {
+		const categoryEntity: CategoryEntity = this.categoriesRepository.create(addCategoryPayload);
+		const savedCategoryEntity: CategoryEntity = await this.categoriesRepository.save(
+			categoryEntity
+		);
+		return savedCategoryEntity;
 	}
 }
 

@@ -4,4 +4,9 @@ interface Category {
 	name: string;
 }
 
-export {type Category};
+interface AddCategoryPayload {
+	slug: string;
+	name: string;
+}
+
+export {type Category, type AddCategoryPayload};

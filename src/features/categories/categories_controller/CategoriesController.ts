@@ -1,9 +1,11 @@
 import {
+	Body,
 	Controller,
 	Get,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
+	Post,
 	Query,
 	Version,
 } from "@nestjs/common";
@@ -13,6 +15,7 @@ import CategoriesService from "../categories_service/CategoriesService.js";
 import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
 import * as Utils from "../../../utils/index.js";
 import {Category} from "../types.js";
+import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
 @Controller()
 class CategoriesController {
 	private readonly categoriesService: CategoriesService;
@@ -46,6 +49,16 @@ class CategoriesController {
 			}
 			throw error;
 		}
+	}
+
+	@ApiProduces("application/json")
+	@Version(["1"])
+	@Post("/categories")
+	public async addCategory(
+		@Body()
+		addCategoryRequestBody: AddCategoryRequestBody
+	): Promise<Category> {
+		return this.categoriesService.addCategory(addCategoryRequestBody);
 	}
 }
 

@@ -4,7 +4,7 @@ import PageMeta from "./PageMeta.js";
 
 class Page<T> {
 	@ApiProperty({isArray: true})
-	public readonly data!: T[];
+	public readonly data!: readonly T[];
 
 	@ApiProperty({type: PageMeta})
 	public readonly meta!: PageMeta;
