@@ -1,7 +1,6 @@
 import {IsInt, IsOptional, Max, Min} from "class-validator";
 import {ApiPropertyOptional} from "@nestjs/swagger";
-import {plainToClass, Type} from "class-transformer";
-import PagingOptions from "./PagingOptions.js";
+import {Expose, Type} from "class-transformer";
 
 class PagingOptionsInRequest {
 	@ApiPropertyOptional({
@@ -13,6 +12,7 @@ class PagingOptionsInRequest {
 	@Min(0)
 	@Type(() => Number)
 	@IsOptional()
+	@Expose({name: "skip"})
 	public readonly "paging-skip"?: number;
 
 	@ApiPropertyOptional({
@@ -26,20 +26,8 @@ class PagingOptionsInRequest {
 	@Max(100)
 	@Type(() => Number)
 	@IsOptional()
+	@Expose({name: "take"})
 	public readonly "paging-take"?: number;
-
-	public toPagingOptions(): PagingOptions {
-		return plainToClass(
-			PagingOptions,
-			{
-				skip: this["paging-skip"],
-				take: this["paging-take"],
-			},
-			{
-				exposeDefaultValues: true,
-			}
-		);
-	}
 }
 
 export default PagingOptionsInRequest;
