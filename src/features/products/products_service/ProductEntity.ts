@@ -6,8 +6,10 @@ import {
 	RelationId,
 	JoinTable,
 	ManyToMany,
+	OneToMany,
 } from "typeorm";
-import {CategoryEntity} from "../categories/index.js";
+import {CategoryEntity} from "../../categories/index.js";
+import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 
 @Entity({name: "products"})
 class ProductEntity {
@@ -39,6 +41,9 @@ class ProductEntity {
 		},
 	})
 	public readonly categories!: readonly Relation<CategoryEntity>[];
+
+	@OneToMany(() => ProductInDataSourceEntity, (productInDataSource) => productInDataSource.product)
+	public readonly dataSources!: readonly Relation<ProductInDataSourceEntity>[];
 }
 
 export default ProductEntity;

@@ -16,7 +16,7 @@ import {
 import {ApiNotFoundResponse, ApiOkResponse, ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 
-import ProductsService from "../ProductsService.js";
+import ProductsService from "../products_service/ProductsService.js";
 import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import {AppConfig} from "../../../config/index.js";

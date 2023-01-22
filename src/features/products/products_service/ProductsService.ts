@@ -2,13 +2,13 @@ import {Injectable} from "@nestjs/common";
 import {In, Repository} from "typeorm";
 import ProductEntity from "./ProductEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PageMeta, PagingOptions} from "../../paging/index.js";
-import AddProductRequestBody from "./products_controller/AddProductRequestBody.js";
+import {Page, PageMeta, PagingOptions} from "../../../paging/index.js";
+import AddProductRequestBody from "../products_controller/AddProductRequestBody.js";
 import * as Uuid from "uuid";
-import {DetailedProduct, Product} from "./types.js";
+import {DetailedProduct, Product} from "../types.js";
 
-import * as Paging from "../../paging/index.js";
-import {CategoryEntity} from "../categories/index.js";
+import * as Paging from "../../../paging/index.js";
+import {CategoryEntity} from "../../categories/index.js";
 
 @Injectable()
 class ProductsService {

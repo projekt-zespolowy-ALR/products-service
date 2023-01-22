@@ -18,7 +18,7 @@ import {Test} from "@nestjs/testing";
 import ProductsModule from "../../src/features/products/ProductsModule.js";
 
 import {getRepositoryToken} from "@nestjs/typeorm";
-import ProductEntity from "../../src/features/products/ProductEntity.js";
+import ProductEntity from "../../src/features/products/products_service/ProductEntity.js";
 import CategoriesModule from "../../src/features/categories/CategoriesModule.js";
 import BrandsModule from "../../src/features/brands/BrandsModule.js";
 import CategoryEntity from "../../src/features/categories/categories_service/CategoryEntity.js";

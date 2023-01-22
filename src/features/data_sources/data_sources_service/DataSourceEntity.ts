@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+import ProductInDataSourceEntity from "../../products/products_service/ProductInDataSourceEntity.js";
 
 @Entity({name: "data_sources"})
 class DataSourceEntity {
@@ -13,6 +14,12 @@ class DataSourceEntity {
 
 	@Column({name: "url", type: "text"})
 	public readonly url!: string;
+
+	@OneToMany(
+		() => ProductInDataSourceEntity,
+		(productInDataSource) => productInDataSource.dataSource
+	)
+	public readonly products!: readonly ProductInDataSourceEntity[];
 }
 
 export default DataSourceEntity;
