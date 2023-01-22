@@ -1,5 +1,6 @@
 import {plainToClass} from "class-transformer";
-import {PagingOptions, type PagingOptionsInRequest} from "../paging/index.js";
+import PagingOptions from "./PagingOptions.js";
+import PagingOptionsInRequest from "./PagingOptionsInRequest.js";
 
 function convertPagingOptionsInRequestToPagingOptions(
 	pagingOptionsInRequest: PagingOptionsInRequest
