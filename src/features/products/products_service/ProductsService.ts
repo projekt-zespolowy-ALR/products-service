@@ -119,7 +119,7 @@ class ProductsService {
 			addProductRequestBody.inDataSources?.map((inDataSource) => {
 				const dataSource =
 					dataSourceEntityBySlug.get(inDataSource.dataSourceIdOrSlug) ??
-					dataSourceEntityById.get(inDataSource.dataSourceIdOrSlug)!;
+					(dataSourceEntityById.get(inDataSource.dataSourceIdOrSlug) as DataSourceEntity);
 				return this.productInDataSourceRepository.create({
 					dataSourceId: dataSource.id,
 					productId: null as unknown as string,
@@ -140,7 +140,6 @@ class ProductsService {
 		return this.deentitifyProduct(savedProductEntity);
 	}
 	public deentitifyDetailedProduct(productEntity: ProductEntity): DetailedProduct {
-		console.log(productEntity);
 		return {
 			id: productEntity.id,
 			name: productEntity.name,

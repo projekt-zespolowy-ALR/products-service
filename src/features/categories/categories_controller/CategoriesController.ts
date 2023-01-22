@@ -41,7 +41,6 @@ class CategoriesController {
 		@Param("idOrSlug")
 		idOrSlug: string
 	): Promise<Readonly<Category>> {
-		console.log("idOrSlug", idOrSlug);
 		try {
 			// return this.categoriesService.getCategoryByIdOrSlug(idOrSlug);
 			if (Uuid.validate(idOrSlug)) {

@@ -3,11 +3,9 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	Relation,
-	RelationId,
 	JoinTable,
 	ManyToMany,
 	OneToMany,
-	JoinColumn,
 } from "typeorm";
 import {CategoryEntity} from "../../categories/index.js";
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";

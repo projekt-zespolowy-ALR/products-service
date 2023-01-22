@@ -2,7 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PageMeta, PagingOptions} from "../../../paging/index.js";
+import {Page, PagingOptions} from "../../../paging/index.js";
 import BrandEntity from "./BrandEntity.js";
 
 import * as Paging from "../../../paging/index.js";

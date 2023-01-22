@@ -8,12 +8,11 @@ import {
 	ParseUUIDPipe,
 	Post,
 	Query,
-	ValidationPipe,
 	Version,
 	Headers,
 	Delete,
 } from "@nestjs/common";
-import {ApiNotFoundResponse, ApiOkResponse, ApiProduces} from "@nestjs/swagger";
+import {ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 
 import ProductsService from "../products_service/ProductsService.js";
@@ -94,8 +93,7 @@ class ProductsController {
 	@Post("/products")
 	public async addProduct(
 		@Body()
-		product: AddProductRequestBody,
-		@Headers("Authorization") authorization: string
+		product: AddProductRequestBody
 	): Promise<Readonly<Product>> {
 		return await this.productsService.addProduct(product);
 	}

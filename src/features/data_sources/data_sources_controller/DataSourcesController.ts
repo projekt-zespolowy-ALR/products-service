@@ -26,11 +26,7 @@ class DataSourcesRequestController {
 		@Param("idOrSlug")
 		idOrSlug: string
 	): Promise<DataSource> {
-		try {
-			return await this.dataSourcesService.getDataSourceByIdOrSlug(idOrSlug);
-		} catch (error) {
-			throw error;
-		}
+		return await this.dataSourcesService.getDataSourceByIdOrSlug(idOrSlug);
 	}
 
 	@Version(["1"])
