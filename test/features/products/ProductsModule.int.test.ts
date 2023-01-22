@@ -154,7 +154,7 @@ describe("ProductsModule", () => {
 							mass: 100,
 							volume: null,
 							categoriesIds: [],
-							dataSourcesIds: [],
+							inDataSourcesIds: [],
 						},
 					],
 					meta: {skip: 0, take: 10, totalItemsCount: 1, pageItemsCount: 1},
@@ -179,7 +179,7 @@ describe("ProductsModule", () => {
 					mass: 100,
 					volume: null,
 					categoriesIds: [],
-					dataSourcesIds: [],
+					inDataSourcesIds: [],
 				});
 			});
 		});
