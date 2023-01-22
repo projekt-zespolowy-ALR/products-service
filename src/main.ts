@@ -4,7 +4,18 @@ import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 import {AppConfig} from "./config/index.js";
 import {HttpStatus, ValidationPipe, VersioningType} from "@nestjs/common";
 
-const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
+	cors: {
+		methods: "*",
+		allowedHeaders: "*",
+		exposedHeaders: "*",
+		credentials: true,
+
+		origin: (requestOrigin, callback) => {
+			callback(null, true);
+		},
+	},
+});
 app.enableVersioning({
 	type: VersioningType.URI,
 });
