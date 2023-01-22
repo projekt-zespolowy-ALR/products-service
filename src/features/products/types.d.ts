@@ -1,18 +1,20 @@
 import {type Category} from "../../categories/index.js";
 
-interface Product {
-	id: string;
+type Product = {
+	readonly id: string;
 
-	name: string | null;
+	readonly name: string | null;
 
-	slug: string;
+	readonly slug: string;
 
-	mass: number | null;
+	readonly mass: number | null;
 
-	volume: number | null;
-}
+	readonly volume: number | null;
 
-type DetailedProduct = Product & {
+	readonly categoriesIds: readonly string[];
+};
+
+type DetailedProduct = Omit<Product, "categoriesIds"> & {
 	categories: readonly Category[];
 };
 

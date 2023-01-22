@@ -11,7 +11,7 @@ import {AppConfig} from "../../../src/config/index.js";
 import {Test} from "@nestjs/testing";
 import {HttpStatus, ValidationPipe, VersioningType} from "@nestjs/common";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
-import AddProductRequestBody from "../../../src/features/products/AddProductRequestBody.js";
+import AddProductRequestBody from "../../../src/features/products/products_controller/AddProductRequestBody.js";
 
 let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer | null = null;
 let app: NestFastifyApplication | null = null;

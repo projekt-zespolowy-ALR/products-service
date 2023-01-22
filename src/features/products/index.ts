@@ -1,5 +1,5 @@
 import ProductEntity from "./ProductEntity.js";
-import ProductsController from "./ProductsController.js";
+import ProductsController from "./products_controller/ProductsController.js";
 import ProductsService from "./ProductsService.js";
 import ProductsModule from "./ProductsModule.js";
 
