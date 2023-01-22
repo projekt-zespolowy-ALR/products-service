@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
-import ProductInDataSourceEntity from "../../products/products_service/ProductInDataSourceEntity.js";
+import {ProductInDataSourceEntity} from "../../products/index.js";
 
 @Entity({name: "data_sources"})
 class DataSourceEntity {

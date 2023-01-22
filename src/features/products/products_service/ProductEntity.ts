@@ -7,6 +7,7 @@ import {
 	JoinTable,
 	ManyToMany,
 	OneToMany,
+	JoinColumn,
 } from "typeorm";
 import {CategoryEntity} from "../../categories/index.js";
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
@@ -42,8 +43,12 @@ class ProductEntity {
 	})
 	public readonly categories!: readonly Relation<CategoryEntity>[];
 
-	@OneToMany(() => ProductInDataSourceEntity, (productInDataSource) => productInDataSource.product)
-	public readonly dataSources!: readonly Relation<ProductInDataSourceEntity>[];
+	@OneToMany(
+		() => ProductInDataSourceEntity,
+		(productInDataSource) => productInDataSource.product,
+		{cascade: true}
+	)
+	public readonly inDataSources!: readonly Relation<ProductInDataSourceEntity>[];
 }
 
 export default ProductEntity;

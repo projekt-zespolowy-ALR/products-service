@@ -23,7 +23,6 @@ import {AppConfig} from "../../../config/index.js";
 
 import * as Utils from "../../../utils/index.js";
 import {type Product, type DetailedProduct} from "../types.js";
-import * as Uuid from "uuid";
 
 @Controller("/")
 class ProductsController {
@@ -48,7 +47,6 @@ class ProductsController {
 
 	@Version(["1"])
 	@Get("/detailed-products")
-	@ApiProduces("application/json")
 	public async getAllDetailedProducts(
 		@Query()
 		pagingOptionsInRequest: PagingOptionsInRequest
@@ -59,7 +57,7 @@ class ProductsController {
 	}
 
 	@Version(["1"])
-	@Get("/details/:idOrSlug")
+	@Get("/detailed-products/:idOrSlug")
 	@ApiProduces("application/json")
 	public async getDetailedProductByIdOrSlug(
 		@Param("idOrSlug")
