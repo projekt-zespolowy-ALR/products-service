@@ -153,6 +153,8 @@ describe("ProductsModule", () => {
 							slug: "some-product",
 							mass: 100,
 							volume: null,
+							categoriesIds: [],
+							dataSourcesIds: [],
 						},
 					],
 					meta: {skip: 0, take: 10, totalItemsCount: 1, pageItemsCount: 1},
@@ -176,6 +178,8 @@ describe("ProductsModule", () => {
 					slug: "some-product",
 					mass: 100,
 					volume: null,
+					categoriesIds: [],
+					dataSourcesIds: [],
 				});
 			});
 		});

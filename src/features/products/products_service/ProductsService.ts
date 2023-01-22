@@ -59,8 +59,14 @@ class ProductsService {
 	public async getProductByIdOrSlug(slug: string): Promise<Product> {
 		return this.deentitifyProduct(
 			await (Uuid.validate(slug)
-				? this.productsRepository.findOneByOrFail({id: slug})
-				: this.productsRepository.findOneByOrFail({slug}))
+				? this.productsRepository.findOneOrFail({
+						where: {id: slug},
+						relations: ["categories", "inDataSources"],
+				  })
+				: this.productsRepository.findOneOrFail({
+						where: {slug},
+						relations: ["categories", "inDataSources"],
+				  }))
 		);
 	}
 	public async addProduct(addProductRequestBody: AddProductRequestBody): Promise<Product> {
@@ -175,8 +181,14 @@ class ProductsService {
 
 	public async getDetailedProductByIdOrSlug(idOrSlug: string): Promise<DetailedProduct> {
 		const detailedProductEntity = await (Uuid.validate(idOrSlug)
-			? this.productsRepository.findOneByOrFail({id: idOrSlug})
-			: this.productsRepository.findOneByOrFail({slug: idOrSlug}));
+			? this.productsRepository.findOneOrFail({
+					where: {id: idOrSlug},
+					relations: ["categories", "inDataSources"],
+			  })
+			: this.productsRepository.findOneOrFail({
+					where: {slug: idOrSlug},
+					relations: ["categories", "inDataSources"],
+			  }));
 		const productEntity = this.deentitifyDetailedProduct(detailedProductEntity);
 		return productEntity;
 	}
