@@ -1,10 +1,10 @@
 import {Controller, Get, NotFoundException, Param, ParseUUIDPipe, Query} from "@nestjs/common";
 
-import BrandsService from "../brands_service/BrandsService.js";
 import {type Page, PagingOptions} from "../../../paging/index.js";
 import {
 	BrandsServiceBrandWithGivenIdNotFoundError,
 	BrandsServiceBrandWithGivenSlugNotFoundError,
+	BrandsService,
 } from "../brands_service/index.js";
 import {type Brand} from "../types/index.d.js";
 
@@ -20,7 +20,7 @@ class BrandsController {
 		@Query()
 		pagingOptions: PagingOptions
 	): Promise<Page<Brand>> {
-		return this.brandsService.getBrands(pagingOptions);
+		return await this.brandsService.getBrands(pagingOptions);
 	}
 
 	@Get("/brands/:brandId")
