@@ -1,6 +1,5 @@
-import CategoryEntity from "./categories_service/CategoryEntity.js";
-import CategoriesController from "./categories_controller/CategoriesController.js";
-import CategoriesService from "./categories_service/CategoriesService.js";
+import {CategoryEntity, CategoriesService} from "./categories_service/index.js";
+import {CategoriesController} from "./categories_controller/index.js";
 import CategoriesModule from "./CategoriesModule.js";
 
 export {CategoryEntity, CategoriesController, CategoriesService, CategoriesModule};
