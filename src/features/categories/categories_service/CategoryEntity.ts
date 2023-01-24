@@ -1,5 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn, Relation, ManyToMany, JoinTable} from "typeorm";
 import {ProductEntity} from "../../products/index.js";
+import {Entity, Column, PrimaryGeneratedColumn, Relation, ManyToMany, JoinTable} from "typeorm";
 
 @Entity({name: "categories"})
 class CategoryEntity {

@@ -1,8 +1,9 @@
+import BrandEntity from "./BrandEntity.js";
+
 import {Injectable} from "@nestjs/common";
 import {EntityNotFoundError, Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
-import BrandEntity from "./BrandEntity.js";
 
 import {PagingOptions, paginatedFindAndCount, type Page} from "../../../paging/index.js";
 import {

@@ -1,6 +1,7 @@
+import CategoryEntity from "./CategoryEntity.js";
 import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
-import CategoryEntity from "./CategoryEntity.js";
+
 import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PagingOptions} from "../../../paging/index.js";
 

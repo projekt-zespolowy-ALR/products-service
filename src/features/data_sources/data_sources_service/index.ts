@@ -1,4 +1,4 @@
-import DataSourcesService from "./DataSourcesService.js";
 import DataSourceEntity from "./DataSourceEntity.js";
+import DataSourcesService from "./DataSourcesService.js";
 
-export {DataSourcesService, DataSourceEntity};
+export {DataSourceEntity, DataSourcesService};

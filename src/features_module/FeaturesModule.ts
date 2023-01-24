@@ -8,7 +8,7 @@ import {
 } from "../features/index.js";
 
 @Module({
-	imports: [ProductsModule, BrandsModule, CategoriesModule, DataSourcesModule],
+	imports: [BrandsModule, CategoriesModule, DataSourcesModule, ProductsModule],
 	controllers: [],
 	providers: [],
 })

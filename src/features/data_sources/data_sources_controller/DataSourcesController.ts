@@ -1,9 +1,9 @@
 import {Body, Controller, Get, Param, Post, Query, Version} from "@nestjs/common";
 import {Page, PagingOptions} from "../../../paging/index.js";
 import {DataSourcesService} from "../data_sources_service/index.js";
-import {DataSource} from "../types.js";
+import {type DataSource} from "../types.js";
 import AddDataSourceRequestBody from "./AddDataSourceRequestBody.js";
-import * as Paging from "../../../paging/index.js";
+
 @Controller("/")
 class DataSourcesRequestController {
 	private readonly dataSourcesService: DataSourcesService;
