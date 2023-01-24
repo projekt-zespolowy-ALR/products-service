@@ -7,7 +7,6 @@ import {PostgreSqlContainer, StartedPostgreSqlContainer} from "testcontainers";
 import * as fs from "fs/promises";
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 
-import type PostgresqlContainerInitializationResult from "./PostgresqlContainerInitializationResult.d.js";
 import {Test} from "@nestjs/testing";
 import AppModule from "../../../src/AppModule.js";
 import configureApp from "../../../src/configureApp.js";
@@ -20,6 +19,17 @@ type AppTestingEnvironmentStartedState = {
 	id: "started";
 	app: NestFastifyApplication;
 	postgresqlContainer: StartedPostgreSqlContainer;
+};
+
+type PostgresqlContainerInitializationResult = {
+	container: StartedPostgreSqlContainer;
+	connectionOptions: {
+		host: string;
+		port: number;
+		username: string;
+		password: string;
+		database: string;
+	};
 };
 
 type AppTestingEnvironmentStoppedState = {
@@ -113,6 +123,11 @@ class AppTestingEnvironment implements TestingEnvironment {
 			postgresqlInitializationSqlScript
 		);
 		const postgresqlContainer = postgresqlContainerInitializationResult.container;
+		console.log(
+			`PostgreSQL container is started. Connection options: ${JSON.stringify(
+				postgresqlContainerInitializationResult.connectionOptions
+			)}`
+		);
 		const app = await this.initializeApp({
 			"POSTGRES_HOST": postgresqlContainerInitializationResult.connectionOptions.host,
 			"POSTGRES_PORT": postgresqlContainerInitializationResult.connectionOptions.port.toString(),

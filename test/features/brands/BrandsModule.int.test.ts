@@ -3,15 +3,21 @@ import {testsConfig} from "../../config/index.js";
 import {describe, test, expect, beforeEach, afterEach} from "@jest/globals";
 import AddProductRequestBody from "../../../src/features/products/products_controller/AddProductRequestBody.js";
 import {
+	AppTestingEnvironment,
 	EmptyTestingEnvironment,
 	type TestingEnvironment,
 } from "../../utils/testing_environment/index.js";
 
 let testingEnvironment: TestingEnvironment = new EmptyTestingEnvironment();
 
-beforeEach(async () => {}, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
+beforeEach(async () => {
+	testingEnvironment = new AppTestingEnvironment();
+	await testingEnvironment.start();
+}, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
 
-afterEach(async () => {});
+afterEach(async () => {
+	await testingEnvironment.stop();
+});
 
 describe("ProductsModule", () => {
 	describe("v1", () => {

@@ -16,9 +16,7 @@ class DataSourcesRequestController {
 		@Query()
 		pagingOptions: PagingOptions
 	): Promise<Page<DataSource>> {
-		return this.dataSourcesService.getDataSources(
-			Paging.convertPagingOptionsToPagingOptions(pagingOptions)
-		);
+		return this.dataSourcesService.getDataSources(pagingOptions);
 	}
 	@Version(["1"])
 	@Get("/data-sources/:idOrSlug")

@@ -20,7 +20,6 @@ import {Page, PagingOptions} from "../../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import {AppConfig} from "../../../config/index.js";
 
-import * as Utils from "../../../utils/index.js";
 import {type Product, type DetailedProduct} from "../types.js";
 
 @Controller("/")
@@ -39,9 +38,7 @@ class ProductsController {
 		@Query()
 		pagingOptions: PagingOptions
 	): Promise<Page<Product>> {
-		return this.productsService.getProducts(
-			Utils.convertPagingOptionsToPagingOptions(pagingOptions)
-		);
+		return this.productsService.getProducts(pagingOptions);
 	}
 
 	@Version(["1"])
@@ -50,9 +47,7 @@ class ProductsController {
 		@Query()
 		pagingOptions: PagingOptions
 	): Promise<Page<Readonly<DetailedProduct>>> {
-		return this.productsService.getDetailedProducts(
-			Utils.convertPagingOptionsToPagingOptions(pagingOptions)
-		);
+		return this.productsService.getDetailedProducts(pagingOptions);
 	}
 
 	@Version(["1"])

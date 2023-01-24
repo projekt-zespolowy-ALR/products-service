@@ -105,7 +105,7 @@ type DetailedProduct = {
 	 */
 	readonly brand: Brand | null;
 
-	readonly ingredients: Ingredient[];
+	readonly ingredients: Ingredient[] | null;
 };
 
 type AddProductRequestBody = {

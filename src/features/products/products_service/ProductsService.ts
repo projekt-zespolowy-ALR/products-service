@@ -53,6 +53,8 @@ class ProductsService {
 			volume: product.volume,
 			categoriesIds: product.categories.map((category) => category.id),
 			inDataSourcesIds: product.inDataSources.map((inDataSource) => inDataSource.dataSourceId),
+			brandId: "",
+			ingredientsIds: [],
 		};
 	}
 
@@ -163,6 +165,8 @@ class ProductsService {
 				imageUrl: inDataSource.imageUrl,
 				price: inDataSource.price,
 			})),
+			ingredients: [],
+			brand: null,
 		};
 	}
 	public async getDetailedProducts(pagingOptions: PagingOptions): Promise<Page<DetailedProduct>> {
