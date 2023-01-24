@@ -10,6 +10,8 @@ import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 import {Test} from "@nestjs/testing";
 import AppModule from "../../../src/AppModule.js";
 import configureApp from "../../../src/configureApp.js";
+import FeaturesModule from "../../../src/features_module/FeaturesModule.js";
+import {TypeOrmModule} from "@nestjs/typeorm";
 
 type AppTestingEnvironmentCreatedState = {
 	id: "created";
@@ -23,13 +25,15 @@ type AppTestingEnvironmentStartedState = {
 
 type PostgresqlContainerInitializationResult = {
 	container: StartedPostgreSqlContainer;
-	connectionOptions: {
-		host: string;
-		port: number;
-		username: string;
-		password: string;
-		database: string;
-	};
+	connectionOptions: PostgresqlConnectionOptions;
+};
+
+type PostgresqlConnectionOptions = {
+	host: string;
+	port: number;
+	username: string;
+	password: string;
+	database: string;
 };
 
 type AppTestingEnvironmentStoppedState = {
@@ -91,10 +95,22 @@ class AppTestingEnvironment implements TestingEnvironment {
 			id: "created",
 		};
 	}
-	private async initializeApp(env: Record<string, string>): Promise<NestFastifyApplication> {
-		process.env = {...process.env, ...env};
+	private async initializeApp(
+		postgresqlConnectionOptions: PostgresqlConnectionOptions
+	): Promise<NestFastifyApplication> {
+		const AppOrmModule = TypeOrmModule.forRoot({
+			type: "postgres",
+			host: postgresqlConnectionOptions.host,
+			port: postgresqlConnectionOptions.port,
+			username: postgresqlConnectionOptions.username,
+			password: postgresqlConnectionOptions.password,
+			database: postgresqlConnectionOptions.database,
+			autoLoadEntities: true,
+			synchronize: false,
+		});
+
 		const appTestingModule = await Test.createTestingModule({
-			imports: [AppModule],
+			imports: [FeaturesModule, AppOrmModule],
 		}).compile();
 
 		const app = appTestingModule.createNestApplication<NestFastifyApplication>(
@@ -128,13 +144,7 @@ class AppTestingEnvironment implements TestingEnvironment {
 				postgresqlContainerInitializationResult.connectionOptions
 			)}`
 		);
-		const app = await this.initializeApp({
-			"POSTGRES_HOST": postgresqlContainerInitializationResult.connectionOptions.host,
-			"POSTGRES_PORT": postgresqlContainerInitializationResult.connectionOptions.port.toString(),
-			"POSTGRES_USERNAME": postgresqlContainerInitializationResult.connectionOptions.username,
-			"POSTGRES_PASSWORD": postgresqlContainerInitializationResult.connectionOptions.password,
-			"POSTGRES_DATABASE": postgresqlContainerInitializationResult.connectionOptions.database,
-		});
+		const app = await this.initializeApp(postgresqlContainerInitializationResult.connectionOptions);
 		this.state = {
 			id: "started",
 			app,

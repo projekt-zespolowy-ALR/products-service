@@ -1,5 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {In, Repository} from "typeorm";
+import {CategoryEntity} from "../../categories/index.js";
 import ProductEntity from "./ProductEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Page, PagingOptions} from "../../../paging/index.js";
@@ -8,7 +9,7 @@ import * as Uuid from "uuid";
 import {DetailedProduct, Product} from "../types.js";
 
 import * as Paging from "../../../paging/index.js";
-import {CategoryEntity} from "../../categories/index.js";
+
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 import {DataSourceEntity} from "../../data_sources/index.js";
 
