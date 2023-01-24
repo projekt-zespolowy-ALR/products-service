@@ -9,4 +9,9 @@ interface AddCategoryPayload {
 	name: string;
 }
 
-export {type Category, type AddCategoryPayload};
+type AddCategoryRequestBody = {
+	readonly name: string;
+	readonly slug: string;
+};
+
+export {type Category, type AddCategoryPayload, type AddCategoryRequestBody};

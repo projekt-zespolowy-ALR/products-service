@@ -1,3 +1,4 @@
 import BrandsServiceBrandWithGivenIdNotFoundError from "./BrandsServiceBrandWithGivenIdNotFoundError.js";
+import BrandsServiceBrandWithGivenSlugNotFoundError from "./BrandsServiceBrandWithGivenSlugNotFoundError.js";
 
-export {BrandsServiceBrandWithGivenIdNotFoundError};
+export {BrandsServiceBrandWithGivenIdNotFoundError, BrandsServiceBrandWithGivenSlugNotFoundError};

@@ -1,5 +1,5 @@
 import {Body, Controller, Get, Param, Post, Query, Version} from "@nestjs/common";
-import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
+import {Page, PagingOptions} from "../../../paging/index.js";
 import {DataSourcesService} from "../data_sources_service/index.js";
 import {DataSource} from "../types.js";
 import AddDataSourceRequestBody from "./AddDataSourceRequestBody.js";
@@ -14,10 +14,10 @@ class DataSourcesRequestController {
 	@Get("/data-sources")
 	public async getAllDataSources(
 		@Query()
-		pagingOptionsInRequest: PagingOptionsInRequest
+		pagingOptions: PagingOptions
 	): Promise<Page<DataSource>> {
 		return this.dataSourcesService.getDataSources(
-			Paging.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+			Paging.convertPagingOptionsToPagingOptions(pagingOptions)
 		);
 	}
 	@Version(["1"])

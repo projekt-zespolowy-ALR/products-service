@@ -1,3 +1,3 @@
-import convertPagingOptionsInRequestToPagingOptions from "../paging/convertPagingOptionsInRequestToPagingOptions.js";
+import convertPagingOptionsToPagingOptions from "../paging/convertPagingOptionsToPagingOptions.js";
 
-export {convertPagingOptionsInRequestToPagingOptions};
+export {convertPagingOptionsToPagingOptions};

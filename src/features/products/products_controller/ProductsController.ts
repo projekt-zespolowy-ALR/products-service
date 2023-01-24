@@ -16,7 +16,7 @@ import {ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 
 import ProductsService from "../products_service/ProductsService.js";
-import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
+import {Page, PagingOptions} from "../../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import {AppConfig} from "../../../config/index.js";
 
@@ -37,10 +37,10 @@ class ProductsController {
 	@ApiProduces("application/json")
 	public async getAllProducts(
 		@Query()
-		pagingOptionsInRequest: PagingOptionsInRequest
+		pagingOptions: PagingOptions
 	): Promise<Page<Product>> {
 		return this.productsService.getProducts(
-			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+			Utils.convertPagingOptionsToPagingOptions(pagingOptions)
 		);
 	}
 
@@ -48,10 +48,10 @@ class ProductsController {
 	@Get("/detailed-products")
 	public async getAllDetailedProducts(
 		@Query()
-		pagingOptionsInRequest: PagingOptionsInRequest
+		pagingOptions: PagingOptions
 	): Promise<Page<Readonly<DetailedProduct>>> {
 		return this.productsService.getDetailedProducts(
-			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+			Utils.convertPagingOptionsToPagingOptions(pagingOptions)
 		);
 	}
 

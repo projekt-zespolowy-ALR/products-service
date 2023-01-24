@@ -1,54 +1,57 @@
-import {
-	Controller,
-	Get,
-	NotFoundException,
-	Param,
-	ParseUUIDPipe,
-	Query,
-	Version,
-} from "@nestjs/common";
-import {ApiNotFoundResponse, ApiProduces} from "@nestjs/swagger";
+import {Controller, Get, NotFoundException, Param, ParseUUIDPipe, Query} from "@nestjs/common";
 
 import BrandsService from "../brands_service/BrandsService.js";
-import {type Page, PagingOptionsInRequest} from "../../../paging/index.js";
-import * as Utils from "../../../utils/index.js";
-import {BrandsServiceBrandWithGivenIdNotFoundError} from "../brands_service/index.js";
-import {type Brand} from "../types.js";
+import {type Page, PagingOptions} from "../../../paging/index.js";
+import {
+	BrandsServiceBrandWithGivenIdNotFoundError,
+	BrandsServiceBrandWithGivenSlugNotFoundError,
+} from "../brands_service/index.js";
+import {type Brand} from "../types/index.d.js";
 
-@Controller("/brands")
+@Controller("/")
 class BrandsController {
 	private readonly brandsService: BrandsService;
 	constructor(brandsService: BrandsService) {
 		this.brandsService = brandsService;
 	}
 
-	@Version(["1"])
-	@ApiProduces("application/json")
-	@Get("/")
+	@Get("/brands")
 	public async getAllBrands(
 		@Query()
-		pagingOptionsInRequest: PagingOptionsInRequest
+		pagingOptions: PagingOptions
 	): Promise<Page<Brand>> {
-		return this.brandsService.getBrands(
-			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
-		);
+		return this.brandsService.getBrands(pagingOptions);
 	}
 
-	@ApiNotFoundResponse({
-		description: "Brand with given id not found",
-	})
-	@ApiProduces("application/json")
-	@Version(["1"])
-	@Get("/:brand-id")
+	@Get("/brands/:brandId")
 	public async getBrandById(
-		@Param("brand-id", ParseUUIDPipe)
+		@Param("brandId", ParseUUIDPipe)
 		brandId: string
 	): Promise<Brand> {
 		try {
 			return await this.brandsService.getBrandById(brandId);
 		} catch (error) {
 			if (error instanceof BrandsServiceBrandWithGivenIdNotFoundError) {
-				throw new NotFoundException();
+				throw new NotFoundException(`Brand with id ${brandId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Get("/brand-by-slug/:brandSlug")
+	public async getBrandBySlug(
+		@Param("brandSlug")
+		brandSlug: string
+	): Promise<Brand> {
+		try {
+			return await this.brandsService.getBrandBySlug(brandSlug);
+		} catch (error) {
+			if (error instanceof BrandsServiceBrandWithGivenSlugNotFoundError) {
+				throw new NotFoundException(`Brand with slug ${brandSlug} not found.`, {
+					cause: error,
+				});
 			}
 			throw error;
 		}

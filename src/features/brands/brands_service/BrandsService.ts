@@ -1,11 +1,11 @@
 import {Injectable} from "@nestjs/common";
-import {Repository} from "typeorm";
+import {EntityNotFoundError, Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PagingOptions} from "../../../paging/index.js";
 import BrandEntity from "./BrandEntity.js";
 
-import * as Paging from "../../../paging/index.js";
+import {PagingOptions, paginatedFindAndCount, type Page} from "../../../paging/index.js";
+import {BrandsServiceBrandWithGivenIdNotFoundError} from "./errors/index.js";
 
 @Injectable()
 class BrandsService {
@@ -15,10 +15,17 @@ class BrandsService {
 	}
 
 	public async getBrands(pagingOptions: PagingOptions): Promise<Page<BrandEntity>> {
-		return await Paging.paginatedFindAndCount(this.brandsRepository, pagingOptions);
+		return await paginatedFindAndCount(this.brandsRepository, pagingOptions);
 	}
 	public async getBrandById(id: string): Promise<BrandEntity> {
-		return this.brandsRepository.findOneByOrFail({id});
+		try {
+			return await this.brandsRepository.findOneByOrFail({id});
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new BrandsServiceBrandWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
 	}
 }
 

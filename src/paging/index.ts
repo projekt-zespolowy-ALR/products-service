@@ -1,17 +1,17 @@
 import Page from "./Page.js";
 import PageMeta from "./PageMeta.js";
-import PagingOptionsInRequest from "./PagingOptionsInRequest.js";
+import PagingOptions from "./PagingOptions.js";
 import PagingOptions from "./PagingOptions.js";
 import ApiPaginatedOkResponse from "./ApiPaginatedOkResponse.js";
 import paginatedFindAndCount from "./paginatedFindAndCount.js";
-import convertPagingOptionsInRequestToPagingOptions from "./convertPagingOptionsInRequestToPagingOptions.js";
+import convertPagingOptionsToPagingOptions from "./convertPagingOptionsToPagingOptions.js";
 
 export {
 	Page,
 	PageMeta,
-	PagingOptionsInRequest,
+	PagingOptions,
 	PagingOptions,
 	ApiPaginatedOkResponse,
 	paginatedFindAndCount,
-	convertPagingOptionsInRequestToPagingOptions,
+	convertPagingOptionsToPagingOptions,
 };

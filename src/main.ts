@@ -18,6 +18,7 @@ const app = await NestFactory.create<NestFastifyApplication>(AppModule, new Fast
 });
 app.enableVersioning({
 	type: VersioningType.URI,
+	defaultVersion: "1",
 });
 app.useGlobalPipes(
 	new ValidationPipe({

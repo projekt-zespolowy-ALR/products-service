@@ -11,7 +11,7 @@ import {
 import {ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 import CategoriesService from "../categories_service/CategoriesService.js";
-import {Page, PagingOptionsInRequest} from "../../../paging/index.js";
+import {Page, PagingOptions} from "../../../paging/index.js";
 import * as Utils from "../../../utils/index.js";
 import {Category} from "../types.js";
 import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
@@ -28,10 +28,10 @@ class CategoriesController {
 	@Get("/categories")
 	public async getAllCategories(
 		@Query()
-		pagingOptionsInRequest: PagingOptionsInRequest
+		pagingOptions: PagingOptions
 	): Promise<Page<Category>> {
 		return this.categoriesService.getCategories(
-			Utils.convertPagingOptionsInRequestToPagingOptions(pagingOptionsInRequest)
+			Utils.convertPagingOptionsToPagingOptions(pagingOptions)
 		);
 	}
 	@ApiProduces("application/json")

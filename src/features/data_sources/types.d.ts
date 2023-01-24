@@ -6,9 +6,15 @@ type DataSource = {
 };
 
 type AddDataSourcePayload = {
-	name: string;
-	slug: string;
-	url: string;
+	readonly name: string;
+	readonly slug: string;
+	readonly url: string;
 };
 
-export {type DataSource, type AddDataSourcePayload};
+type AddDataSourceRequestBody = {
+	readonly name: string;
+	readonly slug: string;
+	readonly url: string;
+};
+
+export {type DataSource, type AddDataSourcePayload, type AddDataSourceRequestBody};
