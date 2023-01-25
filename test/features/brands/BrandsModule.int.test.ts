@@ -1,5 +1,5 @@
 import {describe, test, expect, beforeEach, afterEach} from "@jest/globals";
-import AddProductRequestBody from "../../../src/features/products/products_controller/AddProductRequestBody.js";
+import type AddBrandRequestBody from "../../../src/features/brands/brands_controller/AddBrandRequestBody.js";
 import testsConfig from "../../config/testsConfig.js";
 import AppTestingEnvironment from "../../utils/testing_environment/AppTestingEnvironment.js";
 import EmptyTestingEnvironment from "../../utils/testing_environment/EmptyTestingEnvironment.js";
@@ -16,13 +16,13 @@ afterEach(async () => {
 	await testingEnvironment.stop();
 });
 
-describe("ProductsModule", () => {
+describe("BrandsModule", () => {
 	describe("v1", () => {
 		describe("Empty database", () => {
-			test("GET /cats", async () => {
+			test("Get all brands", async () => {
 				const response = await testingEnvironment.app.inject({
 					method: "GET",
-					url: "/v1/products",
+					url: "/v1/brands",
 				});
 				expect(response.statusCode).toBe(200);
 				expect(response.json()).toEqual({
@@ -30,68 +30,179 @@ describe("ProductsModule", () => {
 					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
 				});
 			});
-		});
-		describe("Database with one product", () => {
-			let addedProductId: string | null = null;
-			beforeEach(async () => {
-				const someProductRequestBody: Readonly<AddProductRequestBody> = {
-					name: "Some product",
-					slug: "some-product",
-					mass: 100,
-				};
-				const ADMIN_TOKEN = "4dm1nT0k3n";
+			test("Add one brand", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
 				const response = await testingEnvironment.app.inject({
 					method: "POST",
-					url: "/v1/products",
+					url: "/v1/brands",
 					headers: {
-						Authorization: `Bearer ${ADMIN_TOKEN}`,
 						"content-type": "application/json",
 					},
-					payload: someProductRequestBody,
+					payload: someBrandRequestBody,
 				});
-				addedProductId = response.json().id;
-			});
-			test("GET /products", async () => {
-				if (addedProductId === null) {
-					throw new Error("Added product ID is not initialized");
-				}
-				const response = await testingEnvironment.app.inject({
-					method: "GET",
-					url: "/v1/products",
-				});
-				expect(response.statusCode).toBe(200);
+				expect(response.statusCode).toBe(201);
 				expect(response.json()).toEqual({
+					id: expect.stringMatching(
+						/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+					),
+					name: "Some brand",
+					slug: "some-brand",
+				});
+			});
+			test("Add one brand and check if it is in the database", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
+				await testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/brands",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someBrandRequestBody,
+				});
+
+				const response2 = await testingEnvironment.app.inject({
+					method: "GET",
+					url: "/v1/brands",
+				});
+				expect(response2.statusCode).toBe(200);
+				expect(response2.json()).toEqual({
 					data: [
 						{
-							id: addedProductId,
-							name: "Some product",
-							slug: "some-product",
-							mass: 100,
-							volume: null,
-							categoriesIds: [],
-							inDataSourcesIds: [],
+							id: expect.stringMatching(
+								/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+							),
+							name: "Some brand",
+							slug: "some-brand",
 						},
 					],
 					meta: {skip: 0, take: 10, totalItemsCount: 1, pageItemsCount: 1},
 				});
 			});
-			test("GET /products/:product-id", async () => {
-				if (addedProductId === null) {
-					throw new Error("Added product ID is not initialized");
-				}
+			test("Get non existing brand by id should return 404", async () => {
 				const response = await testingEnvironment.app.inject({
 					method: "GET",
-					url: `/v1/products/${addedProductId}`,
+					url: "/v1/brands/af7c1fe6-d669-414e-b066-e9733f0de7a8",
 				});
-				expect(response.statusCode).toBe(200);
-				expect(response.json()).toEqual({
-					id: addedProductId,
-					name: "Some product",
-					slug: "some-product",
-					mass: 100,
-					volume: null,
-					categoriesIds: [],
-					inDataSourcesIds: [],
+				expect(response.statusCode).toBe(404);
+			});
+			test("Get non existing brand by slug should return 404", async () => {
+				const response = await testingEnvironment.app.inject({
+					method: "GET",
+					url: "/v1/brand-by-slug?slug=some-brand",
+				});
+				expect(response.statusCode).toBe(404);
+			});
+			test("Delete added brand", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
+				const response = await testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/brands",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someBrandRequestBody,
+				});
+				const brandId = response.json().id;
+
+				const response2 = await testingEnvironment.app.inject({
+					method: "DELETE",
+					url: `/v1/brands/${brandId}`,
+				});
+				expect(response2.statusCode).toBe(204);
+			});
+			test("Update added brand", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
+				const response = await testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/brands",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someBrandRequestBody,
+				});
+				const brandId = response.json().id;
+
+				const newBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand updated",
+					slug: "some-brand-updated",
+				} as const;
+				const response2 = await testingEnvironment.app.inject({
+					method: "PUT",
+					url: `/v1/brands/${brandId}`,
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: newBrandRequestBody,
+				});
+				expect(response2.statusCode).toBe(200);
+				expect(response2.json()).toEqual({
+					id: brandId,
+					name: "Some brand updated",
+					slug: "some-brand-updated",
+				});
+			});
+			test("Get added brand by id", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
+				const response = await testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/brands",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someBrandRequestBody,
+				});
+				const brandId = response.json().id;
+
+				const response2 = await testingEnvironment.app.inject({
+					method: "GET",
+					url: `/v1/brands/${brandId}`,
+				});
+				expect(response2.statusCode).toBe(200);
+				expect(response2.json()).toEqual({
+					id: brandId,
+					name: "Some brand",
+					slug: "some-brand",
+				});
+			});
+			test("Get added brand by slug", async () => {
+				const someBrandRequestBody: AddBrandRequestBody = {
+					name: "Some brand",
+					slug: "some-brand",
+				} as const;
+				const response = await testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/brands",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someBrandRequestBody,
+				});
+				const brandId = response.json().id;
+
+				const response2 = await testingEnvironment.app.inject({
+					method: "GET",
+					url: `/v1/brand-by-slug?slug=some-brand`,
+				});
+				expect(response2.statusCode).toBe(200);
+				expect(response2.json()).toEqual({
+					id: brandId,
+					name: "Some brand",
+					slug: "some-brand",
 				});
 			});
 		});

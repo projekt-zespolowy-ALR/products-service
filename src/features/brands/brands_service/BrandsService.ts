@@ -10,6 +10,9 @@ import BrandsServiceBrandWithGivenSlugNotFoundError from "./errors/BrandsService
 import Page from "../../../paging/Page.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
+import AddBrandPayload from "../types/AddBrandPayload.js";
+import Brand from "../types/Brand.js";
+import UpdateBrandPayload from "../types/UpdateBrandPayload.js";
 
 @Injectable()
 class BrandsService {
@@ -18,10 +21,10 @@ class BrandsService {
 		this.brandsRepository = brandsRepository;
 	}
 
-	public async getBrands(pagingOptions: PagingOptions): Promise<Page<BrandEntity>> {
+	public async getBrands(pagingOptions: PagingOptions): Promise<Page<Brand>> {
 		return await paginatedFindAndCount(this.brandsRepository, pagingOptions);
 	}
-	public async getBrandById(id: string): Promise<BrandEntity> {
+	public async getBrandById(id: string): Promise<Brand> {
 		try {
 			return await this.brandsRepository.findOneByOrFail({id});
 		} catch (error) {
@@ -31,7 +34,7 @@ class BrandsService {
 			throw error;
 		}
 	}
-	public async getBrandBySlug(brandSlug: string): Promise<BrandEntity> {
+	public async getBrandBySlug(brandSlug: string): Promise<Brand> {
 		try {
 			return await this.brandsRepository.findOneByOrFail({slug: brandSlug});
 		} catch (error) {
@@ -40,6 +43,25 @@ class BrandsService {
 			}
 			throw error;
 		}
+	}
+	public async addBrand(addBrandPayload: AddBrandPayload): Promise<Brand> {
+		const brandEntity = this.brandsRepository.create(addBrandPayload);
+		const savedBrandEntity = await this.brandsRepository.save(brandEntity);
+		return savedBrandEntity;
+	}
+	public async updateBrand(
+		brandId: string,
+		updateBrandPayload: UpdateBrandPayload
+	): Promise<Brand> {
+		const brandEntity = await this.getBrandById(brandId);
+		const updatedBrandEntity = this.brandsRepository.merge(brandEntity, updateBrandPayload);
+		const savedBrandEntity = await this.brandsRepository.save(updatedBrandEntity);
+		return savedBrandEntity;
+	}
+
+	public async deleteBrand(brandId: string): Promise<void> {
+		const brandEntity = await this.getBrandById(brandId);
+		await this.brandsRepository.remove(brandEntity);
 	}
 }
 

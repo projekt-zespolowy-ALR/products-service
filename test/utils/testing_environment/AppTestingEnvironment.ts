@@ -138,11 +138,7 @@ class AppTestingEnvironment implements TestingEnvironment {
 			postgresqlInitializationSqlScript
 		);
 		const postgresqlContainer = postgresqlContainerInitializationResult.container;
-		console.log(
-			`PostgreSQL container is started. Connection options: ${JSON.stringify(
-				postgresqlContainerInitializationResult.connectionOptions
-			)}`
-		);
+
 		const app = await this.initializeApp(postgresqlContainerInitializationResult.connectionOptions);
 		this.state = {
 			id: "started",
