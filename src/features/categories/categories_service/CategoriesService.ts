@@ -3,10 +3,11 @@ import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PagingOptions} from "../../../paging/index.js";
 
 import {type AddCategoryPayload, type Category} from "../types.js";
-import * as Paging from "../../../paging/index.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import Page from "../../../paging/Page.js";
+import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 
 @Injectable()
 class CategoriesService {
@@ -18,7 +19,7 @@ class CategoriesService {
 	public async getCategories(
 		pagingOptions: PagingOptions
 	): Promise<Page<Readonly<CategoryEntity>>> {
-		return await Paging.paginatedFindAndCount(this.categoriesRepository, pagingOptions);
+		return await paginatedFindAndCount(this.categoriesRepository, pagingOptions);
 	}
 	public async getCategoryById(id: string): Promise<Readonly<Category>> {
 		return await this.categoriesRepository.findOneByOrFail({id});

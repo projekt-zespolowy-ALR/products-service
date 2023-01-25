@@ -1,6 +1,3 @@
-import {type Brand} from "../brands/index.js";
-import {type Ingredient} from "../ingredients/index.js";
-
 type Product = {
 	readonly id: string;
 

@@ -15,20 +15,20 @@ import {
 import {ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 
-import {ProductsService} from "../products_service/index.js";
-import {Page, PagingOptions} from "../../../paging/index.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
-import {AppConfig} from "../../../config/index.js";
 
 import {type Product, type DetailedProduct} from "../types.js";
+import AppConfig from "../../../config/AppConfig.js";
+import ProductsService from "../products_service/ProductsService.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import Page from "../../../paging/Page.js";
 
 @Controller("/")
 class ProductsController {
 	private readonly productsService: ProductsService;
-	private readonly appConfig: AppConfig;
-	constructor(productsService: ProductsService, appConfig: AppConfig) {
+
+	constructor(productsService: ProductsService) {
 		this.productsService = productsService;
-		this.appConfig = appConfig;
 	}
 
 	@Version(["1"])
@@ -102,12 +102,8 @@ class ProductsController {
 				version: "4",
 			})
 		)
-		productId: string,
-		@Headers("Authorization") authorization: string
+		productId: string
 	): Promise<void> {
-		if (authorization !== `Bearer ${this.appConfig.ADMIN_TOKEN}`) {
-			throw new Error("Unauthorized");
-		}
 		return this.productsService.deleteProduct(productId);
 	}
 }

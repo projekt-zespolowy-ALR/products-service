@@ -1,11 +1,10 @@
 import {Controller, Get, NotFoundException, Param, ParseUUIDPipe, Query} from "@nestjs/common";
+import Page from "../../../paging/Page.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import BrandsService from "../brands_service/BrandsService.js";
+import BrandsServiceBrandWithGivenIdNotFoundError from "../brands_service/errors/BrandsServiceBrandWithGivenIdNotFoundError.js";
+import BrandsServiceBrandWithGivenSlugNotFoundError from "../brands_service/errors/BrandsServiceBrandWithGivenSlugNotFoundError.js";
 
-import {type Page, PagingOptions} from "../../../paging/index.js";
-import {
-	BrandsServiceBrandWithGivenIdNotFoundError,
-	BrandsServiceBrandWithGivenSlugNotFoundError,
-	BrandsService,
-} from "../brands_service/index.js";
 import {type Brand} from "../types/index.d.js";
 
 @Controller("/")

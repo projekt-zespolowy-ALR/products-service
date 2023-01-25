@@ -5,11 +5,11 @@ import {EntityNotFoundError, Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
 
-import {PagingOptions, paginatedFindAndCount, type Page} from "../../../paging/index.js";
-import {
-	BrandsServiceBrandWithGivenIdNotFoundError,
-	BrandsServiceBrandWithGivenSlugNotFoundError,
-} from "./errors/index.js";
+import BrandsServiceBrandWithGivenIdNotFoundError from "./errors/BrandsServiceBrandWithGivenIdNotFoundError.js";
+import BrandsServiceBrandWithGivenSlugNotFoundError from "./errors/BrandsServiceBrandWithGivenSlugNotFoundError.js";
+import Page from "../../../paging/Page.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 
 @Injectable()
 class BrandsService {

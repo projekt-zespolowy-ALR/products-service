@@ -1,6 +1,5 @@
-import {ProductInDataSourceEntity} from "../../products/index.js";
-
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, Relation} from "typeorm";
+import ProductInDataSourceEntity from "../../products/products_service/ProductInDataSourceEntity.js";
 
 @Entity({name: "data_sources"})
 class DataSourceEntity {
@@ -20,7 +19,7 @@ class DataSourceEntity {
 		() => ProductInDataSourceEntity,
 		(productInDataSource) => productInDataSource.dataSource
 	)
-	public readonly products!: readonly ProductInDataSourceEntity[];
+	public readonly products!: readonly Relation<ProductInDataSourceEntity>[];
 }
 
 export default DataSourceEntity;

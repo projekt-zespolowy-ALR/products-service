@@ -1,12 +1,9 @@
-import {testsConfig} from "../../config/index.js";
-
 import {describe, test, expect, beforeEach, afterEach} from "@jest/globals";
 import AddProductRequestBody from "../../../src/features/products/products_controller/AddProductRequestBody.js";
-import {
-	AppTestingEnvironment,
-	EmptyTestingEnvironment,
-	type TestingEnvironment,
-} from "../../utils/testing_environment/index.js";
+import testsConfig from "../../config/testsConfig.js";
+import AppTestingEnvironment from "../../utils/testing_environment/AppTestingEnvironment.js";
+import EmptyTestingEnvironment from "../../utils/testing_environment/EmptyTestingEnvironment.js";
+import TestingEnvironment from "../../utils/testing_environment/TestingEnvironment.js";
 
 let testingEnvironment: TestingEnvironment = new EmptyTestingEnvironment();
 

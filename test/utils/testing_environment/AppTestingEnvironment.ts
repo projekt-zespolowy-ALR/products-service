@@ -1,7 +1,5 @@
 import type TestingEnvironment from "./TestingEnvironment.d.js";
 
-import {testsConfig} from "../../config/index.js";
-
 import {PostgreSqlContainer, StartedPostgreSqlContainer} from "testcontainers";
 
 import * as fs from "fs/promises";
@@ -12,6 +10,7 @@ import AppModule from "../../../src/AppModule.js";
 import configureApp from "../../../src/configureApp.js";
 import FeaturesModule from "../../../src/features_module/FeaturesModule.js";
 import {TypeOrmModule} from "@nestjs/typeorm";
+import testsConfig from "../../config/testsConfig.js";
 
 type AppTestingEnvironmentCreatedState = {
 	id: "created";

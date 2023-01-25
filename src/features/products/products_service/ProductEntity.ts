@@ -7,7 +7,8 @@ import {
 	ManyToMany,
 	OneToMany,
 } from "typeorm";
-import {CategoryEntity} from "../../categories/index.js";
+import CategoryEntity from "../../categories/categories_service/CategoryEntity.js";
+
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 
 @Entity({name: "products"})

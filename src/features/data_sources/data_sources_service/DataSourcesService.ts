@@ -3,11 +3,13 @@ import {Injectable} from "@nestjs/common";
 import {Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PagingOptions} from "../../../paging/index.js";
 
 import {type AddDataSourcePayload, type DataSource} from "../types.js";
-import * as Paging from "../../../paging/index.js";
+
 import * as Uuid from "uuid";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
+import Page from "../../../paging/Page.js";
 
 @Injectable()
 class DataSourcesService {
@@ -21,7 +23,7 @@ class DataSourcesService {
 	public async getDataSources(
 		pagingOptions: PagingOptions
 	): Promise<Page<Readonly<DataSourceEntity>>> {
-		return await Paging.paginatedFindAndCount(this.dataSourcesRepository, pagingOptions);
+		return await paginatedFindAndCount(this.dataSourcesRepository, pagingOptions);
 	}
 
 	public async getDataSourceByIdOrSlug(idOrSlug: string): Promise<DataSource> {

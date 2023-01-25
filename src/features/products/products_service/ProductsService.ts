@@ -1,5 +1,3 @@
-import {CategoryEntity} from "../../categories/index.js";
-import {DataSourceEntity} from "../../data_sources/index.js";
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 
 import {Injectable} from "@nestjs/common";
@@ -7,12 +5,14 @@ import {In, Repository} from "typeorm";
 
 import ProductEntity from "./ProductEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
-import {Page, PagingOptions} from "../../../paging/index.js";
 import AddProductRequestBody from "../products_controller/AddProductRequestBody.js";
 import * as Uuid from "uuid";
 import {DetailedProduct, Product} from "../types.js";
-
-import * as Paging from "../../../paging/index.js";
+import CategoryEntity from "../../categories/categories_service/CategoryEntity.js";
+import DataSourceEntity from "../../data_sources/data_sources_service/DataSourceEntity.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import Page from "../../../paging/Page.js";
+import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 
 @Injectable()
 class ProductsService {
@@ -36,13 +36,9 @@ class ProductsService {
 		this.dataSourceRepository = dataSourceRepository;
 	}
 	public async getProducts(pagingOptions: PagingOptions): Promise<Page<Product>> {
-		const productsEntities = await Paging.paginatedFindAndCount(
-			this.productsRepository,
-			pagingOptions,
-			{
-				relations: ["categories", "inDataSources"],
-			}
-		);
+		const productsEntities = await paginatedFindAndCount(this.productsRepository, pagingOptions, {
+			relations: ["categories", "inDataSources"],
+		});
 		const products = productsEntities.map(this.deentitifyProduct);
 		return products;
 	}
@@ -172,7 +168,7 @@ class ProductsService {
 		};
 	}
 	public async getDetailedProducts(pagingOptions: PagingOptions): Promise<Page<DetailedProduct>> {
-		const detailedProductsEntities = await Paging.paginatedFindAndCount(
+		const detailedProductsEntities = await paginatedFindAndCount(
 			this.productsRepository,
 			pagingOptions,
 			{

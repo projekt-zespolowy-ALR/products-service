@@ -1,6 +1,8 @@
 import {Body, Controller, Get, Param, Post, Query, Version} from "@nestjs/common";
-import {Page, PagingOptions} from "../../../paging/index.js";
-import {DataSourcesService} from "../data_sources_service/index.js";
+import Page from "../../../paging/Page.js";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import DataSourcesService from "../data_sources_service/DataSourcesService.js";
+
 import {type DataSource} from "../types.js";
 import AddDataSourceRequestBody from "./AddDataSourceRequestBody.js";
 

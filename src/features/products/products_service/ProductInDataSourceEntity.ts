@@ -1,6 +1,6 @@
-import {DataSourceEntity} from "../../data_sources/index.js";
 import ProductEntity from "./ProductEntity.js";
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, type Relation} from "typeorm";
+import DataSourceEntity from "../../data_sources/data_sources_service/DataSourceEntity.js";
 
 @Entity({name: "products_in_data_sources"})
 class ProductInDataSourceEntity {

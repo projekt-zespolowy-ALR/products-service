@@ -11,10 +11,11 @@ import {
 import {ApiProduces} from "@nestjs/swagger";
 import {EntityNotFoundError} from "typeorm";
 import CategoriesService from "../categories_service/CategoriesService.js";
-import {Page, PagingOptions} from "../../../paging/index.js";
 import {type Category} from "../types.js";
 import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
 import * as Uuid from "uuid";
+import PagingOptions from "../../../paging/PagingOptions.js";
+import Page from "../../../paging/Page.js";
 @Controller()
 class CategoriesController {
 	private readonly categoriesService: CategoriesService;
