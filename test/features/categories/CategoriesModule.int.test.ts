@@ -279,7 +279,7 @@ describe("CategoriesModule", () => {
 							categoriesIds: [someCategory1Id],
 						}),
 					],
-					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
+					meta: {skip: 0, take: 10, totalItemsCount: 1, pageItemsCount: 1},
 				});
 			});
 		});
