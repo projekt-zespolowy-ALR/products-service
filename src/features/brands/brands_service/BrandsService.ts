@@ -10,9 +10,9 @@ import BrandsServiceBrandWithGivenSlugNotFoundError from "./errors/BrandsService
 import Page from "../../../paging/Page.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
-import type AddBrandPayload from "../types/AddBrandPayload.js";
-import type Brand from "../types/Brand.js";
-import type UpdateBrandPayload from "../types/UpdateBrandPayload.js";
+import type AddBrandPayload from "../types/AddBrandPayload.d.js";
+import type Brand from "../types/Brand.d.js";
+import type UpdateBrandPayload from "../types/UpdateBrandPayload.d.js";
 
 @Injectable()
 class BrandsService {
