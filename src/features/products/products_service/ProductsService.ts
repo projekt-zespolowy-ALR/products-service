@@ -14,6 +14,7 @@ import DataSourceEntity from "../../data_sources/data_sources_service/DataSource
 import PagingOptions from "../../../paging/PagingOptions.js";
 import Page from "../../../paging/Page.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
+import deentitifyDetailedProduct from "./deentitifyDetailedProduct.js";
 
 @Injectable()
 class ProductsService {
@@ -72,102 +73,26 @@ class ProductsService {
 	}
 	public async addProduct(addProductRequestBody: AddProductRequestBody): Promise<Product> {
 		// TODO: Refactor using promise all
-		const categoriesIdsOrSlugs = addProductRequestBody.categoriesIdsOrSlugs;
-		const categories = categoriesIdsOrSlugs
+		const categories = addProductRequestBody.categoriesIds
 			? await this.categoryRepository.findBy([
 					{
-						id: In(
-							categoriesIdsOrSlugs.filter((categoryIdOrSlug) => Uuid.validate(categoryIdOrSlug))
-						),
-					},
-					{
-						slug: In(
-							categoriesIdsOrSlugs.filter((categoryIdOrSlug) => !Uuid.validate(categoryIdOrSlug))
-						),
+						id: In(addProductRequestBody.categoriesIds),
 					},
 			  ])
 			: [];
-		const inDataSourcesIdsOrSlugs = addProductRequestBody.inDataSources?.map(
-			(inDataSource) => inDataSource.dataSourceIdOrSlug
-		);
-		const dataSources = inDataSourcesIdsOrSlugs
-			? await this.dataSourceRepository.findBy([
-					{
-						id: In(
-							inDataSourcesIdsOrSlugs.filter((dataSourceIdOrSlug) =>
-								Uuid.validate(dataSourceIdOrSlug)
-							)
-						),
-					},
-					{
-						slug: In(
-							inDataSourcesIdsOrSlugs.filter(
-								(dataSourceIdOrSlug) => !Uuid.validate(dataSourceIdOrSlug)
-							)
-						),
-					},
-			  ])
-			: [];
-		const dataSourceEntityBySlug = dataSources.reduce(
-			(dataSourceEntityBySlug: Map<string, DataSourceEntity>, dataSource) => {
-				dataSourceEntityBySlug.set(dataSource.slug, dataSource);
-				return dataSourceEntityBySlug;
-			},
-			new Map()
-		);
-		const dataSourceEntityById = dataSources.reduce(
-			(dataSourceEntityById: Map<string, DataSourceEntity>, dataSource) => {
-				dataSourceEntityById.set(dataSource.id, dataSource);
-				return dataSourceEntityById;
-			},
-			new Map()
-		);
-		const inDataSources: ProductInDataSourceEntity[] =
-			addProductRequestBody.inDataSources?.map((inDataSource) => {
-				const dataSource =
-					dataSourceEntityBySlug.get(inDataSource.dataSourceIdOrSlug) ??
-					(dataSourceEntityById.get(inDataSource.dataSourceIdOrSlug) as DataSourceEntity);
-				return this.productInDataSourceRepository.create({
-					dataSourceId: dataSource.id,
-					productId: null as unknown as string,
-					referenceUrl: inDataSource.referenceUrl ?? null,
-					imageUrl: inDataSource.imageUrl ?? null,
-					price: inDataSource.price ?? null,
-				});
-			}) ?? [];
+
 		const productEntity = this.productsRepository.create({
 			name: addProductRequestBody.name ?? null,
 			slug: addProductRequestBody.slug,
 			mass: addProductRequestBody.mass ?? null,
 			volume: addProductRequestBody.volume ?? null,
 			categories,
-			inDataSources,
+			inDataSources: [],
 		});
 		const savedProductEntity = await this.productsRepository.save(productEntity);
 		return this.deentitifyProduct(savedProductEntity);
 	}
-	public deentitifyDetailedProduct(productEntity: ProductEntity): DetailedProduct {
-		return {
-			id: productEntity.id,
-			name: productEntity.name,
-			slug: productEntity.slug,
-			mass: productEntity.mass,
-			volume: productEntity.volume,
-			categories: productEntity.categories.map((category: CategoryEntity) => ({
-				id: category.id,
-				name: category.name,
-				slug: category.slug,
-			})),
-			inDataSources: productEntity.inDataSources.map((inDataSource: ProductInDataSourceEntity) => ({
-				dataSource: inDataSource.dataSource,
-				referenceUrl: inDataSource.referenceUrl,
-				imageUrl: inDataSource.imageUrl,
-				price: inDataSource.price,
-			})),
-			ingredients: [],
-			brand: null,
-		};
-	}
+
 	public async getDetailedProducts(pagingOptions: PagingOptions): Promise<Page<DetailedProduct>> {
 		const detailedProductsEntities = await paginatedFindAndCount(
 			this.productsRepository,
@@ -176,9 +101,7 @@ class ProductsService {
 				relations: ["categories", "inDataSources", "inDataSources.dataSource"],
 			}
 		);
-		const detailedProducts = detailedProductsEntities.map((product) =>
-			this.deentitifyDetailedProduct(product)
-		);
+		const detailedProducts = detailedProductsEntities.map(deentitifyDetailedProduct);
 		return detailedProducts;
 	}
 
@@ -192,7 +115,7 @@ class ProductsService {
 					where: {slug: idOrSlug},
 					relations: ["categories", "inDataSources"],
 			  }));
-		const productEntity = this.deentitifyDetailedProduct(detailedProductEntity);
+		const productEntity = deentitifyDetailedProduct(detailedProductEntity);
 		return productEntity;
 	}
 }

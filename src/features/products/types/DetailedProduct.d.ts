@@ -1,3 +1,5 @@
+import type Category from "../../categories/types/Category.d.js";
+
 type DetailedProduct = {
 	/**
 	 * The product's id in UUID format.
@@ -35,39 +37,12 @@ type DetailedProduct = {
 	/**
 	 * The product's categories.
 	 */
-	readonly categories: readonly {
-		id: string;
-		slug: string;
-		name: string;
-	}[];
+	readonly categories: readonly Category[];
 
 	/**
 	 * Information about the product's availability in the data sources.
 	 */
-	readonly inDataSources: readonly {
-		readonly dataSource: {
-			readonly id: string;
-			readonly name: string;
-			readonly slug: string;
-			readonly url: string;
-		};
-		/**
-		 * The URL of the product's page in the data source.
-		 * @example "https://www.hebe.pl/claresa-zel-do-laminacji-brwi-8-g-000000000000407817.html"
-		 */
-		readonly referenceUrl: string | null;
-		/**
-		 * The URL of the product's image in the data source.
-		 * May not always work due to CORS.
-		 */
-		readonly imageUrl: string | null;
-		/**
-		 * The product's price in PLN in the data source if it's known, null otherwise.
-		 * @example 9.99
-		 * @example null
-		 */
-		readonly price: number | null;
-	}[];
+	readonly inDataSources: readonly DetailedProductInDataSource[];
 
 	/**
 	 * The product's brand if it's known, null otherwise.

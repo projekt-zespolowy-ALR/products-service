@@ -55,6 +55,7 @@ CREATE TABLE products_in_data_sources (
 	data_source_id UUID NOT NULL,
 	reference_url TEXT,
 	image_url TEXT,
+	description TEXT,
 	price NUMERIC(10, 2),
 	PRIMARY KEY (product_id, data_source_id),
 	FOREIGN KEY (product_id) REFERENCES products (id),

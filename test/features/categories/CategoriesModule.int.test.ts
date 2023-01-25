@@ -1,5 +1,7 @@
 import {describe, test, expect, beforeEach, afterEach} from "@jest/globals";
 import type AddCategoryRequestBody from "../../../src/features/categories/categories_controller/AddCategoryRequestBody.js";
+import AddCategoryPayload from "../../../src/features/categories/types/AddCategoryPayload.js";
+import AddProductRequestBody from "../../../src/features/products/products_controller/AddProductRequestBody.js";
 import testsConfig from "../../config/testsConfig.js";
 import AppTestingEnvironment from "../../utils/testing_environment/AppTestingEnvironment.js";
 import EmptyTestingEnvironment from "../../utils/testing_environment/EmptyTestingEnvironment.js";
@@ -203,6 +205,82 @@ describe("CategoriesModule", () => {
 					id: categoryId,
 					name: "Some category",
 					slug: "some-category",
+				});
+			});
+		});
+		describe("Database with some products assigned to different categories", () => {
+			test("Get products assigned to category", async () => {
+				const someCategory1: AddCategoryPayload = {
+					name: "Some category 1",
+					slug: "some-category-1",
+				} as const;
+				const someCategory2: AddCategoryPayload = {
+					name: "Some category 2",
+					slug: "some-category-2",
+				} as const;
+				const someCategory1Id = (
+					await testingEnvironment.app.inject({
+						method: "POST",
+						url: "/v1/categories",
+						headers: {
+							"content-type": "application/json",
+						},
+						payload: someCategory1,
+					})
+				).json().id;
+				const someCategory2Id = (
+					await testingEnvironment.app.inject({
+						method: "POST",
+						url: "/v1/categories",
+						headers: {
+							"content-type": "application/json",
+						},
+						payload: someCategory2,
+					})
+				).json().id;
+				const someProduct1: AddProductRequestBody = {
+					name: "Some product 1",
+					slug: "some-product-1",
+					categoriesIds: [someCategory1Id],
+				} as const;
+				const someProduct2: AddProductRequestBody = {
+					name: "Some product 2",
+					slug: "some-product-2",
+					categoriesIds: [someCategory2Id],
+				} as const;
+				testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/products",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someProduct1,
+				});
+				testingEnvironment.app.inject({
+					method: "POST",
+					url: "/v1/products",
+					headers: {
+						"content-type": "application/json",
+					},
+					payload: someProduct2,
+				});
+				const response = await testingEnvironment.app.inject({
+					method: "GET",
+					url: `/v1/categories/${someCategory1Id}/products`,
+				});
+				expect(response.statusCode).toBe(200);
+				expect(response.json()).toEqual({
+					data: [
+						{
+							id: expect.stringMatching(
+								/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+							),
+							name: "Some product 1",
+							slug: "some-product-1",
+							categoriesIds: [someCategory1Id],
+						},
+					],
+					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
 				});
 			});
 		});

@@ -1,7 +1,7 @@
 import type DataSource from "../../data_sources/types/DataSource.d.js";
 
-type ProductInDataSource = {
-	readonly dataSourceId: string;
+type DetailedProductInDataSource = {
+	readonly dataSource: DataSource;
 	/**
 	 * The URL of the product's page in the data source.
 	 * @example "https://www.hebe.pl/claresa-zel-do-laminacji-brwi-8-g-000000000000407817.html"

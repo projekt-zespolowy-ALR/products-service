@@ -19,6 +19,9 @@ class ProductInDataSourceEntity {
 	@Column({name: "price", type: "numeric"})
 	public readonly price!: number | null;
 
+	@Column({name: "description", type: "text"})
+	public readonly description!: string | null;
+
 	@ManyToOne(() => ProductEntity, (product) => product.inDataSources)
 	@JoinColumn({name: "product_id"})
 	public readonly product!: Relation<ProductEntity>;
