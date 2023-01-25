@@ -1,66 +1,114 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
+	HttpCode,
 	NotFoundException,
 	Param,
+	ParseUUIDPipe,
 	Post,
+	Put,
 	Query,
-	Version,
 } from "@nestjs/common";
-import {ApiProduces} from "@nestjs/swagger";
-import {EntityNotFoundError} from "typeorm";
-import CategoriesService from "../categories_service/CategoriesService.js";
-import {type Category} from "../types.js";
-import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
-import * as Uuid from "uuid";
-import PagingOptions from "../../../paging/PagingOptions.js";
 import Page from "../../../paging/Page.js";
-@Controller()
+import PagingOptions from "../../../paging/PagingOptions.js";
+import CategoriesService from "../categories_service/CategoriesService.js";
+import CategoriesServiceCategoryWithGivenIdNotFoundError from "../categories_service/errors/CategoriesServiceCategoryWithGivenIdNotFoundError.js";
+import CategoriesServiceCategoryWithGivenSlugNotFoundError from "../categories_service/errors/CategoriesServiceCategoryWithGivenSlugNotFoundError.js";
+import type Category from "../types/Category.d.js";
+import AddCategoryRequestBody from "./AddCategoryRequestBody.js";
+import UpdateCategoryRequestBody from "./UpdateCategoryRequestBody.js";
+
+@Controller("/")
 class CategoriesController {
 	private readonly categoriesService: CategoriesService;
 	constructor(categoriesService: CategoriesService) {
 		this.categoriesService = categoriesService;
 	}
 
-	@ApiProduces("application/json")
-	@Version(["1"])
 	@Get("/categories")
 	public async getAllCategories(
 		@Query()
 		pagingOptions: PagingOptions
 	): Promise<Page<Category>> {
-		return this.categoriesService.getCategories(pagingOptions);
+		return await this.categoriesService.getCategories(pagingOptions);
 	}
-	@ApiProduces("application/json")
-	@Version(["1"])
-	@Get("/categories/:idOrSlug")
-	public async getCategoryByIdOrSlug(
-		@Param("idOrSlug")
-		idOrSlug: string
-	): Promise<Readonly<Category>> {
+
+	@Get("/categories/:categoryId")
+	public async getCategoryById(
+		@Param("categoryId", ParseUUIDPipe)
+		categoryId: string
+	): Promise<Category> {
 		try {
-			// return this.categoriesService.getCategoryByIdOrSlug(idOrSlug);
-			if (Uuid.validate(idOrSlug)) {
-				return this.categoriesService.getCategoryById(idOrSlug);
-			}
-			return this.categoriesService.getCategoryBySlug(idOrSlug);
+			return await this.categoriesService.getCategoryById(categoryId);
 		} catch (error) {
-			if (error instanceof EntityNotFoundError) {
-				throw new NotFoundException();
+			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Category with id ${categoryId} not found.`, {
+					cause: error,
+				});
 			}
 			throw error;
 		}
 	}
 
-	@ApiProduces("application/json")
-	@Version(["1"])
-	@Post("/categories")
-	public async addCategory(
-		@Body()
-		addCategoryRequestBody: AddCategoryRequestBody
+	@Get("/category-by-slug")
+	public async getCategoryBySlug(
+		@Query("slug")
+		categorieslug: string
 	): Promise<Category> {
-		return this.categoriesService.addCategory(addCategoryRequestBody);
+		try {
+			return await this.categoriesService.getCategoryBySlug(categorieslug);
+		} catch (error) {
+			if (error instanceof CategoriesServiceCategoryWithGivenSlugNotFoundError) {
+				throw new NotFoundException(`Category with slug ${categorieslug} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Post("/categories")
+	public async addCategory(@Body() category: AddCategoryRequestBody): Promise<Category> {
+		return await this.categoriesService.addCategory(category);
+	}
+
+	@Delete("/categories/:categoryId")
+	@HttpCode(204)
+	public async deleteCategory(
+		@Param("categoryId", ParseUUIDPipe)
+		categoryId: string
+	): Promise<void> {
+		try {
+			await this.categoriesService.deleteCategory(categoryId);
+		} catch (error) {
+			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Category with id ${categoryId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Put("/categories/:categoryId")
+	public async updateCategory(
+		@Param("categoryId", ParseUUIDPipe)
+		categoryId: string,
+		@Body()
+		category: UpdateCategoryRequestBody
+	): Promise<Category> {
+		try {
+			return await this.categoriesService.updateCategory(categoryId, category);
+		} catch (error) {
+			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Category with id ${categoryId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
 	}
 }
 

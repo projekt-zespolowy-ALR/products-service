@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, Relation, ManyToMany, JoinTable} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, Relation} from "typeorm";
 import ProductEntity from "../../products/products_service/ProductEntity.js";
 
 @Entity({name: "categories"})
@@ -6,10 +6,10 @@ class CategoryEntity {
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
 
-	@Column({name: "slug", unique: true, type: "text"})
+	@Column({name: "slug", unique: true, type: "text", nullable: false})
 	public readonly slug!: string;
 
-	@Column({name: "name", type: "text"})
+	@Column({name: "name", type: "text", nullable: false})
 	public readonly name!: string;
 
 	@ManyToMany(() => ProductEntity, (product) => product.categories)

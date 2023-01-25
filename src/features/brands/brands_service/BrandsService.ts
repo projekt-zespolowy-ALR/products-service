@@ -53,8 +53,14 @@ class BrandsService {
 		brandId: string,
 		updateBrandPayload: UpdateBrandPayload
 	): Promise<Brand> {
-		const brandEntity = await this.getBrandById(brandId);
-		const updatedBrandEntity = this.brandsRepository.merge(brandEntity, updateBrandPayload);
+		const updatedBrandEntity = await this.brandsRepository.preload({
+			id: brandId,
+			...updateBrandPayload,
+		});
+		if (!updatedBrandEntity) {
+			throw new BrandsServiceBrandWithGivenIdNotFoundError(brandId);
+		}
+
 		const savedBrandEntity = await this.brandsRepository.save(updatedBrandEntity);
 		return savedBrandEntity;
 	}
