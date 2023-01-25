@@ -10,7 +10,7 @@ function deentitifyProduct(product: ProductEntity): Product {
 		volume: product.volume,
 		brandId: null,
 
-		categoriesIds: [],
+		categoriesIds: product.categories.map((category) => category.id),
 		inDataSourcesIds: [],
 		ingredientsIds: [],
 	};

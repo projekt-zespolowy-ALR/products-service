@@ -248,7 +248,7 @@ describe("CategoriesModule", () => {
 					slug: "some-product-2",
 					categoriesIds: [someCategory2Id],
 				} as const;
-				testingEnvironment.app.inject({
+				const responseSomeProduct1 = await testingEnvironment.app.inject({
 					method: "POST",
 					url: "/v1/products",
 					headers: {
@@ -256,7 +256,8 @@ describe("CategoriesModule", () => {
 					},
 					payload: someProduct1,
 				});
-				testingEnvironment.app.inject({
+				const addedProduct1 = responseSomeProduct1.json();
+				await testingEnvironment.app.inject({
 					method: "POST",
 					url: "/v1/products",
 					headers: {
@@ -271,14 +272,12 @@ describe("CategoriesModule", () => {
 				expect(response.statusCode).toBe(200);
 				expect(response.json()).toEqual({
 					data: [
-						{
-							id: expect.stringMatching(
-								/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
-							),
-							name: "Some product 1",
-							slug: "some-product-1",
+						expect.objectContaining({
+							id: addedProduct1.id,
+							name: addedProduct1.name,
+							slug: addedProduct1.slug,
 							categoriesIds: [someCategory1Id],
-						},
+						}),
 					],
 					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
 				});

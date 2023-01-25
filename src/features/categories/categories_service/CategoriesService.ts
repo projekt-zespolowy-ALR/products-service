@@ -20,7 +20,7 @@ import deentitifyProduct from "../../products/products_service/deentitifyProduct
 
 @Injectable()
 class CategoriesService {
-	public async getProductsByCategoryId(
+	public async getProductsByCategory(
 		categoryId: string,
 		pagingOptions: PagingOptions
 	): Promise<Page<Product>> {
@@ -29,7 +29,27 @@ class CategoriesService {
 			await paginateQuery(
 				this.productsRepository
 					.createQueryBuilder("product")
-					.leftJoin("product.categories", "category", "category.id = :categoryId", {categoryId}),
+					.innerJoinAndSelect("product.categories", "category", "category.id = :categoryId", {
+						categoryId,
+					}),
+				pagingOptions
+			)
+		).map((product) => deentitifyProduct(product));
+		return products;
+	}
+
+	public async getProductsByCategorySlug(
+		categorySlug: string,
+		pagingOptions: PagingOptions
+	): Promise<Page<Product>> {
+		const category = await this.getCategoryBySlug(categorySlug);
+		const products = (
+			await paginateQuery(
+				this.productsRepository
+					.createQueryBuilder("product")
+					.innerJoinAndSelect("product.categories", "category", "category.slug = :categorySlug", {
+						categorySlug,
+					}),
 				pagingOptions
 			)
 		).map((product) => deentitifyProduct(product));
