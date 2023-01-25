@@ -1,6 +1,6 @@
 import {IsNumber, IsOptional, IsString} from "class-validator";
 
-class AddProductRequestBody {
+class UpdateProductRequestBody {
 	@IsString()
 	@IsOptional()
 	public readonly name?: string | undefined | null;
@@ -23,10 +23,6 @@ class AddProductRequestBody {
 	@IsString()
 	@IsOptional()
 	public readonly brandId?: string | undefined | null;
-
-	@IsString({each: true})
-	@IsOptional()
-	public readonly ingredientsIds: readonly string[] | undefined | null;
 }
 
-export default AddProductRequestBody;
+export default UpdateProductRequestBody;

@@ -2,12 +2,18 @@ import {
 	Entity,
 	Column,
 	PrimaryGeneratedColumn,
-	Relation,
+	type Relation,
 	JoinTable,
 	ManyToMany,
 	OneToMany,
+	ManyToOne,
+	OneToOne,
+	JoinColumn,
 } from "typeorm";
+import BrandEntity from "../../brands/brands_service/BrandEntity.js";
 import CategoryEntity from "../../categories/categories_service/CategoryEntity.js";
+import IngredientsListEntity from "./IngredientsListEntity.js";
+import ProductInCategoryEntity from "./ProductInCategoryEntity.js";
 
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 
@@ -28,26 +34,25 @@ class ProductEntity {
 	@Column({name: "volume", nullable: true, type: "double precision"})
 	public readonly volume!: number | null;
 
-	@ManyToMany(() => CategoryEntity, (category) => category.products)
-	@JoinTable({
-		name: "products_in_categories",
-		joinColumn: {
-			name: "product_id",
-			referencedColumnName: "id",
-		},
-		inverseJoinColumn: {
-			name: "category_id",
-			referencedColumnName: "id",
-		},
-	})
-	public readonly categories!: readonly Relation<CategoryEntity>[];
+	@Column({name: "brand_id", nullable: true, type: "uuid"})
+	public readonly brandId!: string | null;
 
-	@OneToMany(
-		() => ProductInDataSourceEntity,
-		(productInDataSource) => productInDataSource.product,
-		{cascade: true}
-	)
+	@Column({name: "ingredients_list_id", nullable: true, type: "uuid"})
+	public readonly ingredientsListId!: string | null;
+
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product)
+	public readonly inCategories!: readonly Relation<ProductInCategoryEntity>[];
+
+	@OneToMany(() => ProductInDataSourceEntity, (productInDataSource) => productInDataSource.product)
 	public readonly inDataSources!: readonly Relation<ProductInDataSourceEntity>[];
+
+	@ManyToOne(() => BrandEntity)
+	@JoinColumn({name: "brand_id"})
+	public readonly brand!: Relation<BrandEntity> | null;
+
+	@OneToOne(() => IngredientsListEntity, {cascade: true})
+	@JoinColumn({name: "ingredients_list_id", referencedColumnName: "id"})
+	public readonly ingredientsList!: Relation<IngredientsListEntity> | null;
 }
 
 export default ProductEntity;

@@ -1,5 +1,14 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, Relation} from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	ManyToMany,
+	JoinTable,
+	Relation,
+	OneToMany,
+} from "typeorm";
 import ProductEntity from "../../products/products_service/ProductEntity.js";
+import ProductInCategoryEntity from "../../products/products_service/ProductInCategoryEntity.js";
 
 @Entity({name: "categories"})
 class CategoryEntity {
@@ -12,19 +21,8 @@ class CategoryEntity {
 	@Column({name: "name", type: "text", nullable: false})
 	public readonly name!: string;
 
-	@ManyToMany(() => ProductEntity, (product) => product.categories)
-	@JoinTable({
-		name: "products_in_categories",
-		joinColumn: {
-			name: "product_id",
-			referencedColumnName: "id",
-		},
-		inverseJoinColumn: {
-			name: "category_id",
-			referencedColumnName: "id",
-		},
-	})
-	public readonly products!: readonly Relation<ProductEntity>[];
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.category)
+	public readonly inProducts!: readonly Relation<ProductInCategoryEntity>[];
 }
 
 export default CategoryEntity;
