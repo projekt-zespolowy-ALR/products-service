@@ -1,12 +1,12 @@
-import DataSource from "../types/DataSource.js";
-import DataSourceEntity from "./DataSourceEntity.js";
+import type DataSource from "../types/DataSource.d.js";
+import type DataSourceEntity from "./DataSourceEntity.js";
 
-function deentitifyDataSource(dataSource: DataSourceEntity): DataSource {
+function deentitifyDataSource(dataSourceEntity: DataSourceEntity): DataSource {
 	return {
-		id: dataSource.id,
-		name: dataSource.name,
-		slug: dataSource.slug,
-		url: dataSource.url,
+		id: dataSourceEntity.id,
+		name: dataSourceEntity.name,
+		slug: dataSourceEntity.slug,
+		url: dataSourceEntity.url,
 	};
 }
 

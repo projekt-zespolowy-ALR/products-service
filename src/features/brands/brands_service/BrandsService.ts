@@ -7,8 +7,8 @@ import {InjectRepository} from "@nestjs/typeorm";
 
 import BrandsServiceBrandWithGivenIdNotFoundError from "./errors/BrandsServiceBrandWithGivenIdNotFoundError.js";
 import BrandsServiceBrandWithGivenSlugNotFoundError from "./errors/BrandsServiceBrandWithGivenSlugNotFoundError.js";
-import Page from "../../../paging/Page.js";
-import PagingOptions from "../../../paging/PagingOptions.js";
+import type Page from "../../../paging/Page.js";
+import type PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type AddBrandPayload from "../types/AddBrandPayload.d.js";
 import type Brand from "../types/Brand.d.js";

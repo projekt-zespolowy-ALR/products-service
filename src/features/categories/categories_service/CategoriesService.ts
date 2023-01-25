@@ -7,8 +7,8 @@ import {InjectRepository} from "@nestjs/typeorm";
 
 import CategoriesServiceCategoryWithGivenIdNotFoundError from "./errors/CategoriesServiceCategoryWithGivenIdNotFoundError.js";
 import CategoriesServiceCategoryWithGivenSlugNotFoundError from "./errors/CategoriesServiceCategoryWithGivenSlugNotFoundError.js";
-import Page from "../../../paging/Page.js";
-import PagingOptions from "../../../paging/PagingOptions.js";
+import type Page from "../../../paging/Page.js";
+import type PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type AddCategoryPayload from "../types/AddCategoryPayload.d.js";
 import type Category from "../types/Category.js";
