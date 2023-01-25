@@ -13,12 +13,37 @@ import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type AddCategoryPayload from "../types/AddCategoryPayload.d.js";
 import type Category from "../types/Category.js";
 import type UpdateCategoryPayload from "../types/UpdateCategoryPayload.d.js";
+import type Product from "../../products/types/Product.d.js";
+import ProductEntity from "../../products/products_service/ProductEntity.js";
+import paginateQuery from "../../../paging/paginateQuery.js";
+import deentitifyProduct from "../../products/products_service/deentitifyProduct.js";
 
 @Injectable()
 class CategoriesService {
+	public async getProductsByCategoryId(
+		categoryId: string,
+		pagingOptions: PagingOptions
+	): Promise<Page<Product>> {
+		const category = await this.getCategoryById(categoryId);
+		const products = (
+			await paginateQuery(
+				this.productsRepository
+					.createQueryBuilder("product")
+					.leftJoin("product.categories", "category", "category.id = :categoryId", {categoryId}),
+				pagingOptions
+			)
+		).map((product) => deentitifyProduct(product));
+		return products;
+	}
+
 	private readonly categoriesRepository: Repository<CategoryEntity>;
-	constructor(@InjectRepository(CategoryEntity) categoriesRepository: Repository<CategoryEntity>) {
+	private readonly productsRepository: Repository<ProductEntity>;
+	constructor(
+		@InjectRepository(CategoryEntity) categoriesRepository: Repository<CategoryEntity>,
+		@InjectRepository(ProductEntity) productsRepository: Repository<ProductEntity>
+	) {
 		this.categoriesRepository = categoriesRepository;
+		this.productsRepository = productsRepository;
 	}
 
 	public async getCategories(pagingOptions: PagingOptions): Promise<Page<Category>> {

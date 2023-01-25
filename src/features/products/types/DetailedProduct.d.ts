@@ -1,31 +1,3 @@
-type Product = {
-	readonly id: string;
-
-	readonly name: string | null;
-
-	readonly slug: string;
-
-	readonly mass: number | null;
-
-	readonly volume: number | null;
-
-	readonly categoriesIds: readonly string[];
-
-	readonly inDataSourcesIds: readonly string[];
-
-	readonly brandId: string | null;
-
-	readonly ingredientsIds: readonly string[] | null;
-};
-
-type ProductInDataSource = {
-	readonly productId: string;
-	readonly dataSourceId: string;
-	readonly referenceUrl: string | null;
-	readonly imageUrl: string | null;
-	readonly price: number | null;
-};
-
 type DetailedProduct = {
 	/**
 	 * The product's id in UUID format.
@@ -105,27 +77,4 @@ type DetailedProduct = {
 	readonly ingredients: Ingredient[] | null;
 };
 
-type AddProductRequestBody = {
-	readonly name?: string | null | undefined;
-	readonly slug: string;
-	readonly mass?: number | null | undefined;
-	readonly volume?: number | null | undefined;
-	readonly categoriesIds?: readonly string[];
-	readonly ingredientsIds?: readonly string[];
-};
-
-type AddProductInDataSourceRequestBody = {
-	readonly productId: string;
-	readonly dataSourceId: string;
-	readonly referenceUrl?: string | null | undefined;
-	readonly imageUrl?: string | null | undefined;
-	readonly price?: number | null | undefined;
-};
-
-export {
-	type Product,
-	type DetailedProduct,
-	type AddProductRequestBody,
-	type ProductInDataSource,
-	type AddProductInDataSourceRequestBody,
-};
+export default DetailedProduct;

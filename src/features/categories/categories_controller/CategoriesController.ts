@@ -13,6 +13,7 @@ import {
 } from "@nestjs/common";
 import Page from "../../../paging/Page.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
+import type Product from "../../products/types/Product.d.js";
 import CategoriesService from "../categories_service/CategoriesService.js";
 import CategoriesServiceCategoryWithGivenIdNotFoundError from "../categories_service/errors/CategoriesServiceCategoryWithGivenIdNotFoundError.js";
 import CategoriesServiceCategoryWithGivenSlugNotFoundError from "../categories_service/errors/CategoriesServiceCategoryWithGivenSlugNotFoundError.js";
@@ -42,6 +43,25 @@ class CategoriesController {
 	): Promise<Category> {
 		try {
 			return await this.categoriesService.getCategoryById(categoryId);
+		} catch (error) {
+			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Category with id ${categoryId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Get("/categories/:categoryId/products")
+	public async getProductsByCategoryId(
+		@Param("categoryId", ParseUUIDPipe)
+		categoryId: string,
+		@Query()
+		pagingOptions: PagingOptions
+	): Promise<Page<Product>> {
+		try {
+			return await this.categoriesService.getProductsByCategoryId(categoryId, pagingOptions);
 		} catch (error) {
 			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
 				throw new NotFoundException(`Category with id ${categoryId} not found.`, {

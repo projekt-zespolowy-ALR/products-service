@@ -17,8 +17,8 @@ import {EntityNotFoundError} from "typeorm";
 
 import AddProductRequestBody from "./AddProductRequestBody.js";
 
-import {type Product, type DetailedProduct} from "../types.js";
-import AppConfig from "../../../config/AppConfig.js";
+import type Product from "../types/Product.d.js";
+import type DetailedProduct from "../types/DetailedProduct.d.js";
 import ProductsService from "../products_service/ProductsService.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
 import Page from "../../../paging/Page.js";
