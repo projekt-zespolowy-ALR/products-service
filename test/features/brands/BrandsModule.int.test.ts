@@ -94,7 +94,7 @@ describe("BrandsModule", () => {
 			test("Get non existing brand by slug should return 404", async () => {
 				const response = await testingEnvironment.app.inject({
 					method: "GET",
-					url: "/v1/brand-by-slug?slug=some-brand",
+					url: "/v1/brands-by-slug/some-brand",
 				});
 				expect(response.statusCode).toBe(404);
 			});
@@ -196,7 +196,7 @@ describe("BrandsModule", () => {
 
 				const response2 = await testingEnvironment.app.inject({
 					method: "GET",
-					url: `/v1/brand-by-slug?slug=some-brand`,
+					url: `/v1/brands-by-slug/some-brand`,
 				});
 				expect(response2.statusCode).toBe(200);
 				expect(response2.json()).toEqual({

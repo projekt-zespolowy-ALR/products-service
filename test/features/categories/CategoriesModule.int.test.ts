@@ -96,7 +96,7 @@ describe("CategoriesModule", () => {
 			test("Get non existing category by slug should return 404", async () => {
 				const response = await testingEnvironment.app.inject({
 					method: "GET",
-					url: "/v1/category-by-slug?slug=some-category",
+					url: "/v1/categories-by-slug/some-category",
 				});
 				expect(response.statusCode).toBe(404);
 			});
@@ -198,7 +198,7 @@ describe("CategoriesModule", () => {
 
 				const response2 = await testingEnvironment.app.inject({
 					method: "GET",
-					url: `/v1/category-by-slug?slug=some-category`,
+					url: `/v1/categories-by-slug/some-category`,
 				});
 				expect(response2.statusCode).toBe(200);
 				expect(response2.json()).toEqual({

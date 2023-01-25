@@ -41,7 +41,7 @@ class BrandsController {
 		brandId: string
 	): Promise<Brand> {
 		try {
-			return await this.brandsService.getBrandById(brandId);
+			return await this.brandsService.getBrand(brandId);
 		} catch (error) {
 			if (error instanceof BrandsServiceBrandWithGivenIdNotFoundError) {
 				throw new NotFoundException(`Brand with id ${brandId} not found.`, {
@@ -52,9 +52,9 @@ class BrandsController {
 		}
 	}
 
-	@Get("/brand-by-slug")
+	@Get("/brands-by-slug/:brandSlug")
 	public async getBrandBySlug(
-		@Query("slug")
+		@Param("brandSlug")
 		brandSlug: string
 	): Promise<Brand> {
 		try {

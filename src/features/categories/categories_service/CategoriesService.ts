@@ -49,12 +49,12 @@ class CategoriesService {
 	public async getCategories(pagingOptions: PagingOptions): Promise<Page<Category>> {
 		return await paginatedFindAndCount(this.categoriesRepository, pagingOptions);
 	}
-	public async getCategoryById(id: string): Promise<Category> {
+	public async getCategoryById(categoryId: string): Promise<Category> {
 		try {
-			return await this.categoriesRepository.findOneByOrFail({id});
+			return await this.categoriesRepository.findOneByOrFail({id: categoryId});
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
-				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(id);
+				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(categoryId);
 			}
 			throw error;
 		}
@@ -90,7 +90,15 @@ class CategoriesService {
 	}
 
 	public async deleteCategory(categoryId: string): Promise<void> {
-		await this.categoriesRepository.delete(categoryId);
+		try {
+			const categoryEntity = await this.categoriesRepository.findOneByOrFail({id: categoryId});
+			await this.categoriesRepository.remove(categoryEntity);
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(categoryId);
+			}
+			throw error;
+		}
 	}
 }
 

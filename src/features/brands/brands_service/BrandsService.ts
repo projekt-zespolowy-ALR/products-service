@@ -24,12 +24,12 @@ class BrandsService {
 	public async getBrands(pagingOptions: PagingOptions): Promise<Page<Brand>> {
 		return await paginatedFindAndCount(this.brandsRepository, pagingOptions);
 	}
-	public async getBrandById(id: string): Promise<Brand> {
+	public async getBrand(brandId: string): Promise<Brand> {
 		try {
-			return await this.brandsRepository.findOneByOrFail({id});
+			return await this.brandsRepository.findOneByOrFail({id: brandId});
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
-				throw new BrandsServiceBrandWithGivenIdNotFoundError(id);
+				throw new BrandsServiceBrandWithGivenIdNotFoundError(brandId);
 			}
 			throw error;
 		}
@@ -66,8 +66,15 @@ class BrandsService {
 	}
 
 	public async deleteBrand(brandId: string): Promise<void> {
-		const brandEntity = await this.getBrandById(brandId);
-		await this.brandsRepository.remove(brandEntity);
+		try {
+			const brandEntity = await this.brandsRepository.findOneByOrFail({id: brandId});
+			await this.brandsRepository.remove(brandEntity);
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new BrandsServiceBrandWithGivenIdNotFoundError(brandId);
+			}
+			throw error;
+		}
 	}
 }
 

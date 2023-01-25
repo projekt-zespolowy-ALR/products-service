@@ -72,16 +72,16 @@ class CategoriesController {
 		}
 	}
 
-	@Get("/category-by-slug")
+	@Get("/categories-by-slug/:categorySlug")
 	public async getCategoryBySlug(
-		@Query("slug")
-		categorieslug: string
+		@Param("categorySlug")
+		categorySlug: string
 	): Promise<Category> {
 		try {
-			return await this.categoriesService.getCategoryBySlug(categorieslug);
+			return await this.categoriesService.getCategoryBySlug(categorySlug);
 		} catch (error) {
 			if (error instanceof CategoriesServiceCategoryWithGivenSlugNotFoundError) {
-				throw new NotFoundException(`Category with slug ${categorieslug} not found.`, {
+				throw new NotFoundException(`Category with slug ${categorySlug} not found.`, {
 					cause: error,
 				});
 			}
