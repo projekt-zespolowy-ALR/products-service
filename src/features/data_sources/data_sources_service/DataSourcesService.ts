@@ -4,7 +4,8 @@ import {Repository} from "typeorm";
 
 import {InjectRepository} from "@nestjs/typeorm";
 
-import {type AddDataSourcePayload, type DataSource} from "../types.js";
+import type AddDataSourcePayload from "../types/DataSourcePayload.d.js";
+import type DataSource from "../types/DataSource.js";
 
 import * as Uuid from "uuid";
 import PagingOptions from "../../../paging/PagingOptions.js";
