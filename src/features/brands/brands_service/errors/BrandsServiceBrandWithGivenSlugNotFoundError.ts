@@ -1,8 +1,8 @@
 class BrandsServiceBrandWithGivenSlugNotFoundError extends Error {
-	public readonly slug: string;
-	constructor(slug: string) {
-		super(`Brand with slug ${slug} was not found.`);
-		this.slug = slug;
+	public readonly brandSlug: string;
+	constructor(brandSlug: string) {
+		super(`Brand with slug ${brandSlug} was not found.`);
+		this.brandSlug = brandSlug;
 	}
 }
 

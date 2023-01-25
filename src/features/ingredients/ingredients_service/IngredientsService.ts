@@ -13,6 +13,7 @@ import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type AddIngredientPayload from "../types/AddIngredientPayload.d.js";
 import type Ingredient from "../types/Ingredient.js";
 import type UpdateIngredientPayload from "../types/UpdateIngredientPayload.d.js";
+import deentitifyIngredient from "./deentitifyIngredient.js";
 
 @Injectable()
 class IngredientsService {
@@ -24,11 +25,15 @@ class IngredientsService {
 	}
 
 	public async getIngredients(pagingOptions: PagingOptions): Promise<Page<Ingredient>> {
-		return await paginatedFindAndCount(this.ingredientsRepository, pagingOptions);
+		return (await paginatedFindAndCount(this.ingredientsRepository, pagingOptions)).map(
+			deentitifyIngredient
+		);
 	}
 	public async getIngredient(ingredientId: string): Promise<Ingredient> {
 		try {
-			return await this.ingredientsRepository.findOneByOrFail({id: ingredientId});
+			return deentitifyIngredient(
+				await this.ingredientsRepository.findOneByOrFail({id: ingredientId})
+			);
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
 				throw new IngredientsServiceIngredientWithGivenIdNotFoundError(ingredientId);
@@ -38,7 +43,9 @@ class IngredientsService {
 	}
 	public async getIngredientBySlug(ingredientSlug: string): Promise<Ingredient> {
 		try {
-			return await this.ingredientsRepository.findOneByOrFail({slug: ingredientSlug});
+			return deentitifyIngredient(
+				await this.ingredientsRepository.findOneByOrFail({slug: ingredientSlug})
+			);
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
 				throw new IngredientsServiceIngredientWithGivenSlugNotFoundError(ingredientSlug);
@@ -49,7 +56,7 @@ class IngredientsService {
 	public async addIngredient(addIngredientPayload: AddIngredientPayload): Promise<Ingredient> {
 		const ingredientEntity = this.ingredientsRepository.create(addIngredientPayload);
 		const savedIngredientEntity = await this.ingredientsRepository.save(ingredientEntity);
-		return savedIngredientEntity;
+		return deentitifyIngredient(savedIngredientEntity);
 	}
 	public async updateIngredient(
 		ingredientId: string,
@@ -64,7 +71,7 @@ class IngredientsService {
 		}
 
 		const savedIngredientEntity = await this.ingredientsRepository.save(updatedIngredientEntity);
-		return savedIngredientEntity;
+		return deentitifyIngredient(savedIngredientEntity);
 	}
 
 	public async deleteIngredient(ingredientId: string): Promise<void> {

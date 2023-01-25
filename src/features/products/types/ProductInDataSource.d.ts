@@ -1,6 +1,5 @@
-import type DataSource from "../../data_sources/types/DataSource.d.js";
-
 type ProductInDataSource = {
+	readonly productId: string;
 	readonly dataSourceId: string;
 	/**
 	 * The URL of the product's page in the data source.

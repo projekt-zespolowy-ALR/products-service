@@ -6,7 +6,6 @@ import * as fs from "fs/promises";
 import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 
 import {Test} from "@nestjs/testing";
-import AppModule from "../../../src/AppModule.js";
 import configureApp from "../../../src/configureApp.js";
 import FeaturesModule from "../../../src/features_module/FeaturesModule.js";
 import {TypeOrmModule} from "@nestjs/typeorm";

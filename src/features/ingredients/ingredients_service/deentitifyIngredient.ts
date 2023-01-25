@@ -8,3 +8,5 @@ function deentitifyIngredient(ingredientEntity: IngredientEntity): Ingredient {
 		slug: ingredientEntity.slug,
 	};
 }
+
+export default deentitifyIngredient;

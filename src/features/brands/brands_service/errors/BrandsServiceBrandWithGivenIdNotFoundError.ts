@@ -1,8 +1,8 @@
 class BrandsServiceBrandWithGivenIdNotFoundError extends Error {
-	public readonly id: string;
-	constructor(id: string) {
-		super(`Brand with id ${id} was not found.`);
-		this.id = id;
+	public readonly brandId: string;
+	constructor(brandId: string) {
+		super(`Brand with id ${brandId} was not found.`);
+		this.brandId = brandId;
 	}
 }
 

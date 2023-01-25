@@ -8,3 +8,5 @@ function deentitifyBrand(brandEntity: BrandEntity): Brand {
 		slug: brandEntity.slug,
 	};
 }
+
+export default deentitifyBrand;

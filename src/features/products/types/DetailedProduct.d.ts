@@ -1,4 +1,7 @@
 import type Category from "../../categories/types/Category.d.js";
+import type DetailedProductInDataSource from "./DetailedProductInDataSource.d.js";
+import type Brand from "../../brands/types/Brand.d.js";
+import type Ingredient from "../../ingredients/types/Ingredient.d.js";
 
 type DetailedProduct = {
 	/**

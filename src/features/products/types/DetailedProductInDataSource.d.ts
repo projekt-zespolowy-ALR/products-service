@@ -1,6 +1,9 @@
 import type DataSource from "../../data_sources/types/DataSource.d.js";
+import type ProductInDataSource from "./ProductInDataSource.d.js";
+import type Product from "./Product.js";
 
 type DetailedProductInDataSource = {
+	readonly product: Product;
 	readonly dataSource: DataSource;
 	/**
 	 * The URL of the product's page in the data source.

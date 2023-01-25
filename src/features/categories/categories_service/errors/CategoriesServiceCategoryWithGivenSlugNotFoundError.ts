@@ -1,8 +1,8 @@
 class CategoriesServiceCategoryWithGivenSlugNotFoundError extends Error {
-	public readonly slug: string;
-	constructor(slug: string) {
-		super(`Category with slug ${slug} was not found.`);
-		this.slug = slug;
+	public readonly categorySlug: string;
+	constructor(categorySlug: string) {
+		super(`Category with slug ${categorySlug} was not found.`);
+		this.categorySlug = categorySlug;
 	}
 }
 

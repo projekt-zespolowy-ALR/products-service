@@ -17,6 +17,7 @@ import type Product from "../../products/types/Product.d.js";
 import ProductEntity from "../../products/products_service/ProductEntity.js";
 import paginateQuery from "../../../paging/paginateQuery.js";
 import deentitifyProduct from "../../products/products_service/deentitifyProduct.js";
+import deentitifyCategory from "./deentitifyCategory.js";
 
 @Injectable()
 class CategoriesService {
@@ -24,7 +25,7 @@ class CategoriesService {
 		categoryId: string,
 		pagingOptions: PagingOptions
 	): Promise<Page<Product>> {
-		const category = await this.getCategoryById(categoryId);
+		await this.getCategoryById(categoryId);
 		const products = (
 			await paginateQuery(
 				this.productsRepository
@@ -34,7 +35,7 @@ class CategoriesService {
 					}),
 				pagingOptions
 			)
-		).map((product) => deentitifyProduct(product));
+		).map(deentitifyProduct);
 		return products;
 	}
 
@@ -42,7 +43,7 @@ class CategoriesService {
 		categorySlug: string,
 		pagingOptions: PagingOptions
 	): Promise<Page<Product>> {
-		const category = await this.getCategoryBySlug(categorySlug);
+		await this.getCategoryBySlug(categorySlug);
 		const products = (
 			await paginateQuery(
 				this.productsRepository
@@ -52,7 +53,7 @@ class CategoriesService {
 					}),
 				pagingOptions
 			)
-		).map((product) => deentitifyProduct(product));
+		).map(deentitifyProduct);
 		return products;
 	}
 
@@ -67,11 +68,13 @@ class CategoriesService {
 	}
 
 	public async getCategories(pagingOptions: PagingOptions): Promise<Page<Category>> {
-		return await paginatedFindAndCount(this.categoriesRepository, pagingOptions);
+		return (await paginatedFindAndCount(this.categoriesRepository, pagingOptions)).map(
+			deentitifyCategory
+		);
 	}
 	public async getCategoryById(categoryId: string): Promise<Category> {
 		try {
-			return await this.categoriesRepository.findOneByOrFail({id: categoryId});
+			return deentitifyCategory(await this.categoriesRepository.findOneByOrFail({id: categoryId}));
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
 				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(categoryId);
@@ -81,7 +84,9 @@ class CategoriesService {
 	}
 	public async getCategoryBySlug(categorieslug: string): Promise<Category> {
 		try {
-			return await this.categoriesRepository.findOneByOrFail({slug: categorieslug});
+			return deentitifyCategory(
+				await this.categoriesRepository.findOneByOrFail({slug: categorieslug})
+			);
 		} catch (error) {
 			if (error instanceof EntityNotFoundError) {
 				throw new CategoriesServiceCategoryWithGivenSlugNotFoundError(categorieslug);
@@ -106,7 +111,7 @@ class CategoriesService {
 			throw new CategoriesServiceCategoryWithGivenIdNotFoundError(categoryId);
 		}
 		const savedCategoryEntity = await this.categoriesRepository.save(updatedCategoryEntity);
-		return savedCategoryEntity;
+		return deentitifyCategory(savedCategoryEntity);
 	}
 
 	public async deleteCategory(categoryId: string): Promise<void> {

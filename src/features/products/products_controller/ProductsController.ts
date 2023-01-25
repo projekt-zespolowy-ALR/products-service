@@ -9,7 +9,6 @@ import {
 	Post,
 	Query,
 	Version,
-	Headers,
 	Delete,
 } from "@nestjs/common";
 import {ApiProduces} from "@nestjs/swagger";

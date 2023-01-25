@@ -5,6 +5,7 @@ function deentitifyProductInDataSource(
 	producInDataSourceEntity: ProductInDataSourceEntity
 ): ProductInDataSource {
 	return {
+		productId: producInDataSourceEntity.productId,
 		dataSourceId: producInDataSourceEntity.dataSourceId,
 		referenceUrl: producInDataSourceEntity.referenceUrl,
 		imageUrl: producInDataSourceEntity.imageUrl,

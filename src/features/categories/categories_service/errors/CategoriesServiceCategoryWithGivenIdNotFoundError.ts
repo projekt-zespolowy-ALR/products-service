@@ -1,8 +1,8 @@
 class CategoriesServiceCategoryWithGivenIdNotFoundError extends Error {
-	public readonly id: string;
-	constructor(id: string) {
-		super(`Category with id ${id} was not found.`);
-		this.id = id;
+	public readonly categoryId: string;
+	constructor(categoryId: string) {
+		super(`Category with id ${categoryId} was not found.`);
+		this.categoryId = categoryId;
 	}
 }
 
