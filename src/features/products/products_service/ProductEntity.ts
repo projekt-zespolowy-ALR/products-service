@@ -3,15 +3,12 @@ import {
 	Column,
 	PrimaryGeneratedColumn,
 	type Relation,
-	JoinTable,
-	ManyToMany,
 	OneToMany,
 	ManyToOne,
 	OneToOne,
 	JoinColumn,
 } from "typeorm";
 import BrandEntity from "../../brands/brands_service/BrandEntity.js";
-import CategoryEntity from "../../categories/categories_service/CategoryEntity.js";
 import IngredientsListEntity from "./IngredientsListEntity.js";
 import ProductInCategoryEntity from "./ProductInCategoryEntity.js";
 
@@ -40,19 +37,27 @@ class ProductEntity {
 	@Column({name: "ingredients_list_id", nullable: true, type: "uuid"})
 	public readonly ingredientsListId!: string | null;
 
-	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product)
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product, {
+		cascade: true,
+	})
 	public readonly inCategories!: readonly Relation<ProductInCategoryEntity>[];
 
-	@OneToMany(() => ProductInDataSourceEntity, (productInDataSource) => productInDataSource.product)
+	@OneToMany(
+		() => ProductInDataSourceEntity,
+		(productInDataSource) => productInDataSource.product,
+		{
+			cascade: true,
+		}
+	)
 	public readonly inDataSources!: readonly Relation<ProductInDataSourceEntity>[];
 
 	@ManyToOne(() => BrandEntity)
 	@JoinColumn({name: "brand_id"})
-	public readonly brand!: Relation<BrandEntity> | null;
+	public readonly brand!: Relation<BrandEntity>;
 
 	@OneToOne(() => IngredientsListEntity, {cascade: true})
 	@JoinColumn({name: "ingredients_list_id", referencedColumnName: "id"})
-	public readonly ingredientsList!: Relation<IngredientsListEntity> | null;
+	public readonly ingredientsList!: Relation<IngredientsListEntity>;
 }
 
 export default ProductEntity;

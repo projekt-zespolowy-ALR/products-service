@@ -8,7 +8,8 @@ class IngredientsListEntity {
 
 	@OneToMany(
 		() => IngredientInIngredientsListEntity,
-		(ingredientInIngredientsList) => ingredientInIngredientsList.ingredientsList
+		(ingredientInIngredientsList) => ingredientInIngredientsList.ingredientsList,
+		{cascade: true}
 	)
 	public readonly inIngredients!: readonly Relation<IngredientInIngredientsListEntity>[];
 }

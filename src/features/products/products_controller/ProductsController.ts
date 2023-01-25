@@ -8,7 +8,6 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Post,
-	Put,
 	Query,
 } from "@nestjs/common";
 import Page from "../../../paging/Page.js";
@@ -18,7 +17,9 @@ import ProductsServiceProductWithGivenIdNotFoundError from "../products_service/
 import ProductsServiceProductWithGivenSlugNotFoundError from "../products_service/errors/ProductsServiceProductWithGivenSlugNotFoundError.js";
 import type Product from "../types/Product.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
-import UpdateProductRequestBody from "./UpdateProductRequestBody.js";
+import AddProductInDataSourceRequestBody from "./AddProductInDataSourceRequestBody.js";
+import ProductInDataSource from "../types/ProductInDataSource.js";
+import DetailedProduct from "../types/DetailedProduct.js";
 
 @Controller("/")
 class ProductsController {
@@ -82,6 +83,72 @@ class ProductsController {
 	): Promise<void> {
 		try {
 			await this.productsService.deleteProduct(productId);
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id ${productId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Post("/products/:productId/data-sources")
+	public async addDataSourceToProduct(
+		@Param("productId", ParseUUIDPipe)
+		productId: string,
+		@Body()
+		addProductInDataSourceRequestBody: AddProductInDataSourceRequestBody
+	): Promise<ProductInDataSource> {
+		try {
+			return await this.productsService.addDataSourceToProduct(
+				productId,
+				addProductInDataSourceRequestBody
+			);
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id ${productId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Get("/products/:productId/data-sources")
+	public async getDataSourcesForProduct(
+		@Query()
+		pagingOptions: PagingOptions,
+		@Param("productId", ParseUUIDPipe)
+		productId: string
+	): Promise<Page<ProductInDataSource>> {
+		try {
+			return await this.productsService.getDataSourcesForProduct(productId, pagingOptions);
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id ${productId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Get("/detailed-products")
+	public async getDetailedProducts(
+		@Query()
+		pagingOptions: PagingOptions
+	): Promise<Page<DetailedProduct>> {
+		return await this.productsService.getDetailedProducts(pagingOptions);
+	}
+
+	@Get("/detailed-products/:productId")
+	public async getDetailedProductById(
+		@Param("productId", ParseUUIDPipe)
+		productId: string
+	): Promise<DetailedProduct> {
+		try {
+			return await this.productsService.getDetailedProduct(productId);
 		} catch (error) {
 			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
 				throw new NotFoundException(`Product with id ${productId} not found.`, {

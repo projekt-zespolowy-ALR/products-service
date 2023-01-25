@@ -1,25 +1,28 @@
 import type ProductEntity from "./ProductEntity.js";
 import type Product from "../types/Product.d.js";
 
-function deentitifyProduct(product: ProductEntity): Product {
-	console.log("deentitifyProduct", product);
+function deentitifyProduct(productEntity: ProductEntity): Product {
 	return {
-		id: product.id,
-		name: product.name,
-		slug: product.slug,
-		mass: product.mass,
-		volume: product.volume,
-		brandId: product.brandId,
+		id: productEntity.id,
+		name: productEntity.name,
+		slug: productEntity.slug,
+		mass: productEntity.mass,
+		volume: productEntity.volume,
+		brandId: productEntity.brandId,
 
-		categoriesIds: product.inCategories.map((productInCategory) => productInCategory.categoryId),
-		inDataSourcesIds: product.inDataSources.map(
+		categoriesIds: productEntity.inCategories.map(
+			(productInCategoryEntity) => productInCategoryEntity.categoryId
+		),
+		inDataSourcesIds: productEntity.inDataSources.map(
 			(productInDataSource) => productInDataSource.dataSourceId
 		),
 
 		ingredientsIds:
-			product.ingredientsList === null
+			productEntity.ingredientsListId === null
 				? null
-				: product.ingredientsList.inIngredients.map((inIngredient) => inIngredient.ingredientId),
+				: productEntity.ingredientsList.inIngredients.map(
+						(productInIngredientsListEntity) => productInIngredientsListEntity.ingredientId
+				  ),
 	};
 }
 

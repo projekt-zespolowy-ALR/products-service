@@ -6,15 +6,19 @@ class AddProductInDataSourceRequestBody {
 
 	@IsString()
 	@IsOptional()
-	public readonly refenceUrl?: string | null | undefined;
+	public readonly referenceUrl?: string | null | undefined;
 
 	@IsString()
 	@IsOptional()
 	public readonly imageUrl?: string | null | undefined;
 
-	@IsString()
 	@IsNumber()
+	@IsOptional()
 	public readonly price?: number | null | undefined;
+
+	@IsString()
+	@IsOptional()
+	public readonly description?: string | null | undefined;
 }
 
 export default AddProductInDataSourceRequestBody;

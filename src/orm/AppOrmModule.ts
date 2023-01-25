@@ -12,7 +12,6 @@ const AppOrmModule = TypeOrmModule.forRootAsync({
 		database: config.POSTGRES_DATABASE,
 		autoLoadEntities: true,
 		synchronize: false,
-		logging: true,
 	}),
 });
 

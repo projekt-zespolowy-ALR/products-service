@@ -1,5 +1,4 @@
 import type DataSource from "../../data_sources/types/DataSource.d.js";
-import type ProductInDataSource from "./ProductInDataSource.d.js";
 import type Product from "./Product.js";
 
 type DetailedProductInDataSource = {
@@ -24,4 +23,4 @@ type DetailedProductInDataSource = {
 	readonly description: string | null;
 };
 
-export default ProductInDataSource;
+export default DetailedProductInDataSource;
