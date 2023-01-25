@@ -1,6 +1,6 @@
+import ProductEntity from "./ProductEntity.js";
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, type Relation} from "typeorm";
 import DataSourceEntity from "../../data_sources/data_sources_service/DataSourceEntity.js";
-import ProductEntity from "./ProductEntity.js";
 
 @Entity({name: "products_in_data_sources"})
 class ProductInDataSourceEntity {
@@ -18,6 +18,9 @@ class ProductInDataSourceEntity {
 
 	@Column({name: "price", type: "numeric"})
 	public readonly price!: number | null;
+
+	@Column({name: "description", type: "text"})
+	public readonly description!: string | null;
 
 	@ManyToOne(() => ProductEntity, (product) => product.inDataSources)
 	@JoinColumn({name: "product_id"})

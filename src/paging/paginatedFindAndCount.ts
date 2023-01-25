@@ -16,13 +16,10 @@ async function paginatedFindAndCount<Entity extends ObjectLiteral>(
 	const pageMeta: Readonly<PageMeta> = {
 		totalItemsCount: total,
 		pageItemsCount: entities.length,
-		skip: pagingOptions.skip,
-		take: pagingOptions.take,
+		skip: pagingOptions["paging-skip"],
+		take: pagingOptions["paging-take"],
 	};
-	// const page: Page<Readonly<Entity>> = {
-	// 	meta: pageMeta,
-	// 	data: entities,
-	// };
+
 	const page: Page<Entity> = plainToClass(Page, {
 		meta: pageMeta,
 		data: entities,

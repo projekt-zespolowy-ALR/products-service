@@ -1,30 +1,19 @@
-import {Entity, Column, PrimaryGeneratedColumn, Relation, ManyToMany, JoinTable} from "typeorm";
-import {ProductEntity} from "../../products/index.js";
+import {Entity, Column, PrimaryGeneratedColumn, Relation, OneToMany} from "typeorm";
+import ProductInCategoryEntity from "../../products/products_service/ProductInCategoryEntity.js";
 
 @Entity({name: "categories"})
 class CategoryEntity {
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
 
-	@Column({name: "slug", unique: true, type: "text"})
+	@Column({name: "slug", unique: true, type: "text", nullable: false})
 	public readonly slug!: string;
 
-	@Column({name: "name", type: "text"})
+	@Column({name: "name", type: "text", nullable: false})
 	public readonly name!: string;
 
-	@ManyToMany(() => ProductEntity, (product) => product.categories)
-	@JoinTable({
-		name: "products_in_categories",
-		joinColumn: {
-			name: "product_id",
-			referencedColumnName: "id",
-		},
-		inverseJoinColumn: {
-			name: "category_id",
-			referencedColumnName: "id",
-		},
-	})
-	public readonly products!: readonly Relation<ProductEntity>[];
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.category)
+	public readonly inProducts!: readonly Relation<ProductInCategoryEntity>[];
 }
 
 export default CategoryEntity;

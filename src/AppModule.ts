@@ -1,20 +1,10 @@
 import {Module} from "@nestjs/common";
-import {AppConfigModule} from "./config/index.js";
-import {AppOrmModule} from "./orm/index.js";
-import {ProductsModule} from "./features/products/index.js";
-import {BrandsModule} from "./features/brands/index.js";
-import {CategoriesModule} from "./features/categories/index.js";
-import {DataSourcesModule} from "./features/data_sources/index.js";
+import AppConfigModule from "./config/AppConfigModule.js";
+import FeaturesModule from "./features_module/FeaturesModule.js";
+import AppOrmModule from "./orm/AppOrmModule.js";
 
 @Module({
-	imports: [
-		AppOrmModule,
-		AppConfigModule,
-		ProductsModule,
-		BrandsModule,
-		CategoriesModule,
-		DataSourcesModule,
-	],
+	imports: [AppOrmModule, AppConfigModule, FeaturesModule],
 	controllers: [],
 	providers: [],
 })

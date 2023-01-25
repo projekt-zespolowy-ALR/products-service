@@ -15,18 +15,17 @@ import {SwaggerModule, DocumentBuilder} from "@nestjs/swagger";
 import * as path from "path";
 import * as fs from "fs/promises";
 import {Test} from "@nestjs/testing";
-import ProductsModule from "../../src/features/products/ProductsModule.js";
+import ProductsModule from "../../src/features/products/products_module/ProductsModule.js";
 
 import {getRepositoryToken} from "@nestjs/typeorm";
 import ProductEntity from "../../src/features/products/products_service/ProductEntity.js";
-import CategoriesModule from "../../src/features/categories/CategoriesModule.js";
-import BrandsModule from "../../src/features/brands/BrandsModule.js";
+import BrandsModule from "../../src/features/brands/brands_module/BrandsModule.js";
 import CategoryEntity from "../../src/features/categories/categories_service/CategoryEntity.js";
 import BrandEntity from "../../src/features/brands/brands_service/BrandEntity.js";
 import AppConfigModule from "../../src/config/AppConfigModule.js";
 
 const appModule = await Test.createTestingModule({
-	imports: [ProductsModule, CategoriesModule, BrandsModule, AppConfigModule],
+	imports: [ProductsModule, BrandsModule, AppConfigModule],
 })
 	.overrideProvider(getRepositoryToken(ProductEntity))
 	.useValue(null)

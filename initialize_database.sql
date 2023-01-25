@@ -1,22 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE brands (
-	id UUID DEFAULT uuid_generate_v4() NOT NULL,
-	name TEXT NOT NULL,
-	slug TEXT NOT NULL UNIQUE,
-	PRIMARY KEY (id)
-);
-
-CREATE TABLE products (
-	id UUID DEFAULT uuid_generate_v4() NOT NULL,
-	name TEXT,
-	slug TEXT NOT NULL UNIQUE,
-	brand_id UUID,
-	mass DOUBLE PRECISION, -- in kilograms
-	volume DOUBLE PRECISION, -- in liters
-	PRIMARY KEY (id),
-	FOREIGN KEY (brand_id) REFERENCES brands (id)
-);
 
 CREATE TABLE data_sources (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
@@ -26,14 +9,36 @@ CREATE TABLE data_sources (
 	PRIMARY KEY (id)
 );
 
+
+CREATE TABLE brands (
+	id UUID DEFAULT uuid_generate_v4() NOT NULL,
+	name TEXT NOT NULL,
+	slug TEXT NOT NULL UNIQUE,
+	PRIMARY KEY (id)
+);
+
+
 CREATE TABLE ingredients_lists (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
 	-- if there is no ingredients list attached to a product
 	-- then we consider the list to be unknown
-	product_id UUID NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (product_id) REFERENCES products (id)
+	PRIMARY KEY (id)
 );
+
+CREATE TABLE products (
+	id UUID DEFAULT uuid_generate_v4() NOT NULL,
+	name TEXT,
+	slug TEXT NOT NULL UNIQUE,
+	brand_id UUID,
+	ingredients_list_id UUID,
+	mass DOUBLE PRECISION, -- in kilograms
+	volume DOUBLE PRECISION, -- in liters
+	PRIMARY KEY (id),
+	FOREIGN KEY (brand_id) REFERENCES brands (id),
+	FOREIGN KEY (ingredients_list_id) REFERENCES ingredients_lists (id)
+);
+
+
 
 CREATE TABLE ingredients (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
@@ -42,7 +47,10 @@ CREATE TABLE ingredients (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE ingredient_in_ingredients_lists (
+
+
+
+CREATE TABLE ingredients_in_ingredients_lists (
 	ingredients_list_id UUID NOT NULL,
 	ingredient_id UUID NOT NULL,
 	PRIMARY KEY (ingredients_list_id, ingredient_id),
@@ -55,6 +63,7 @@ CREATE TABLE products_in_data_sources (
 	data_source_id UUID NOT NULL,
 	reference_url TEXT,
 	image_url TEXT,
+	description TEXT,
 	price NUMERIC(10, 2),
 	PRIMARY KEY (product_id, data_source_id),
 	FOREIGN KEY (product_id) REFERENCES products (id),

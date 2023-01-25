@@ -2,12 +2,16 @@ import {
 	Entity,
 	Column,
 	PrimaryGeneratedColumn,
-	Relation,
-	JoinTable,
-	ManyToMany,
+	type Relation,
 	OneToMany,
+	ManyToOne,
+	OneToOne,
+	JoinColumn,
 } from "typeorm";
-import {CategoryEntity} from "../../categories/index.js";
+import BrandEntity from "../../brands/brands_service/BrandEntity.js";
+import IngredientsListEntity from "./IngredientsListEntity.js";
+import ProductInCategoryEntity from "./ProductInCategoryEntity.js";
+
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
 
 @Entity({name: "products"})
@@ -27,26 +31,33 @@ class ProductEntity {
 	@Column({name: "volume", nullable: true, type: "double precision"})
 	public readonly volume!: number | null;
 
-	@ManyToMany(() => CategoryEntity, (category) => category.products)
-	@JoinTable({
-		name: "products_in_categories",
-		joinColumn: {
-			name: "product_id",
-			referencedColumnName: "id",
-		},
-		inverseJoinColumn: {
-			name: "category_id",
-			referencedColumnName: "id",
-		},
+	@Column({name: "brand_id", nullable: true, type: "uuid"})
+	public readonly brandId!: string | null;
+
+	@Column({name: "ingredients_list_id", nullable: true, type: "uuid"})
+	public readonly ingredientsListId!: string | null;
+
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product, {
+		cascade: true,
 	})
-	public readonly categories!: readonly Relation<CategoryEntity>[];
+	public readonly inCategories!: readonly Relation<ProductInCategoryEntity>[];
 
 	@OneToMany(
 		() => ProductInDataSourceEntity,
 		(productInDataSource) => productInDataSource.product,
-		{cascade: true}
+		{
+			cascade: true,
+		}
 	)
 	public readonly inDataSources!: readonly Relation<ProductInDataSourceEntity>[];
+
+	@ManyToOne(() => BrandEntity)
+	@JoinColumn({name: "brand_id"})
+	public readonly brand!: Relation<BrandEntity>;
+
+	@OneToOne(() => IngredientsListEntity, {cascade: true})
+	@JoinColumn({name: "ingredients_list_id", referencedColumnName: "id"})
+	public readonly ingredientsList!: Relation<IngredientsListEntity>;
 }
 
 export default ProductEntity;
