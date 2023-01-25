@@ -115,6 +115,28 @@ class ProductsController {
 		}
 	}
 
+	@Post("/products-by-slug/:productSlug/data-sources")
+	public async addDataSourceToProductBySlug(
+		@Param("productSlug")
+		productSlug: string,
+		@Body()
+		addProductInDataSourceRequestBody: AddProductInDataSourceRequestBody
+	): Promise<ProductInDataSource> {
+		try {
+			return await this.productsService.addDataSourceToProductBySlug(
+				productSlug,
+				addProductInDataSourceRequestBody
+			);
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenSlugNotFoundError) {
+				throw new NotFoundException(`Product with slug ${productSlug} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
 	@Get("/products/:productId/data-sources")
 	public async getDataSourcesForProduct(
 		@Query()
@@ -127,6 +149,25 @@ class ProductsController {
 		} catch (error) {
 			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
 				throw new NotFoundException(`Product with id ${productId} not found.`, {
+					cause: error,
+				});
+			}
+			throw error;
+		}
+	}
+
+	@Get("/products-by-slug/:productSlug/data-sources")
+	public async getDataSourcesForProductBySlug(
+		@Query()
+		pagingOptions: PagingOptions,
+		@Param("productSlug")
+		productSlug: string
+	): Promise<Page<ProductInDataSource>> {
+		try {
+			return await this.productsService.getDataSourcesForProductBySlug(productSlug, pagingOptions);
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenSlugNotFoundError) {
+				throw new NotFoundException(`Product with slug ${productSlug} not found.`, {
 					cause: error,
 				});
 			}

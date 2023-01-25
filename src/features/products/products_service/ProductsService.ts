@@ -32,6 +32,16 @@ class ProductsService {
 			})
 		).map(deentitifyProductInDataSource);
 	}
+	public async getDataSourcesForProductBySlug(
+		productSlug: string,
+		pagingOptions: PagingOptions
+	): Promise<Page<ProductInDataSource>> {
+		return (
+			await paginatedFindAndCount(this.productInDataSourceRepository, pagingOptions, {
+				where: {product: {slug: productSlug}},
+			})
+		).map(deentitifyProductInDataSource);
+	}
 	private readonly productsRepository: Repository<ProductEntity>;
 	private readonly productInDataSourceRepository: Repository<ProductInDataSourceEntity>;
 	constructor(
@@ -157,6 +167,27 @@ class ProductsService {
 		const savedProductInDataSourceEntity = await this.productInDataSourceRepository.save(
 			productInDataSourceEntity
 		);
+		return deentitifyProductInDataSource(savedProductInDataSourceEntity);
+	}
+
+	async addDataSourceToProductBySlug(
+		productSlug: string,
+		addProductInDataSourceRequestBody: AddProductInDataSourceRequestBody
+	): Promise<ProductInDataSource> {
+		const product = await this.getProductBySlug(productSlug);
+
+		const productInDataSourceEntity = this.productInDataSourceRepository.create({
+			productId: product.id,
+			dataSourceId: addProductInDataSourceRequestBody.dataSourceId,
+			referenceUrl: addProductInDataSourceRequestBody.referenceUrl ?? null,
+			imageUrl: addProductInDataSourceRequestBody.imageUrl ?? null,
+			price: addProductInDataSourceRequestBody.price ?? null,
+			description: addProductInDataSourceRequestBody.description ?? null,
+		});
+		const savedProductInDataSourceEntity = await this.productInDataSourceRepository.save(
+			productInDataSourceEntity
+		);
+
 		return deentitifyProductInDataSource(savedProductInDataSourceEntity);
 	}
 
