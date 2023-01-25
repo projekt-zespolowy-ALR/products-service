@@ -72,25 +72,6 @@ class CategoriesController {
 		}
 	}
 
-	@Get("/categories-by-slug/:categorySlug/products")
-	public async getProductsByCategorySlug(
-		@Param("categorySlug")
-		categorySlug: string,
-		@Query()
-		pagingOptions: PagingOptions
-	): Promise<Page<Product>> {
-		try {
-			return await this.categoriesService.getProductsByCategorySlug(categorySlug, pagingOptions);
-		} catch (error) {
-			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
-				throw new NotFoundException(`Category with id ${categorySlug} not found.`, {
-					cause: error,
-				});
-			}
-			throw error;
-		}
-	}
-
 	@Get("/categories-by-slug/:categorySlug")
 	public async getCategoryBySlug(
 		@Param("categorySlug")

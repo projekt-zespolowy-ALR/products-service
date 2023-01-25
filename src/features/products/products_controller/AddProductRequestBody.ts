@@ -26,7 +26,7 @@ class AddProductRequestBody {
 
 	@IsString({each: true})
 	@IsOptional()
-	public readonly ingredientsIds: readonly string[] | undefined | null;
+	public readonly ingredientsIds?: readonly string[] | undefined | null;
 }
 
 export default AddProductRequestBody;

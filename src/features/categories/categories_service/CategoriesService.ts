@@ -39,24 +39,6 @@ class CategoriesService {
 		return products;
 	}
 
-	public async getProductsByCategorySlug(
-		categorySlug: string,
-		pagingOptions: PagingOptions
-	): Promise<Page<Product>> {
-		await this.getCategoryBySlug(categorySlug);
-		const products = (
-			await paginateQuery(
-				this.productsRepository
-					.createQueryBuilder("product")
-					.innerJoinAndSelect("product.categories", "category", "category.slug = :categorySlug", {
-						categorySlug,
-					}),
-				pagingOptions
-			)
-		).map(deentitifyProduct);
-		return products;
-	}
-
 	private readonly categoriesRepository: Repository<CategoryEntity>;
 	private readonly productsRepository: Repository<ProductEntity>;
 	constructor(
