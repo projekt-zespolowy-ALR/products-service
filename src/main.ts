@@ -4,7 +4,12 @@ import {FastifyAdapter, NestFastifyApplication} from "@nestjs/platform-fastify";
 import configureApp from "./configureApp.js";
 import AppConfig from "./config/AppConfig.js";
 
-const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+const app = await NestFactory.create<NestFastifyApplication>(
+	AppModule,
+	new FastifyAdapter({
+		maxParamLength: 1000,
+	})
+);
 configureApp(app);
 const appConfig = app.get(AppConfig);
 

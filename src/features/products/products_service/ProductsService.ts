@@ -140,7 +140,12 @@ class ProductsService {
 		try {
 			return deentitifyProduct(
 				await this.productsRepository.findOneOrFail({
-					relations: ["categories"],
+					relations: [
+						"inCategories",
+						"ingredientsList",
+						"ingredientsList.inIngredients",
+						"inDataSources",
+					],
 					where: {slug: productSlug},
 				})
 			);
