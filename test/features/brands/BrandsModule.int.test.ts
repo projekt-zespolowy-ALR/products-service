@@ -1,26 +1,76 @@
-import {describe, test, expect, beforeEach, afterEach} from "@jest/globals";
-import type AddBrandRequestBody from "../../../src/features/brands/brands_controller/AddBrandRequestBody.js";
-import testsConfig from "../../config/testsConfig.js";
-import AppTestingEnvironment from "../../utils/testing_environment/AppTestingEnvironment.js";
-import EmptyTestingEnvironment from "../../utils/testing_environment/EmptyTestingEnvironment.js";
-import TestingEnvironment from "../../utils/testing_environment/TestingEnvironment.js";
+import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
+import generatePostgresqlPassword from "../../utils/generatePostgresqlPassword.js";
+import {Test} from "@nestjs/testing";
+import type {NestFastifyApplication} from "@nestjs/platform-fastify";
+import * as Testcontainers from "testcontainers";
+import AppOrmModule from "../../../src/orm/AppOrmModule.js";
+import AppConfig from "../../../src/app_config/AppConfig.js";
+import {TypedConfigModule} from "nest-typed-config";
+import * as Fs from "fs/promises";
 
-let testingEnvironment: TestingEnvironment = new EmptyTestingEnvironment();
-
-beforeEach(async () => {
-	testingEnvironment = new AppTestingEnvironment();
-	await testingEnvironment.start();
-}, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
-
-afterEach(async () => {
-	await testingEnvironment.stop();
-});
+import testsConfig from "../../app_config/testsConfig.js";
+import createTestingApp from "../../utils/createTestingApp.js";
+import CategoriesModule from "../../../src/features/categories/categories_module/CategoriesModule.js";
+import AddBrandRequestBody from "../../../src/features/brands/brands_controller/AddBrandRequestBody.js";
 
 describe("BrandsModule", () => {
+	let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer;
+	let app: NestFastifyApplication;
+	let postgresqlInitializationSqlScript: string;
+
+	beforeAll(async () => {
+		postgresqlInitializationSqlScript = await Fs.readFile(
+			testsConfig.TESTS_POSTGRESQL_INITIALIZATION_SQL_SCRIPT_PATH,
+			"utf-8"
+		);
+	});
+
+	beforeEach(async () => {
+		const postgresqlContainerPassword = generatePostgresqlPassword();
+
+		postgresqlContainer = await new Testcontainers.PostgreSqlContainer(
+			testsConfig.TESTS_POSTGRESQL_CONTAINER_IMAGE_NAME
+		)
+			.withPassword(postgresqlContainerPassword)
+			.withEnvironment({"PGPASSWORD": postgresqlContainerPassword})
+			.withDatabase(testsConfig.TESTS_POSTGRESQL_CONTAINER_DATABASE_NAME)
+			.start();
+
+		await postgresqlContainer.exec([
+			"psql",
+			`--host=localhost`,
+			`--port=5432`,
+			`--username=${postgresqlContainer.getUsername()}`,
+			`--dbname=${postgresqlContainer.getDatabase()}`,
+			`--no-password`,
+			`--command`,
+			`${postgresqlInitializationSqlScript}`,
+		]);
+
+		const AppConfigModule = TypedConfigModule.forRoot({
+			schema: AppConfig,
+			load: () => ({
+				POSTGRES_HOST: postgresqlContainer.getHost(),
+				POSTGRES_PORT: postgresqlContainer.getPort(),
+				POSTGRES_USERNAME: postgresqlContainer.getUsername(),
+				POSTGRES_PASSWORD: postgresqlContainer.getPassword(),
+				POSTGRES_DATABASE: postgresqlContainer.getDatabase(),
+			}),
+		});
+		const appModule = await Test.createTestingModule({
+			imports: [CategoriesModule, AppOrmModule, AppConfigModule],
+		}).compile();
+
+		app = await createTestingApp(appModule);
+	}, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
+
+	afterEach(async () => {
+		await Promise.all([postgresqlContainer.stop(), app.close()]);
+	});
 	describe("v1", () => {
 		describe("Empty database", () => {
 			test("Get all brands", async () => {
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "GET",
 					url: "/v1/brands",
 				});
@@ -35,7 +85,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -57,7 +107,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				await testingEnvironment.app.inject({
+				await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -66,7 +116,7 @@ describe("BrandsModule", () => {
 					payload: someBrandRequestBody,
 				});
 
-				const response2 = await testingEnvironment.app.inject({
+				const response2 = await app.inject({
 					method: "GET",
 					url: "/v1/brands",
 				});
@@ -85,14 +135,14 @@ describe("BrandsModule", () => {
 				});
 			});
 			test("Get non existing brand by id should return 404", async () => {
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "GET",
 					url: "/v1/brands/af7c1fe6-d669-414e-b066-e9733f0de7a8",
 				});
 				expect(response.statusCode).toBe(404);
 			});
 			test("Get non existing brand by slug should return 404", async () => {
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "GET",
 					url: "/v1/brands-by-slug/some-brand",
 				});
@@ -103,7 +153,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -113,7 +163,7 @@ describe("BrandsModule", () => {
 				});
 				const brandId = response.json().id;
 
-				const response2 = await testingEnvironment.app.inject({
+				const response2 = await app.inject({
 					method: "DELETE",
 					url: `/v1/brands/${brandId}`,
 				});
@@ -124,7 +174,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -138,7 +188,7 @@ describe("BrandsModule", () => {
 					name: "Some brand updated",
 					slug: "some-brand-updated",
 				} as const;
-				const response2 = await testingEnvironment.app.inject({
+				const response2 = await app.inject({
 					method: "PUT",
 					url: `/v1/brands/${brandId}`,
 					headers: {
@@ -158,7 +208,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -168,7 +218,7 @@ describe("BrandsModule", () => {
 				});
 				const brandId = response.json().id;
 
-				const response2 = await testingEnvironment.app.inject({
+				const response2 = await app.inject({
 					method: "GET",
 					url: `/v1/brands/${brandId}`,
 				});
@@ -184,7 +234,7 @@ describe("BrandsModule", () => {
 					name: "Some brand",
 					slug: "some-brand",
 				} as const;
-				const response = await testingEnvironment.app.inject({
+				const response = await app.inject({
 					method: "POST",
 					url: "/v1/brands",
 					headers: {
@@ -194,7 +244,7 @@ describe("BrandsModule", () => {
 				});
 				const brandId = response.json().id;
 
-				const response2 = await testingEnvironment.app.inject({
+				const response2 = await app.inject({
 					method: "GET",
 					url: `/v1/brands-by-slug/some-brand`,
 				});

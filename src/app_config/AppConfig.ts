@@ -1,5 +1,5 @@
-import {Type} from "class-transformer";
 import {IsInt, IsString, Min, Max} from "class-validator";
+import {Type} from "class-transformer";
 
 class AppConfig {
 	@Type(() => Number)

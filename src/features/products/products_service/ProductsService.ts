@@ -17,7 +17,7 @@ import AddProductInDataSourceRequestBody from "../products_controller/AddProduct
 import type ProductInDataSource from "../types/ProductInDataSource.d.js";
 import deentitifyProductInDataSource from "./deentitifyProductInDataSource.js";
 import ProductInDataSourceEntity from "./ProductInDataSourceEntity.js";
-import DetailedProduct from "../types/DetailedProduct.js";
+import type DetailedProduct from "../types/DetailedProduct.js";
 import deentitifyDetailedProduct from "./deentitifyDetailedProduct.js";
 
 @Injectable()

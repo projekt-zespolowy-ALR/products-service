@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, Relation, OneToMany} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, type Relation, OneToMany} from "typeorm";
 import ProductInCategoryEntity from "../../products/products_service/ProductInCategoryEntity.js";
 
 @Entity({name: "categories"})

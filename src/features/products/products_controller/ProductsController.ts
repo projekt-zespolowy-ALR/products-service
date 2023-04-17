@@ -18,8 +18,8 @@ import ProductsServiceProductWithGivenSlugNotFoundError from "../products_servic
 import type Product from "../types/Product.js";
 import AddProductRequestBody from "./AddProductRequestBody.js";
 import AddProductInDataSourceRequestBody from "./AddProductInDataSourceRequestBody.js";
-import ProductInDataSource from "../types/ProductInDataSource.js";
-import DetailedProduct from "../types/DetailedProduct.js";
+import type ProductInDataSource from "../types/ProductInDataSource.js";
+import type DetailedProduct from "../types/DetailedProduct.js";
 
 @Controller("/")
 class ProductsController {

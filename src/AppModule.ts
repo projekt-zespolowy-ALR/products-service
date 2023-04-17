@@ -1,5 +1,5 @@
 import {Module} from "@nestjs/common";
-import AppConfigModule from "./config/AppConfigModule.js";
+import AppConfigModule from "./app_config/AppConfigModule.js";
 import FeaturesModule from "./features_module/FeaturesModule.js";
 import AppOrmModule from "./orm/AppOrmModule.js";
 

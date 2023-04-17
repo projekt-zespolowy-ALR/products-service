@@ -9,14 +9,14 @@ async function paginateQuery<Entity extends ObjectLiteral>(
 	pagingOptions: PagingOptions
 ): Promise<Page<Entity>> {
 	const [entities, total]: [ReadonlyArray<Entity>, number] = await selectQueryBuilder
-		.skip(pagingOptions["paging-skip"])
-		.take(pagingOptions["paging-take"])
+		.skip(pagingOptions.skip)
+		.take(pagingOptions.take)
 		.getManyAndCount();
 	const pageMeta: Readonly<PageMeta> = {
 		totalItemsCount: total,
 		pageItemsCount: entities.length,
-		skip: pagingOptions["paging-skip"],
-		take: pagingOptions["paging-take"],
+		skip: pagingOptions.skip,
+		take: pagingOptions.take,
 	};
 
 	const page: Page<Entity> = plainToClass(Page, {

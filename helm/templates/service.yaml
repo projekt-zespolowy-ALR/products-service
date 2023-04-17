@@ -1,17 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ .Release.Name }}-api-server"
+  name: "{{ .Release.Name }}"
   labels:
-    app: api-server
-    microservice: "{{ .Release.Name }}"
+    app: "{{ .Release.Name }}"
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   ports:
     - port: 80
-      targetPort: 3000
+      targetPort: {{.Values.port}}
       protocol: TCP
   selector:
-    app: api-server
-    microservice: "{{ .Release.Name }}"
+    app: "{{ .Release.Name }}"

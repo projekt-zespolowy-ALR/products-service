@@ -1,5 +1,5 @@
 import {TypeOrmModule} from "@nestjs/typeorm";
-import AppConfig from "../config/AppConfig.js";
+import AppConfig from "../app_config/AppConfig.js";
 
 const AppOrmModule = TypeOrmModule.forRootAsync({
 	inject: [AppConfig],

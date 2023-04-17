@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, Relation} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, type Relation} from "typeorm";
 import ProductInDataSourceEntity from "../../products/products_service/ProductInDataSourceEntity.js";
 
 @Entity({name: "data_sources"})

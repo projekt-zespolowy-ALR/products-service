@@ -1,37 +1,17 @@
-FROM node:19-alpine as builder
+FROM node:19.8.1-alpine3.17
 
-RUN adduser -D wlosiara && \
-	mkdir -p /home/wlosiara/app && \
-	chown -R wlosiara:wlosiara /home/wlosiara/app
+RUN adduser --disabled-password --gecos '' appuser
 
-USER wlosiara
+WORKDIR /home/appuser
 
-WORKDIR /home/wlosiara/app
+COPY --chown=appuser:appuser package.json ./
+COPY --chown=appuser:appuser package-lock.json ./
+COPY --chown=appuser:appuser ./dist/ ./dist/
 
-COPY package.json package-lock.json ./
-
-RUN npm ci
-
-COPY . ./
-
-RUN npm run compile
-
-FROM node:19-alpine
-
-RUN adduser -D wlosiara && \
-	mkdir -p /home/wlosiara/app && \
-	chown -R wlosiara:wlosiara /home/wlosiara/app
-
-USER wlosiara
-
-WORKDIR /home/wlosiara/app
-
-COPY package.json package-lock.json ./
-
-RUN npm ci --omit=dev
-
-COPY --from=builder /home/wlosiara/app/dist ./dist
+RUN chown -R appuser:appuser /home/appuser && npm ci --production
 
 EXPOSE 3000
+
+USER appuser
 
 ENTRYPOINT [ "npm", "start" ]
