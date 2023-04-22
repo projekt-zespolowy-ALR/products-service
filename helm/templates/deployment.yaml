@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Release.Name }}-api-server"
+  name: "{{ .Release.Name }}"
   labels:
-    app: api-server
-    microservice: "{{ .Release.Name }}"
+    app: "{{ .Release.Name }}"
 spec:
-  replicas: 1
+  replicas: {{.Values.replicaCount}}
   selector:
     matchLabels:
-      app: api-server
-      microservice: "{{ .Release.Name }}"
+      app: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: api-server
-        microservice: "{{ .Release.Name }}"
+        app: "{{ .Release.Name }}"
     spec:
       containers:
         - name: "{{ .Release.Name }}"
-          image: "bte1lar/{{ .Release.Name }}:{{ required `Missing value for .Values.image.tag` .Values.image.tag }}"
+          image: "{{ required `A valid image repository is required` .Values.image.repository | }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: Always
           resources:
             limits:
@@ -29,30 +26,30 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: PORT
             - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: POSTGRES_HOST
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: POSTGRES_PORT
             - name: POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: POSTGRES_USERNAME
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Release.Name }}-api-server"
+                  name: "{{ .Release.Name }}"
                   key: POSTGRES_DATABASE

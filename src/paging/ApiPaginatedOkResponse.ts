@@ -1,4 +1,4 @@
-import {applyDecorators, Type} from "@nestjs/common";
+import {applyDecorators, type Type} from "@nestjs/common";
 import {ApiExtraModels, ApiOkResponse, getSchemaPath} from "@nestjs/swagger";
 import Page from "./Page.js";
 
@@ -18,7 +18,7 @@ const ApiPaginatedOkResponse = <TModel extends Type<unknown>>({
 					{$ref: getSchemaPath(Page)},
 					{
 						properties: {
-							data: {
+							items: {
 								type: "array",
 								items: {$ref: getSchemaPath(type)},
 							},
