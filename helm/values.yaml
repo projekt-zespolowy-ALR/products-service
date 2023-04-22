@@ -9,4 +9,5 @@ postgresql:
       scripts-configmap: "products-service-initdb-scripts"
 
 image:
-  repository: null
+  dockerRegistry:
+    host: null # required
