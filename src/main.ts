@@ -7,6 +7,5 @@ import initializeApp from "./initializeApp.js";
 const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
 initializeApp(app);
 const appConfig = app.get(AppConfig);
-
 await app.listen(appConfig.PORT);
 console.log(`Nest.js server listening at ${await app.getUrl()}`);
