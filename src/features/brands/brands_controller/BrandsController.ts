@@ -17,9 +17,9 @@ import PagingOptions from "../../../paging/PagingOptions.js";
 import BrandsService from "../brands_service/BrandsService.js";
 import BrandsServiceBrandWithGivenIdNotFoundError from "../brands_service/errors/BrandsServiceBrandWithGivenIdNotFoundError.js";
 import BrandsServiceBrandWithGivenSlugNotFoundError from "../brands_service/errors/BrandsServiceBrandWithGivenSlugNotFoundError.js";
-import type Brand from "../types/Brand.d.js";
 import AddBrandRequestBody from "./AddBrandRequestBody.js";
 import UpdateBrandRequestBody from "./UpdateBrandRequestBody.js";
+import Brand from "../types/Brand.js";
 
 @Controller("/")
 class BrandsController {

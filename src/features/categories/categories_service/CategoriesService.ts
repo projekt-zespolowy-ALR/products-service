@@ -15,9 +15,9 @@ import type Category from "../types/Category.js";
 import type UpdateCategoryPayload from "../types/UpdateCategoryPayload.d.js";
 import type Product from "../../products/types/Product.d.js";
 import ProductEntity from "../../products/products_service/ProductEntity.js";
-import paginateQuery from "../../../paging/paginateQuery.js";
 import deentitifyProduct from "../../products/products_service/deentitifyProduct.js";
 import deentitifyCategory from "./deentitifyCategory.js";
+import paginateSelectQueryBuilder from "../../../paging/paginateSelectQueryBuilder.js";
 
 @Injectable()
 class CategoriesService {
@@ -27,7 +27,7 @@ class CategoriesService {
 	): Promise<Page<Product>> {
 		await this.getCategoryById(categoryId);
 		const products = (
-			await paginateQuery(
+			await paginateSelectQueryBuilder(
 				this.productsRepository
 					.createQueryBuilder("product")
 					.innerJoinAndSelect("product.categories", "category", "category.id = :categoryId", {
@@ -45,7 +45,7 @@ class CategoriesService {
 	): Promise<Page<Product>> {
 		await this.getCategoryBySlug(categorySlug);
 		const products = (
-			await paginateQuery(
+			await paginateSelectQueryBuilder(
 				this.productsRepository
 					.createQueryBuilder("product")
 					.innerJoinAndSelect("product.categories", "category", "category.slug = :categorySlug", {
