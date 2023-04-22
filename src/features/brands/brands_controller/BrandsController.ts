@@ -10,6 +10,7 @@ import {
 	Post,
 	Put,
 	Query,
+	ValidationPipe,
 } from "@nestjs/common";
 import Page from "../../../paging/Page.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
@@ -29,7 +30,12 @@ class BrandsController {
 
 	@Get("/brands")
 	public async getAllBrands(
-		@Query()
+		@Query(
+			new ValidationPipe({
+				transform: true, // Transform to instance of PagingOptions
+				whitelist: true, // Do not put other query parameters into the object
+			})
+		)
 		pagingOptions: PagingOptions
 	): Promise<Page<Brand>> {
 		return await this.brandsService.getBrands(pagingOptions);
@@ -70,7 +76,16 @@ class BrandsController {
 	}
 
 	@Post("/brands")
-	public async addBrand(@Body() brand: AddBrandRequestBody): Promise<Brand> {
+	public async addBrand(
+		@Body(
+			new ValidationPipe({
+				transform: true,
+				whitelist: true,
+				forbidNonWhitelisted: true,
+			})
+		)
+		brand: AddBrandRequestBody
+	): Promise<Brand> {
 		return await this.brandsService.addBrand(brand);
 	}
 
@@ -96,7 +111,13 @@ class BrandsController {
 	public async updateBrand(
 		@Param("brandId", ParseUUIDPipe)
 		brandId: string,
-		@Body()
+		@Body(
+			new ValidationPipe({
+				transform: true, // Transform to instance of CatInPostRequest
+				whitelist: true, // Do not allow other properties than those defined in CatInPostRequest
+				forbidNonWhitelisted: true, // Throw an error if other properties than those defined in CatInPostRequest are present
+			})
+		)
 		brand: UpdateBrandRequestBody
 	): Promise<Brand> {
 		try {

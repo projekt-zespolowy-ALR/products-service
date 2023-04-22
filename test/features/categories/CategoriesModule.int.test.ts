@@ -6,7 +6,7 @@ import generatePostgresqlPassword from "../../utils/generatePostgresqlPassword.j
 import {Test} from "@nestjs/testing";
 import type {NestFastifyApplication} from "@nestjs/platform-fastify";
 import * as Testcontainers from "testcontainers";
-import AppOrmModule from "../../../src/orm/AppOrmModule.js";
+import AppOrmModule from "../../../src/app_orm/AppOrmModule.js";
 import AppConfig from "../../../src/app_config/AppConfig.js";
 import {TypedConfigModule} from "nest-typed-config";
 import * as Fs from "fs/promises";
