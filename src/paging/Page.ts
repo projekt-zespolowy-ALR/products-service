@@ -1,20 +1,20 @@
 import {ApiProperty} from "@nestjs/swagger";
-import {plainToClass} from "class-transformer";
 
 import PageMeta from "./PageMeta.js";
+import {plainToClass} from "class-transformer";
 
 class Page<T> {
 	@ApiProperty({isArray: true})
-	public readonly data!: readonly T[];
+	public readonly items!: T[];
 
 	@ApiProperty({type: PageMeta})
 	public readonly meta!: PageMeta;
 
-	public map<A>(mapper: (item: T, index: number, array: readonly T[]) => A): Page<A> {
+	public map<U>(mapper: (item: T) => U): Page<U> {
 		return plainToClass(Page, {
-			data: this.data.map(mapper),
+			items: this.items.map(mapper),
 			meta: this.meta,
-		}) as Page<A>;
+		}) as Page<U>;
 	}
 }
 

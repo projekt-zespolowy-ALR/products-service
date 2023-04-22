@@ -35,7 +35,7 @@
 		"noEmitOnError": false,
 		"outDir": "./dist",
 		"preserveConstEnums": true,
-		"preserveValueImports": false,
+		"preserveValueImports": true,
 		"removeComments": true,
 		"sourceMap": true,
 		"allowJs": false,

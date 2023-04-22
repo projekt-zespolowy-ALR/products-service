@@ -1,9 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ .Release.Name }}-api-server"
+  name: "{{ .Release.Name }}"
   labels:
-    app: api-server
-    microservice: "{{ .Release.Name }}"
+    app: "{{ .Release.Name }}"
 data:
-  PORT: "3000"
+  PORT: "{{ .Values.port }}"

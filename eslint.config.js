@@ -3,10 +3,9 @@
 // https://eslint.org/blog/2022/08/new-config-system-part-2/
 
 import typescriptEslintPlugin from "@typescript-eslint/eslint-plugin";
-import * as typescriptEslintParser from "@typescript-eslint/parser";
-import * as espreeParser from "espree";
+import * as TypescriptEslintParser from "@typescript-eslint/parser";
+import * as EspreeParser from "espree";
 import globals from "globals";
-import prettierEslintConfig from "eslint-config-prettier";
 import jestEslintPlugin from "eslint-plugin-jest";
 
 const eslintConfig = [
@@ -122,7 +121,7 @@ const eslintConfig = [
 			"@typescript-eslint": typescriptEslintPlugin,
 		},
 		languageOptions: {
-			parser: typescriptEslintParser,
+			parser: TypescriptEslintParser,
 			parserOptions: {
 				project: "./tsconfig.json",
 				tsconfigRootDir: ".",
@@ -133,7 +132,7 @@ const eslintConfig = [
 	{
 		files: ["**/*.js", "**/*.cjs", "**/*.mjs"],
 		languageOptions: {
-			parser: espreeParser,
+			parser: EspreeParser,
 		},
 	},
 	{
@@ -170,10 +169,8 @@ const eslintConfig = [
 			"**/.vscode/**",
 			"coverage_report/**",
 			"**/.git/**",
-			"openapi/**",
 		],
 	},
-	prettierEslintConfig,
 ];
 
 export default eslintConfig;
