@@ -4,10 +4,9 @@ import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 export default class BrandEntity {
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
-	@Column({name: "name"})
+	@Column({name: "name", type: "text"})
 	public readonly name!: string;
-	@Column({name: "age"})
-	public readonly age!: number;
-	@Column({name: "breed"})
-	public readonly breed!: string;
+
+	@Column({name: "slug", type: "text"})
+	public readonly slug!: string;
 }
