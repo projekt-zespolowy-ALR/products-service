@@ -7,7 +7,7 @@ import type PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type Brand from "../brands_controller/Brand.js";
 import deentityifyBrandEntity from "./deentityifyBrandEntity.js";
-
+import type CreateBrandPayload from "./CreateBrandPayload.js";
 @Injectable()
 export default class BrandsService {
 	private readonly brandsRepository: Repository<BrandEntity>;
@@ -21,5 +21,8 @@ export default class BrandsService {
 	}
 	public async getBrandById(id: string): Promise<Brand> {
 		return deentityifyBrandEntity(await this.brandsRepository.findOneByOrFail({id}));
+	}
+	public async createBrand(createBrandPayload: CreateBrandPayload): Promise<Brand> {
+		return deentityifyBrandEntity(await this.brandsRepository.save(createBrandPayload));
 	}
 }
