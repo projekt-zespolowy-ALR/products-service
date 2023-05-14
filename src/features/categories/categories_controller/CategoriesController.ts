@@ -57,7 +57,7 @@ export default class CategoriesController {
 		}
 	}
 
-	@Post("/cats")
+	@Post("/categories")
 	public async createCategory(
 		@Body(
 			new ValidationPipe({
