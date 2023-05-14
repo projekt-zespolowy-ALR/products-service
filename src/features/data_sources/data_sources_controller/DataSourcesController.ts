@@ -9,11 +9,11 @@ import {
 	Query,
 	ValidationPipe,
 } from "@nestjs/common";
-import DataSourcesService from "../datasources_service/DataSourcesService.js";
+import DataSourcesService from "../data_sources_service/DataSourcesService.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
 import type Page from "../../../paging/Page.js";
 import type DataSource from "./DataSource.js";
-import DataSourcesServiceDataSourceWithGivenIdNotFoundError from "../datasources_service/DataSourcesServiceDataSourceWithGivenIdNotFoundError.js";
+import DataSourcesServiceDataSourceWithGivenIdNotFoundError from "../data_sources_service/DataSourcesServiceDataSourceWithGivenIdNotFoundError.js";
 import CreateDataSourceRequestBody from "./CreateDataSourceRequestBody.js";
 import payloadifyCreateDataSourceRequestBody from "./payloadifyCreateDataSourceRequestBody.js";
 
@@ -23,7 +23,7 @@ export default class DataSourcesController {
 	public constructor(dataSourcesService: DataSourcesService) {
 		this.dataSourcesService = dataSourcesService;
 	}
-	@Get("/datasources")
+	@Get("/data-sources")
 	public async getDataSources(
 		@Query(
 			new ValidationPipe({
@@ -36,7 +36,7 @@ export default class DataSourcesController {
 		return await this.dataSourcesService.getDataSources(pagingOptions);
 	}
 
-	@Get("/datasources/:dataSourceId")
+	@Get("/data-sources/:dataSourceId")
 	public async getDataSourceById(
 		@Param(
 			"dataSourceId",
@@ -57,7 +57,7 @@ export default class DataSourcesController {
 		}
 	}
 
-	@Post("/datasources")
+	@Post("/data-sources")
 	public async createDataSource(
 		@Body(
 			new ValidationPipe({

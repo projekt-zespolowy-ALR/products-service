@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
-@Entity({name: "dataSources"})
+@Entity({name: "data_sources"})
 export default class DataSourceEntity {
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
