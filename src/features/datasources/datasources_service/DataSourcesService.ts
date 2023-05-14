@@ -12,7 +12,9 @@ import DataSourcesServiceDataSourceWithGivenIdNotFoundError from "./DataSourcesS
 @Injectable()
 export default class DataSourcesService {
 	private readonly dataSourcesRepository: Repository<DataSourceEntity>;
-	public constructor(@InjectRepository(DataSourceEntity) dataSourcesRepository: Repository<DataSourceEntity>) {
+	public constructor(
+		@InjectRepository(DataSourceEntity) dataSourcesRepository: Repository<DataSourceEntity>
+	) {
 		this.dataSourcesRepository = dataSourcesRepository;
 	}
 	public async getDataSources(pagingOptions: PagingOptions): Promise<Page<DataSource>> {
@@ -30,7 +32,11 @@ export default class DataSourcesService {
 			throw error;
 		}
 	}
-	public async createDataSource(createDataSourcePayload: CreateDataSourcePayload): Promise<DataSource> {
-		return deentityifyDataSourceEntity(await this.dataSourcesRepository.save(createDataSourcePayload));
+	public async createDataSource(
+		createDataSourcePayload: CreateDataSourcePayload
+	): Promise<DataSource> {
+		return deentityifyDataSourceEntity(
+			await this.dataSourcesRepository.save(createDataSourcePayload)
+		);
 	}
 }
