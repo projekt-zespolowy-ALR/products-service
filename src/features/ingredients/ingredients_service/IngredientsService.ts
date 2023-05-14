@@ -1,5 +1,5 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
-import {Repository} from "typeorm";
+import {Injectable} from "@nestjs/common";
+import {EntityNotFoundError, Repository} from "typeorm";
 import IngredientEntity from "./IngredientEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import type Page from "../../../paging/Page.js";
@@ -26,7 +26,7 @@ export default class IngredientsService {
 		try {
 			return deentityifyIngredientEntity(await this.ingredientsRepository.findOneByOrFail({id}));
 		} catch (error) {
-			if (error instanceof NotFoundException) {
+			if (error instanceof EntityNotFoundError) {
 				throw new IngredientsServiceIngredientWithGivenIdNotFoundError(id);
 			}
 			throw error;
