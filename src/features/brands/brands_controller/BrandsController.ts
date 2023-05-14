@@ -14,7 +14,7 @@ import PagingOptions from "../../../paging/PagingOptions.js";
 import type Page from "../../../paging/Page.js";
 import type Brand from "./Brand.js";
 import BrandsServiceBrandWithGivenIdNotFoundError from "../brands_service/BrandsServiceBrandWithGivenIdNotFoundError.js";
-import type CreateBrandRequestBody from "./CreateBrandRequestBody.js";
+import CreateBrandRequestBody from "./CreateBrandRequestBody.js";
 import payloadifyCreateBrandRequestBody from "./payloadifyCreateBrandRequestBody.js";
 
 @Controller("/")
@@ -57,7 +57,7 @@ export default class BrandsController {
 		}
 	}
 
-	@Post("/cats")
+	@Post("/brands")
 	public async createBrand(
 		@Body(
 			new ValidationPipe({
