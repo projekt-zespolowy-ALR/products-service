@@ -43,7 +43,7 @@ CREATE TABLE products (
 CREATE TABLE ingredients (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
 	slug TEXT NOT NULL UNIQUE,
-	name TEXT NOT NULL,
+	latin_name TEXT NOT NULL,
 	PRIMARY KEY (id)
 );
 
