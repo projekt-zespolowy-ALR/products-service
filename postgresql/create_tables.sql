@@ -31,8 +31,8 @@ CREATE TABLE products (
 	slug TEXT NOT NULL UNIQUE,
 	brand_id UUID,
 	ingredients_list_id UUID,
-	mass DOUBLE PRECISION, -- in kilograms
-	volume DOUBLE PRECISION, -- in liters
+	massKilograms DOUBLE PRECISION, -- in kilograms
+	volumeLiters DOUBLE PRECISION, -- in liters
 	PRIMARY KEY (id),
 	FOREIGN KEY (brand_id) REFERENCES brands (id),
 	FOREIGN KEY (ingredients_list_id) REFERENCES ingredients_lists (id)
