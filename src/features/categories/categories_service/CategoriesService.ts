@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {Repository} from "typeorm";
+import {EntityNotFoundError, Repository} from "typeorm";
 import CategoryEntity from "./CategoryEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import type Page from "../../../paging/Page.js";
@@ -8,6 +8,7 @@ import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
 import type Category from "../categories_controller/Category.js";
 import deentityifyCategoryEntity from "./deentityifyCategoryEntity.js";
 import type CreateCategoryPayload from "./CreateCategoryPayload.js";
+import CategoriesServiceCategoryWithGivenIdNotFoundError from "./CategoriesServiceCategoryWithGivenIdNotFoundError.js";
 @Injectable()
 export default class CategoriesService {
 	private readonly categoriesRepository: Repository<CategoryEntity>;
@@ -22,7 +23,14 @@ export default class CategoriesService {
 		);
 	}
 	public async getCategoryById(id: string): Promise<Category> {
-		return deentityifyCategoryEntity(await this.categoriesRepository.findOneByOrFail({id}));
+		try {
+			return deentityifyCategoryEntity(await this.categoriesRepository.findOneByOrFail({id}));
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
 	}
 	public async createCategory(createCategoryPayload: CreateCategoryPayload): Promise<Category> {
 		return deentityifyCategoryEntity(await this.categoriesRepository.save(createCategoryPayload));
