@@ -98,48 +98,23 @@ describe("IngredientsModule", () => {
 				});
 				expect(response.statusCode).toBe(201);
 			});
-		});
-	});
-	describe("v2", () => {
-		describe("Empty database", () => {
-			test("GET /ingredients", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v2/ingredients",
-				});
-				expect(response.statusCode).toBe(200);
-				expect(response.json()).toEqual({
-					items: [],
-					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
-				});
-			});
+
 			test("GET /ingredients/:id with invalid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/ingredients/1",
+					url: "/v1/ingredients/1",
 				});
 				expect(response.statusCode).toBe(400);
 			});
 			test("GET /ingredients/:id with valid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/ingredients/e8a7b311-367b-4105-a75d-929b930faafa",
+					url: "/v1/ingredients/e8a7b311-367b-4105-a75d-929b930faafa",
 				});
 				expect(response.statusCode).toBe(404);
 			});
-			test("POST /ingredients", async () => {
-				const addIngredientRequestBody = {
-					latinName: "test2",
-					slug: "test2",
-				} as const;
-				const response = await app.inject({
-					method: "POST",
-					url: "/v2/ingredients",
-					payload: addIngredientRequestBody,
-				});
-				expect(response.statusCode).toBe(201);
-			});
 		});
+
 		describe("Database with one ingredient", () => {
 			test("GET /ingredients", async () => {
 				const addIngredientRequestBody = {
@@ -148,12 +123,12 @@ describe("IngredientsModule", () => {
 				} as const;
 				await app.inject({
 					method: "POST",
-					url: "/v2/ingredients",
+					url: "/v1/ingredients",
 					payload: addIngredientRequestBody,
 				});
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/ingredients",
+					url: "/v1/ingredients",
 				});
 				expect(response.statusCode).toBe(200);
 				const responseJson = response.json();
