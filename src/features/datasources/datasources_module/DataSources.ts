@@ -1,11 +1,11 @@
 import {Module} from "@nestjs/common";
-import DataSourcesController from "../brands_controller/DataSourcesController.js";
-import DataSourcesService from "../brands_service/DataSourcesService.js";
+import DataSourcesController from "../datasources_controller/DataSourcesController.js";
+import DataSourcesService from "../datasources_service/DataSourcesService.js";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import BrandEntity from "../brands_service/BrandEntity.js";
+import DataSourceEntity from "../datasources_service/DataSourceEntity.js";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([BrandEntity])],
+	imports: [TypeOrmModule.forFeature([DataSourceEntity])],
 	controllers: [DataSourcesController],
 	providers: [DataSourcesService],
 })
