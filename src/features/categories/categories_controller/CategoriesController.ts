@@ -14,7 +14,7 @@ import PagingOptions from "../../../paging/PagingOptions.js";
 import type Page from "../../../paging/Page.js";
 import type Category from "./Category.js";
 import CategoriesServiceCategoryWithGivenIdNotFoundError from "../categories_service/CategoriesServiceCategoryWithGivenIdNotFoundError.js";
-import type CreateCategoryRequestBody from "./CreateCategoryRequestBody.js";
+import CreateCategoryRequestBody from "./CreateCategoryRequestBody.js";
 import payloadifyCreateCategoryRequestBody from "./payloadifyCreateCategoryequestBody.js";
 
 @Controller("/")
