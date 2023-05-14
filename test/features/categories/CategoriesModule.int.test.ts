@@ -98,48 +98,23 @@ describe("CategoriesModule", () => {
 				});
 				expect(response.statusCode).toBe(201);
 			});
-		});
-	});
-	describe("v2", () => {
-		describe("Empty database", () => {
-			test("GET /categories", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v2/categories",
-				});
-				expect(response.statusCode).toBe(200);
-				expect(response.json()).toEqual({
-					items: [],
-					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
-				});
-			});
+
 			test("GET /categories/:id with invalid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/categories/1",
+					url: "/v1/categories/1",
 				});
 				expect(response.statusCode).toBe(400);
 			});
 			test("GET /categories/:id with valid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/categories/e8a7b311-367b-4105-a75d-929b930faafa",
+					url: "/v1/categories/e8a7b311-367b-4105-a75d-929b930faafa",
 				});
 				expect(response.statusCode).toBe(404);
 			});
-			test("POST /categories", async () => {
-				const addCategoryRequestBody = {
-					name: "test2",
-					slug: "test2",
-				} as const;
-				const response = await app.inject({
-					method: "POST",
-					url: "/v2/categories",
-					payload: addCategoryRequestBody,
-				});
-				expect(response.statusCode).toBe(201);
-			});
 		});
+
 		describe("Database with one category", () => {
 			test("GET /categories", async () => {
 				const addCategoryRequestBody = {
@@ -148,12 +123,12 @@ describe("CategoriesModule", () => {
 				} as const;
 				await app.inject({
 					method: "POST",
-					url: "/v2/categories",
+					url: "/v1/categories",
 					payload: addCategoryRequestBody,
 				});
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/categories",
+					url: "/v1/categories",
 				});
 				expect(response.statusCode).toBe(200);
 				const responseJson = response.json();

@@ -98,48 +98,23 @@ describe("BrandsModule", () => {
 				});
 				expect(response.statusCode).toBe(201);
 			});
-		});
-	});
-	describe("v2", () => {
-		describe("Empty database", () => {
-			test("GET /brands", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v2/brands",
-				});
-				expect(response.statusCode).toBe(200);
-				expect(response.json()).toEqual({
-					items: [],
-					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
-				});
-			});
+
 			test("GET /brands/:id with invalid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/brands/1",
+					url: "/v1/brands/1",
 				});
 				expect(response.statusCode).toBe(400);
 			});
 			test("GET /brands/:id with valid UUID4", async () => {
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/brands/e8a7b311-367b-4105-a75d-929b930faafa",
+					url: "/v1/brands/e8a7b311-367b-4105-a75d-929b930faafa",
 				});
 				expect(response.statusCode).toBe(404);
 			});
-			test("POST /brands", async () => {
-				const addBrandRequestBody = {
-					name: "test2",
-					slug: "test2",
-				} as const;
-				const response = await app.inject({
-					method: "POST",
-					url: "/v2/brands",
-					payload: addBrandRequestBody,
-				});
-				expect(response.statusCode).toBe(201);
-			});
 		});
+
 		describe("Database with one brand", () => {
 			test("GET /brands", async () => {
 				const addBrandRequestBody = {
@@ -148,12 +123,12 @@ describe("BrandsModule", () => {
 				} as const;
 				await app.inject({
 					method: "POST",
-					url: "/v2/brands",
+					url: "/v1/brands",
 					payload: addBrandRequestBody,
 				});
 				const response = await app.inject({
 					method: "GET",
-					url: "/v2/brands",
+					url: "/v1/brands",
 				});
 				expect(response.statusCode).toBe(200);
 				const responseJson = response.json();
