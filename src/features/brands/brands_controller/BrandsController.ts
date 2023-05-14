@@ -57,7 +57,7 @@ export default class BrandsController {
 		}
 	}
 
-	@Post("/cats")
+	@Post("/brands")
 	public async createBrand(
 		@Body(
 			new ValidationPipe({
