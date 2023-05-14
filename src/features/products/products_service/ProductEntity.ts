@@ -1,5 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from "typeorm";
 import BrandEntity from "../../brands/brands_service/BrandEntity.js";
+
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from "typeorm";
 
 @Entity({name: "products"})
 export default class ProductEntity {
@@ -17,7 +18,7 @@ export default class ProductEntity {
 	@Column({name: "name", type: "text"})
 	public readonly name!: string;
 
-	@ManyToOne(() => BrandEntity)
+	@ManyToOne(() => BrandEntity, (brand) => brand.products)
 	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
 	public readonly brand!: BrandEntity;
 }
