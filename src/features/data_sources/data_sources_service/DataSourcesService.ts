@@ -5,7 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import type Page from "../../../paging/Page.js";
 import type PagingOptions from "../../../paging/PagingOptions.js";
 import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
-import type DataSource from "../datasources_controller/DataSource.js";
+import type DataSource from "../data_sources_controller/DataSource.js";
 import deentityifyDataSourceEntity from "./deentityifyDataSourceEntity.js";
 import type CreateDataSourcePayload from "./CreateDataSourcePayload.js";
 import DataSourcesServiceDataSourceWithGivenIdNotFoundError from "./DataSourcesServiceDataSourceWithGivenIdNotFoundError.js";
