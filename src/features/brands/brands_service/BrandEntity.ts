@@ -1,13 +1,6 @@
 import ProductEntity from "../../products/products_service/ProductEntity.js";
 
-import {
-	Entity,
-	Column,
-	PrimaryGeneratedColumn,
-	OneToMany,
-	JoinColumn,
-	type Relation,
-} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn} from "typeorm";
 
 @Entity({name: "brands"})
 export default class BrandEntity {

@@ -87,8 +87,19 @@ describe("ProductsModule", () => {
 				expect(response.statusCode).toBe(400);
 			});
 			test("POST /products", async () => {
+				const addBrandRequestBody = {
+					slug: "test",
+					name: "test",
+				} as const;
+				const brand = (
+					await app.inject({
+						method: "POST",
+						url: "/v1/brands",
+						payload: addBrandRequestBody,
+					})
+				).json();
 				const addProductRequestBody = {
-					brandId: "f9b8c422-478c-4105-a75d-929b930fbbfa",
+					brandId: brand.id,
 					slug: "test2",
 					name: "test2",
 					massKilograms: 0.5,
@@ -120,8 +131,19 @@ describe("ProductsModule", () => {
 
 		describe("Database with one product", () => {
 			test("GET /products", async () => {
+				const addBrandRequestBody = {
+					slug: "test",
+					name: "test",
+				} as const;
+				const brand = (
+					await app.inject({
+						method: "POST",
+						url: "/v1/brands",
+						payload: addBrandRequestBody,
+					})
+				).json();
 				const addProductRequestBody = {
-					brandId: "f9b8c422-478c-4105-a75d-929b930fbbfa",
+					brandId: brand.id,
 					slug: "test2",
 					name: "test2",
 					massKilograms: 0.5,
