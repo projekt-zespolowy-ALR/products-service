@@ -1,4 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import ProductEntity from "../../products/products_service/ProductEntity.js";
+
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn} from "typeorm";
 
 @Entity({name: "brands"})
 export default class BrandEntity {
@@ -9,4 +11,8 @@ export default class BrandEntity {
 
 	@Column({name: "slug", type: "text"})
 	public readonly slug!: string;
+
+	@OneToMany(() => ProductEntity, (product) => product.brand)
+	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
+	public readonly products!: readonly ProductEntity[];
 }
