@@ -2,11 +2,11 @@ port: 3000
 
 postgresql:
   auth:
-    database: "products-service"
-    username: "products-service"
+    database: "wlosiara-pl-products-service"
+    username: "wlosiara-pl-products-service"
   primary:
     initdb:
-      scripts-configmap: "products-service-initdb-scripts"
+      scripts-configmap: "wlosiara-pl-products-service-initdb-scripts"
 
 image:
   dockerRegistry:

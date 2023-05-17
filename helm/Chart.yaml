@@ -1,5 +1,5 @@
 apiVersion: v2
-name: products-service
+name: wlosiara-pl-products-service
 description: Products microservice
 icon: https://cdn.discordapp.com/attachments/1028608205229666398/1063459924048347186/image.png
 
