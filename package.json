@@ -30,14 +30,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/projekt-zespolowy-ALR/products-service.git"
+		"url": "git+https://github.com/projekt-zespolowy-ALR/wlosiara-pl-products-service.git"
 	},
 	"author": "Włosiara.pl",
 	"license": "UNLICENSED",
 	"bugs": {
-		"url": "https://github.com/projekt-zespolowy-ALR/products-service/issues"
+		"url": "https://github.com/projekt-zespolowy-ALR/wlosiara-pl-products-service/issues"
 	},
-	"homepage": "https://github.com/projekt-zespolowy-ALR/products-service#readme",
+	"homepage": "https://github.com/projekt-zespolowy-ALR/wlosiara-pl-products-service#readme",
 	"devDependencies": {
 		"@j-ulrich/release-it-regex-bumper": "^4.1.1",
 		"@nestjs/testing": "^9.4.0",
