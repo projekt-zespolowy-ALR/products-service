@@ -11,7 +11,7 @@ import DataSourcesModule from "./data_sources/data_sources_module/DataSourcesMod
 	providers: [],
 })
 class FeaturesModule {
-	constructor() {}
+	public constructor() {}
 }
 
 export default FeaturesModule;
