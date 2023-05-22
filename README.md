@@ -1,4 +1,4 @@
-# pwlosiara-pl-roducts-service
+# wlosiara-pl-products-service
 
 This is a template for a Nest.js TypeScript project.
 
