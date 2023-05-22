@@ -9,4 +9,6 @@ import CategoryEntity from "../categories_service/CategoryEntity.js";
 	controllers: [CategoriesController],
 	providers: [CategoriesService],
 })
-export default class CategoriesModule {}
+export default class CategoriesModule {
+	public constructor() {}
+}

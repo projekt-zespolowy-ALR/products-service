@@ -9,4 +9,6 @@ import ProductEntity from "../products_service/ProductEntity.js";
 	controllers: [ProductsController],
 	providers: [ProductsService],
 })
-export default class ProductsModule {}
+export default class ProductsModule {
+	public constructor() {}
+}

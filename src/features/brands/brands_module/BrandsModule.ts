@@ -9,4 +9,6 @@ import BrandEntity from "../brands_service/BrandEntity.js";
 	controllers: [BrandsController],
 	providers: [BrandsService],
 })
-export default class BrandsModule {}
+export default class BrandsModule {
+	public constructor() {}
+}

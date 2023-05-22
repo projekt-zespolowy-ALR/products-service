@@ -9,4 +9,6 @@ import DataSourceEntity from "../data_sources_service/DataSourceEntity.js";
 	controllers: [DataSourcesController],
 	providers: [DataSourcesService],
 })
-export default class DataSourcesModule {}
+export default class DataSourcesModule {
+	public constructor() {}
+}
