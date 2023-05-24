@@ -6,6 +6,10 @@ import UserFavoriteProductsServiceProductWithGivenIdNotFoundError from "./UserFa
 import UsersMicroserviceClient from "../../users_microservice_client/UsersMicroserviceClient.js";
 import UsersMicroserviceClientUserWithGivenIdNotFoundError from "../../users_microservice_client/UsersMicroserviceClientUserWithGivenIdNotFoundError.js";
 import UserFavoriteProductsServiceUserWithGivenIdNotFoundError from "./UserFavoriteProductsServiceUserWithGivenIdNotFoundError.js";
+import type Page from "../../../paging/Page.js";
+import type Product from "../../products/products_controller/Product.js";
+import paginatedFindAndCount from "../../../paging/paginatedFindAndCount.js";
+import type PagingOptions from "../../../paging/PagingOptions.js";
 
 @Injectable()
 export default class UserFavoriteProductsService {
@@ -40,5 +44,26 @@ export default class UserFavoriteProductsService {
 			}
 			throw error;
 		}
+	}
+
+	public async getFavoriteProducts(
+		userId: string,
+		pagingOptions: PagingOptions
+	): Promise<Page<Product>> {
+		try {
+			await this.usersMicroserviceClient.getUserById(userId);
+		} catch (error) {
+			if (error instanceof UsersMicroserviceClientUserWithGivenIdNotFoundError) {
+				throw new UserFavoriteProductsServiceUserWithGivenIdNotFoundError(error.userId);
+			}
+			throw error;
+		}
+
+		return (
+			await paginatedFindAndCount(this.userFavoriteProductsRepository, pagingOptions, {
+				where: {userId},
+				relations: ["product"],
+			})
+		).map((userFavoriteProduct) => userFavoriteProduct.product);
 	}
 }
