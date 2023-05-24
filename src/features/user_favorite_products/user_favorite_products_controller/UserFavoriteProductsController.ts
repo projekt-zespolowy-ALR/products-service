@@ -1,10 +1,12 @@
 import {
 	Controller,
 	Get,
+	Head,
 	NotFoundException,
 	Param,
 	Put,
 	Query,
+	Res,
 	ValidationPipe,
 } from "@nestjs/common";
 import UserFavoriteProductsService from "../user_favorite_products_service/UserFavoriteProductsService.js";
@@ -13,6 +15,7 @@ import UserFavoriteProductsServiceUserWithGivenIdNotFoundError from "../user_fav
 import type Product from "../../products/products_controller/Product.js";
 import type Page from "../../../paging/Page.js";
 import PagingOptions from "../../../paging/PagingOptions.js";
+import type {FastifyReply} from "fastify";
 
 @Controller("/users/:userId/favorite-products")
 export default class UserFavoriteProductsController {
@@ -53,6 +56,33 @@ export default class UserFavoriteProductsController {
 		try {
 			return await this.userFavoriteProductsService.getFavoriteProducts(userId, pagingOptions);
 		} catch (error) {
+			if (error instanceof UserFavoriteProductsServiceUserWithGivenIdNotFoundError) {
+				throw new NotFoundException(`User with id "${userId}" not found.`);
+			}
+			throw error;
+		}
+	}
+
+	@Head("/:productId")
+	public async isProductFavorite(
+		@Param("userId") userId: string,
+		@Param("productId") productId: string,
+		@Res() response: FastifyReply
+	): Promise<void> {
+		try {
+			const isProductFavorite = await this.userFavoriteProductsService.isProductFavorite(
+				userId,
+				productId
+			);
+			if (!isProductFavorite) {
+				response.status(404).send();
+			} else {
+				response.status(200).send();
+			}
+		} catch (error) {
+			if (error instanceof UserFavoriteProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id "${productId}" not found.`);
+			}
 			if (error instanceof UserFavoriteProductsServiceUserWithGivenIdNotFoundError) {
 				throw new NotFoundException(`User with id "${userId}" not found.`);
 			}

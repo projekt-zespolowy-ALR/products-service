@@ -248,6 +248,29 @@ describe("UserFavoriteProductsModule", () => {
 					expect(response.json().items.length).toBe(3);
 				});
 			});
+
+			describe("HEAD /users/[userId]/favorite-products/[likedProductId]", () => {
+				const userId = "ac9bd64c-5260-4044-a113-0e7d9fb32e1f";
+				test("Should return 200", async () => {
+					usersMicroserviceClientMock.getUserById = async function (): Promise<User> {
+						return Promise.resolve({
+							id: userId,
+							username: "username",
+							avatarUrl:
+								"https://static.wikia.nocookie.net/james-camerons-avatar/images/7/7c/Neytiri_infoboks.png/revision/latest",
+						});
+					};
+
+					const addedProducts = await addAndLikeProducts(userId);
+					const firstProduct = addedProducts[0] as Product;
+
+					const response = await app.inject({
+						method: "HEAD",
+						url: `/v1/users/${userId}/favorite-products/${firstProduct.id}`,
+					});
+					expect(response.statusCode).toBe(200);
+				});
+			});
 		});
 	});
 });

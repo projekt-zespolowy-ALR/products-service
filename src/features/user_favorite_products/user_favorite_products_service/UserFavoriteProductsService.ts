@@ -66,4 +66,17 @@ export default class UserFavoriteProductsService {
 			})
 		).map((userFavoriteProduct) => userFavoriteProduct.product);
 	}
+
+	public async isProductFavorite(userId: string, productId: string): Promise<boolean> {
+		try {
+			await this.usersMicroserviceClient.getUserById(userId);
+		} catch (error) {
+			if (error instanceof UsersMicroserviceClientUserWithGivenIdNotFoundError) {
+				throw new UserFavoriteProductsServiceUserWithGivenIdNotFoundError(error.userId);
+			}
+			throw error;
+		}
+
+		return (await this.userFavoriteProductsRepository.count({where: {userId, productId}})) > 0;
+	}
 }
