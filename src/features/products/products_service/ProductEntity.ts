@@ -1,6 +1,15 @@
 import BrandEntity from "../../brands/brands_service/BrandEntity.js";
 
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	JoinColumn,
+	OneToMany,
+	type Relation,
+} from "typeorm";
+import UserFavoriteProductEntity from "../../user_favorite_products/user_favorite_products_service/UserFavoriteProductEntity.js";
 
 @Entity({name: "products"})
 export default class ProductEntity {
@@ -20,8 +29,11 @@ export default class ProductEntity {
 
 	@ManyToOne(() => BrandEntity, (brand) => brand.products)
 	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
-	public readonly brand!: BrandEntity;
+	public readonly brand!: Relation<BrandEntity>;
 
 	@Column({name: "brand_id", type: "uuid"})
 	public readonly brandId!: string;
+
+	@OneToMany(() => UserFavoriteProductEntity, (userFavoriteProduct) => userFavoriteProduct.product)
+	public readonly userFavoriteProducts!: Relation<UserFavoriteProductEntity>[];
 }
