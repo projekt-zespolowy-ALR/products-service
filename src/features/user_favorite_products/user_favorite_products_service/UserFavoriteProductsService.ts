@@ -79,4 +79,22 @@ export default class UserFavoriteProductsService {
 
 		return (await this.userFavoriteProductsRepository.count({where: {userId, productId}})) > 0;
 	}
+
+	public async removeFavoriteProduct(userId: string, productId: string): Promise<void> {
+		try {
+			await this.usersMicroserviceClient.getUserById(userId);
+		} catch (error) {
+			if (error instanceof UsersMicroserviceClientUserWithGivenIdNotFoundError) {
+				throw new UserFavoriteProductsServiceUserWithGivenIdNotFoundError(error.userId);
+			}
+			throw error;
+		}
+
+		const deleteResult = await this.userFavoriteProductsRepository.delete({userId, productId});
+		if (deleteResult.affected === 0) {
+			if ((await this.userFavoriteProductsRepository.count({where: {productId}})) === 0) {
+				throw new UserFavoriteProductsServiceProductWithGivenIdNotFoundError(productId);
+			}
+		}
+	}
 }

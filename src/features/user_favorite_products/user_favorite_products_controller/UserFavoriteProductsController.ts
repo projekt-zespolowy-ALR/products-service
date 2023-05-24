@@ -1,5 +1,6 @@
 import {
 	Controller,
+	Delete,
 	Get,
 	Head,
 	NotFoundException,
@@ -79,6 +80,24 @@ export default class UserFavoriteProductsController {
 			} else {
 				response.status(200).send();
 			}
+		} catch (error) {
+			if (error instanceof UserFavoriteProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id "${productId}" not found.`);
+			}
+			if (error instanceof UserFavoriteProductsServiceUserWithGivenIdNotFoundError) {
+				throw new NotFoundException(`User with id "${userId}" not found.`);
+			}
+			throw error;
+		}
+	}
+
+	@Delete("/:productId")
+	public async removeFavoriteProduct(
+		@Param("userId") userId: string,
+		@Param("productId") productId: string
+	): Promise<void> {
+		try {
+			await this.userFavoriteProductsService.removeFavoriteProduct(userId, productId);
 		} catch (error) {
 			if (error instanceof UserFavoriteProductsServiceProductWithGivenIdNotFoundError) {
 				throw new NotFoundException(`Product with id "${productId}" not found.`);
