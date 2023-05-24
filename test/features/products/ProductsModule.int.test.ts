@@ -49,6 +49,7 @@ describe("ProductsModule", () => {
 		const AppConfigModule = TypedConfigModule.forRoot({
 			schema: AppConfig,
 			load: () => ({
+				USERS_MICROSERVICE_BASE_URL: "https://users-microservice",
 				POSTGRES_HOST: postgresqlContainer.getHost(),
 				POSTGRES_PORT: postgresqlContainer.getPort(),
 				POSTGRES_USERNAME: postgresqlContainer.getUsername(),

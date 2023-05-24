@@ -29,7 +29,7 @@ export default class ProductEntity {
 
 	@ManyToOne(() => BrandEntity, (brand) => brand.products)
 	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
-	public readonly brand!: BrandEntity;
+	public readonly brand!: Relation<BrandEntity>;
 
 	@Column({name: "brand_id", type: "uuid"})
 	public readonly brandId!: string;

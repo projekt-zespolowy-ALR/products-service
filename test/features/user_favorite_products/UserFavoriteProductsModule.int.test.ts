@@ -11,8 +11,11 @@ import testsConfig from "../../app_config/testsConfig.js";
 import generatePostgresqlPassword from "../../utils/generatePostgresqlPassword.js";
 import createTestingApp from "../../utils/createTestingApp.js";
 import FeaturesModule from "../../../src/features/FeaturesModule.js";
+import type {User} from "../../../src/features/users_microservice_client/User.js";
+import UsersMicroserviceClientUserWithGivenIdNotFoundError from "../../../src/features/users_microservice_client/UsersMicroserviceClientUserWithGivenIdNotFoundError.js";
+import UsersMicroserviceClient from "../../../src/features/users_microservice_client/UsersMicroserviceClient.js";
 
-describe("BrandsModule", () => {
+describe("UserFavoriteProductsModule", () => {
 	let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer;
 	let app: NestFastifyApplication;
 	let postgresqlInitializationSqlScript: string;
@@ -23,6 +26,12 @@ describe("BrandsModule", () => {
 			"utf-8"
 		);
 	});
+
+	let usersMicroserviceClientMock: UsersMicroserviceClient = {
+		async getUserById(userId: string): Promise<User> {
+			throw new UsersMicroserviceClientUserWithGivenIdNotFoundError(userId);
+		},
+	} as UsersMicroserviceClient;
 
 	beforeEach(async () => {
 		const postgresqlContainerPassword = generatePostgresqlPassword();
@@ -59,7 +68,10 @@ describe("BrandsModule", () => {
 		});
 		const appModule = await Test.createTestingModule({
 			imports: [FeaturesModule, AppOrmModule, AppConfigModule],
-		}).compile();
+		})
+			.overrideProvider(UsersMicroserviceClient)
+			.useValue(usersMicroserviceClientMock)
+			.compile();
 
 		app = await createTestingApp(appModule);
 	}, testsConfig.TESTS_INTEGRATION_TEST_BEFORE_EACH_TIMEOUT * 1000);
@@ -68,84 +80,53 @@ describe("BrandsModule", () => {
 		await Promise.all([postgresqlContainer.stop(), app.close()]);
 	});
 	describe("v1", () => {
-		describe("Empty database", () => {
-			test("GET /brands", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v1/brands",
-				});
-				expect(response.statusCode).toBe(200);
-				expect(response.json()).toEqual({
-					items: [],
-					meta: {skip: 0, take: 10, totalItemsCount: 0, pageItemsCount: 0},
-				});
-			});
-			test("GET /brands/:id", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v1/brands/1",
-				});
-				expect(response.statusCode).toBe(400);
-			});
-			test("POST /brands", async () => {
-				const addBrandRequestBody = {
-					name: "test2",
-					slug: "test2",
-				} as const;
-				const response = await app.inject({
-					method: "POST",
-					url: "/v1/brands",
-					payload: addBrandRequestBody,
-				});
-				expect(response.statusCode).toBe(201);
-			});
+		describe("Empty database, user exists in users microservice", () => {
+			describe("PUT /users/[userId]/favorite-products/[productId]", () => {
+				const userId = "f6e78687-5049-462a-bfd5-66e35a622977";
+				const productId = "f6e78687-5049-462a-bfd5-66e35a622977";
+				test("Should return 404 (product not found)", async () => {
+					usersMicroserviceClientMock.getUserById = async function (): Promise<User> {
+						return Promise.resolve({
+							id: userId,
+							username: "username",
+							avatarUrl:
+								"https://static.wikia.nocookie.net/james-camerons-avatar/images/7/7c/Neytiri_infoboks.png/revision/latest",
+						});
+					};
 
-			test("GET /brands/:id with invalid UUID4", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v1/brands/1",
+					const response = await app.inject({
+						method: "PUT",
+						url: `/v1/users/${userId}/favorite-products/${productId}`,
+					});
+					expect(response.statusCode).toBe(404);
+					expect(response.json()).toEqual({
+						error: "Not Found",
+						message: `Product with id "${productId}" not found.`,
+						statusCode: 404,
+					});
 				});
-				expect(response.statusCode).toBe(400);
-			});
-			test("GET /brands/:id with valid UUID4", async () => {
-				const response = await app.inject({
-					method: "GET",
-					url: "/v1/brands/e8a7b311-367b-4105-a75d-929b930faafa",
-				});
-				expect(response.statusCode).toBe(404);
 			});
 		});
+		describe("Empty database, user does not exist in users microservice", () => {
+			describe("PUT /users/[userId]/favorite-products/[productId]", () => {
+				const userId = "f6e78687-5049-462a-bfd5-66e35a622977";
+				const productId = "f6e78687-5049-462a-bfd5-66e35a622977";
+				test("Should return 404 (user not found)", async () => {
+					usersMicroserviceClientMock.getUserById = async function (): Promise<User> {
+						throw new UsersMicroserviceClientUserWithGivenIdNotFoundError(userId);
+					};
 
-		describe("Database with one brand", () => {
-			test("GET /brands", async () => {
-				const addBrandRequestBody = {
-					name: "test2",
-					slug: "test2",
-				} as const;
-				await app.inject({
-					method: "POST",
-					url: "/v1/brands",
-					payload: addBrandRequestBody,
+					const response = await app.inject({
+						method: "PUT",
+						url: `/v1/users/${userId}/favorite-products/${productId}`,
+					});
+					expect(response.statusCode).toBe(404);
+					expect(response.json()).toEqual({
+						error: "Not Found",
+						message: `User with id "${userId}" not found.`,
+						statusCode: 404,
+					});
 				});
-				const response = await app.inject({
-					method: "GET",
-					url: "/v1/brands",
-				});
-				expect(response.statusCode).toBe(200);
-				const responseJson = response.json();
-				expect(responseJson).toHaveProperty("items");
-				expect(responseJson).toHaveProperty("meta");
-				expect(responseJson.meta).toEqual({
-					skip: 0,
-					take: 10,
-					totalItemsCount: 1,
-					pageItemsCount: 1,
-				});
-				expect(responseJson.items).toHaveLength(1);
-				expect(responseJson.items[0]).toHaveProperty("id");
-				expect(typeof responseJson.items[0].id).toBe("string");
-				expect(responseJson.items[0].id).not.toHaveLength(0);
-				expect((({id, ...rest}) => rest)(responseJson.items[0])).toEqual(addBrandRequestBody);
 			});
 		});
 	});

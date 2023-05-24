@@ -1,6 +1,13 @@
 import ProductEntity from "../../products/products_service/ProductEntity.js";
 
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn} from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	OneToMany,
+	JoinColumn,
+	type Relation,
+} from "typeorm";
 
 @Entity({name: "brands"})
 export default class BrandEntity {
@@ -14,5 +21,5 @@ export default class BrandEntity {
 
 	@OneToMany(() => ProductEntity, (product) => product.brand)
 	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
-	public readonly products!: readonly ProductEntity[];
+	public readonly products!: readonly Relation<ProductEntity>[];
 }
