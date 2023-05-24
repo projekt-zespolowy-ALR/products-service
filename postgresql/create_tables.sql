@@ -84,3 +84,10 @@ CREATE TABLE products_in_categories (
 	FOREIGN KEY (product_id) REFERENCES products (id),
 	FOREIGN KEY (category_id) REFERENCES categories (id)
 );
+
+CREATE TABLE user_favorite_products (
+	user_id UUID NOT NULL,
+	product_id UUID NOT NULL,
+	FOREIGN KEY (product_id) REFERENCES products (id),
+	PRIMARY KEY (user_id, product_id)
+);
