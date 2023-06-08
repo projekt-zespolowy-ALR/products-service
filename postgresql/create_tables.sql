@@ -58,7 +58,7 @@ CREATE TABLE ingredients_in_ingredients_lists (
 	FOREIGN KEY (ingredient_id) REFERENCES ingredients (id)
 );
 
-CREATE TABLE products_in_data_sources (
+CREATE TABLE offers (
 	product_id UUID NOT NULL,
 	data_source_id UUID NOT NULL,
 	reference_url TEXT,
