@@ -64,7 +64,7 @@ CREATE TABLE offers (
 	reference_url TEXT,
 	image_url TEXT,
 	description TEXT,
-	price NUMERIC(10, 2),
+	price_pln NUMERIC(10, 2),
 	PRIMARY KEY (product_id, data_source_id),
 	FOREIGN KEY (product_id) REFERENCES products (id),
 	FOREIGN KEY (data_source_id) REFERENCES data_sources (id)
