@@ -10,6 +10,7 @@ import {
 	type Relation,
 } from "typeorm";
 import UserFavoriteProductEntity from "../../user_favorite_products/user_favorite_products_service/UserFavoriteProductEntity.js";
+import {OfferEntity} from "../../offers/OfferEntity.js";
 
 @Entity({name: "products"})
 export default class ProductEntity {
@@ -36,4 +37,7 @@ export default class ProductEntity {
 
 	@OneToMany(() => UserFavoriteProductEntity, (userFavoriteProduct) => userFavoriteProduct.product)
 	public readonly userFavoriteProducts!: Relation<UserFavoriteProductEntity>[];
+
+	@OneToMany(() => OfferEntity, (offer) => offer.product)
+	public readonly offers!: Relation<OfferEntity>[];
 }
