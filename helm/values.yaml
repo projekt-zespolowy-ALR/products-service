@@ -16,6 +16,8 @@ image:
   dockerRegistry:
     host: null # required
 
+usersMicroserviceBaseUrl: null # required
+
 resources:
   requests:
     cpu: "50m"
