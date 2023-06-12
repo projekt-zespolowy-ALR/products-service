@@ -1,3 +1,7 @@
+CREATE DATABASE wlosiara_pl_products_service;
+\connect wlosiara_pl_products_service;
+
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 

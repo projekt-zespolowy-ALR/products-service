@@ -28,7 +28,7 @@ class AppConfig {
 
 	@Type(() => String)
 	@IsString()
-	public readonly POSTGRES_DATABASE: string = "postgres";
+	public readonly POSTGRES_DATABASE: string = "wlosiara_pl_products_service";
 
 	@Type(() => String)
 	@IsString()
