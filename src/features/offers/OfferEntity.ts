@@ -20,7 +20,7 @@ export class OfferEntity {
 	public readonly description!: string | null;
 
 	@Column({name: "price_pln", type: "numeric", precision: 10, scale: 2, nullable: true})
-	public readonly pricePln!: number | null;
+	public readonly pricePln!: string | null;
 
 	@ManyToOne(() => ProductEntity, (product) => product.offers)
 	@JoinColumn({referencedColumnName: "id", name: "product_id"})

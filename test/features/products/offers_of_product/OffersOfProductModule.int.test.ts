@@ -110,5 +110,81 @@ describe("OffersOfProductModule", () => {
 				});
 			});
 		});
+		describe("POST /products/:productId/offers", () => {
+			describe("if product with specified id exists, data source is valid and product has no offers and body is valid", () => {
+				const injectTestProduct = async () => {
+					const addBrandRequestBody = {
+						slug: "test",
+						name: "test",
+					} as const;
+					const brand = (
+						await app.inject({
+							method: "POST",
+							url: "/v1/brands",
+							payload: addBrandRequestBody,
+						})
+					).json();
+
+					const addProductRequestBody = {
+						brandId: brand.id,
+						slug: "test2",
+						name: "test2",
+						massKilograms: 0.5,
+						volumeLiters: 0.5,
+					} as const;
+
+					const response = await app.inject({
+						method: "POST",
+						url: "/v1/products",
+						payload: addProductRequestBody,
+					});
+					return response.json();
+				};
+				const injectTestDataSource = async () => {
+					const addDataSourceRequestBody = {
+						name: "test",
+						slug: "test",
+						url: "https://test.com",
+					} as const;
+
+					const response = await app.inject({
+						method: "POST",
+						url: "/v1/data-sources",
+						payload: addDataSourceRequestBody,
+					});
+					return response.json();
+				};
+				test("should return 200 HTTP status code and created offer", async () => {
+					const [product, dataSource] = await Promise.all([
+						injectTestProduct(),
+						injectTestDataSource(),
+					]);
+					const addOfferRequestBody = {
+						referenceUrl: "https://test.com",
+						imageUrl: "https://test.com",
+						description: "test",
+						pricePlnAsString: "1.00",
+					} as const;
+
+					const response = await app.inject({
+						method: "PUT",
+						url: `/v1/products/${product.id}/offers/${dataSource.id}`,
+						payload: addOfferRequestBody,
+					});
+
+					console.log(response);
+
+					expect(response.statusCode).toBe(200);
+					expect(JSON.parse(response.body)).toStrictEqual({
+						productId: product.id,
+						dataSourceId: dataSource.id,
+						referenceUrl: "https://test.com",
+						imageUrl: "https://test.com",
+						description: "test",
+						pricePlnAsString: "1.00",
+					});
+				});
+			});
+		});
 	});
 });
