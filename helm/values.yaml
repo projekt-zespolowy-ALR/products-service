@@ -8,6 +8,8 @@ postgresql:
   primary:
     initdb:
       scriptsConfigMap: "wlosiara-pl-products-service-postgresql-initdb-scripts"
+      user: "wlosiara-pl-products-service"
+      password: null # required
     resources:
       requests:
         cpu: "50m"
