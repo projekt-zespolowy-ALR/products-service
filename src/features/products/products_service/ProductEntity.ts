@@ -13,6 +13,7 @@ import {
 import UserFavoriteProductEntity from "../../user_favorite_products/user_favorite_products_service/UserFavoriteProductEntity.js";
 import {OfferEntity} from "../../offers/OfferEntity.js";
 import {IngredientListEntity} from "../ingredients_of_product/ingredients_of_product_service/IngredientListEntity.js";
+import {ProductInCategoryEntity} from "../categories_of_product/categories_of_product_service/ProductInCategoryEntity.js";
 
 @Entity({name: "products"})
 export default class ProductEntity {
@@ -45,4 +46,7 @@ export default class ProductEntity {
 
 	@OneToOne(() => IngredientListEntity, (ingredientList) => ingredientList.product)
 	public readonly ingredientList!: Relation<IngredientListEntity> | null;
+
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product)
+	public readonly productInCategories!: Relation<ProductInCategoryEntity>[];
 }

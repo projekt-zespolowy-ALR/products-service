@@ -6,12 +6,14 @@ import ProductEntity from "../products_service/ProductEntity.js";
 import {OfferEntity} from "../../offers/OfferEntity.js";
 import {OffersOfProductModule} from "../offers_of_product/offers_of_product_module/OffersOfProductModule.js";
 import {IngredientsOfProductModule} from "../ingredients_of_product/ingredients_of_product_module/IngredientsOfProductModule.js";
+import {CategoriesOfProductModule} from "../categories_of_product/categories_of_product_module/CategoriesOfProductModule.js";
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([ProductEntity, OfferEntity]),
 		OffersOfProductModule,
 		IngredientsOfProductModule,
+		CategoriesOfProductModule,
 	],
 	controllers: [ProductsController],
 	providers: [ProductsService],
