@@ -1,7 +1,6 @@
 import {Test} from "@nestjs/testing";
 import {describe, test, expect, beforeEach, afterEach, beforeAll} from "@jest/globals";
 import type {NestFastifyApplication} from "@nestjs/platform-fastify";
-import IngredientsModule from "../../../src/features/ingredients/ingredients_module/IngredientsModule.js";
 import * as Testcontainers from "testcontainers";
 import AppOrmModule from "../../../src/app_orm/AppOrmModule.js";
 import AppConfig from "../../../src/app_config/AppConfig.js";
@@ -11,6 +10,7 @@ import * as Fs from "fs/promises";
 import testsConfig from "../../app_config/testsConfig.js";
 import generatePostgresqlPassword from "../../utils/generatePostgresqlPassword.js";
 import createTestingApp from "../../utils/createTestingApp.js";
+import FeaturesModule from "../../../src/features/FeaturesModule.js";
 
 describe("IngredientsModule", () => {
 	let postgresqlContainer: Testcontainers.StartedPostgreSqlContainer;
@@ -58,7 +58,7 @@ describe("IngredientsModule", () => {
 			}),
 		});
 		const appModule = await Test.createTestingModule({
-			imports: [IngredientsModule, AppOrmModule, AppConfigModule],
+			imports: [FeaturesModule, AppOrmModule, AppConfigModule],
 		}).compile();
 
 		app = await createTestingApp(appModule);

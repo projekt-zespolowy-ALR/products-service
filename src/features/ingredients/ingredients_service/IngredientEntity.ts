@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, type Relation} from "typeorm";
+import {IngredientInIngredientListEntity} from "../../products/ingredients_of_product/ingredients_of_product_service/IngredientInIngredientListEntity.js";
 
 @Entity({name: "ingredients"})
 export default class IngredientEntity {
@@ -9,4 +10,10 @@ export default class IngredientEntity {
 
 	@Column({name: "slug", type: "text"})
 	public readonly slug!: string;
+
+	@OneToMany(
+		() => IngredientInIngredientListEntity,
+		(ingredientInList) => ingredientInList.ingredient
+	)
+	public readonly ingredientsInLists!: Relation<IngredientInIngredientListEntity>[];
 }

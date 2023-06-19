@@ -18,24 +18,26 @@ CREATE TABLE brands (
 );
 
 
-CREATE TABLE ingredients_lists (
-	id UUID DEFAULT uuid_generate_v4() NOT NULL,
-	-- if there is no ingredients list attached to a product
-	-- then we consider the list to be unknown
-	PRIMARY KEY (id)
-);
 
 CREATE TABLE products (
 	id UUID DEFAULT uuid_generate_v4() NOT NULL,
 	name TEXT,
 	slug TEXT NOT NULL UNIQUE,
 	brand_id UUID,
-	ingredients_list_id UUID,
 	mass_kilograms DOUBLE PRECISION, -- in kilograms
 	volume_liters DOUBLE PRECISION, -- in liters
 	PRIMARY KEY (id),
-	FOREIGN KEY (brand_id) REFERENCES brands (id),
-	FOREIGN KEY (ingredients_list_id) REFERENCES ingredients_lists (id)
+	FOREIGN KEY (brand_id) REFERENCES brands (id)
+);
+
+
+CREATE TABLE ingredients_lists (
+	id UUID DEFAULT uuid_generate_v4() NOT NULL,
+	product_id UUID NOT NULL UNIQUE,
+	-- if there is no ingredients list attached to a product
+	-- then we consider the list to be unknown
+	PRIMARY KEY (id),
+	FOREIGN KEY (product_id) REFERENCES products (id)
 );
 
 
@@ -53,6 +55,7 @@ CREATE TABLE ingredients (
 CREATE TABLE ingredients_in_ingredients_lists (
 	ingredients_list_id UUID NOT NULL,
 	ingredient_id UUID NOT NULL,
+	order_in_list INTEGER NOT NULL,
 	PRIMARY KEY (ingredients_list_id, ingredient_id),
 	FOREIGN KEY (ingredients_list_id) REFERENCES ingredients_lists (id),
 	FOREIGN KEY (ingredient_id) REFERENCES ingredients (id)
