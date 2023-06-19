@@ -8,9 +8,11 @@ import {
 	JoinColumn,
 	OneToMany,
 	type Relation,
+	OneToOne,
 } from "typeorm";
 import UserFavoriteProductEntity from "../../user_favorite_products/user_favorite_products_service/UserFavoriteProductEntity.js";
 import {OfferEntity} from "../../offers/OfferEntity.js";
+import {IngredientListEntity} from "../ingredients_of_product/ingredients_of_product_service/IngredientListEntity.js";
 
 @Entity({name: "products"})
 export default class ProductEntity {
@@ -40,4 +42,7 @@ export default class ProductEntity {
 
 	@OneToMany(() => OfferEntity, (offer) => offer.product)
 	public readonly offers!: Relation<OfferEntity>[];
+
+	@OneToOne(() => IngredientListEntity, (ingredientList) => ingredientList.product)
+	public readonly ingredientList!: Relation<IngredientListEntity> | null;
 }
