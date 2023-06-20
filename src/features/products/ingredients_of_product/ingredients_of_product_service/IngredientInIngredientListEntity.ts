@@ -1,4 +1,4 @@
-import {Entity, Column, ManyToOne, JoinColumn, PrimaryColumn, Unique} from "typeorm";
+import {Entity, Column, ManyToOne, JoinColumn, PrimaryColumn, Unique, type Relation} from "typeorm";
 import {IngredientListEntity} from "./IngredientListEntity.js";
 import IngredientEntity from "../../../ingredients/ingredients_service/IngredientEntity.js";
 
@@ -13,11 +13,11 @@ export class IngredientInIngredientListEntity {
 
 	@ManyToOne(() => IngredientListEntity, (ingredientList) => ingredientList.ingredientsInList)
 	@JoinColumn({name: "ingredients_list_id", referencedColumnName: "id"})
-	public ingredientList!: IngredientListEntity;
+	public ingredientList!: Relation<IngredientListEntity>;
 
 	@ManyToOne(() => IngredientEntity, (ingredient) => ingredient.ingredientsInLists)
 	@JoinColumn({name: "ingredient_id", referencedColumnName: "id"})
-	public ingredient!: IngredientEntity;
+	public ingredient!: Relation<IngredientEntity>;
 
 	@Column({type: "integer", name: "order_in_list", nullable: false})
 	public orderInList!: number;
