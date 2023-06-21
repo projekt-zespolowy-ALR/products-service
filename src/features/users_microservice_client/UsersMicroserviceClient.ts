@@ -12,7 +12,7 @@ export default class UsersMicroserviceClient {
 	}
 
 	public async getUserById(userId: string): Promise<User> {
-		return await fetch(`${this.appConfig.USERS_MICROSERVICE_BASE_URL}/v1/users/${userId}`)
+		return await fetch(`${this.appConfig.USERS_MICROSERVICE_BASE_URL}/users/${userId}`)
 			.catch(() => {
 				throw new UsersMicroserviceClientInternalError(`Failed to get user with id "${userId}".`);
 			})
