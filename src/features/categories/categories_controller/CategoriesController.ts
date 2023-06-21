@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Delete,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
@@ -71,5 +72,26 @@ export default class CategoriesController {
 		return await this.categoriesService.createCategory(
 			payloadifyCreateCategoryRequestBody(createCategoryRequestBody)
 		);
+	}
+
+	@Delete("/categories/:categoryId")
+	public async deleteCategoryById(
+		@Param(
+			"categoryId",
+			new ParseUUIDPipe({
+				version: "4",
+			})
+		)
+		categoryId: string
+	): Promise<boolean> {
+		try {
+			const targetCategory = await this.categoriesService.deleteCategoryById(categoryId);
+			return targetCategory;
+		} catch (error) {
+			if (error instanceof CategoriesServiceCategoryWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Category with id "${categoryId}" not found`);
+			}
+			throw error;
+		}
 	}
 }

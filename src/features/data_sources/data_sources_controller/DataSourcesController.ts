@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Delete,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
@@ -71,5 +72,26 @@ export default class DataSourcesController {
 		return await this.dataSourcesService.createDataSource(
 			payloadifyCreateDataSourceRequestBody(createDataSourceRequestBody)
 		);
+	}
+
+	@Delete("/data-sources/:dataSourceId")
+	public async deleteDataSourceById(
+		@Param(
+			"dataSourceId",
+			new ParseUUIDPipe({
+				version: "4",
+			})
+		)
+		dataSourceId: string
+	): Promise<boolean> {
+		try {
+			const targetDataSource = await this.dataSourcesService.deleteDataSourceById(dataSourceId);
+			return targetDataSource;
+		} catch (error) {
+			if (error instanceof DataSourcesServiceDataSourceWithGivenIdNotFoundError) {
+				throw new NotFoundException(`DataSource with id "${dataSourceId}" not found`);
+			}
+			throw error;
+		}
 	}
 }

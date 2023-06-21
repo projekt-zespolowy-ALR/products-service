@@ -33,4 +33,16 @@ export default class BrandsService {
 	public async createBrand(createBrandPayload: CreateBrandPayload): Promise<Brand> {
 		return deentityifyBrandEntity(await this.brandsRepository.save(createBrandPayload));
 	}
+
+	public async deleteBrandById(id: string): Promise<boolean> {
+		try {
+			await this.brandsRepository.delete({id});
+			return true;
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new BrandsServiceBrandWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
+	}
 }

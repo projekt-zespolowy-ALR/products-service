@@ -35,4 +35,16 @@ export default class CategoriesService {
 	public async createCategory(createCategoryPayload: CreateCategoryPayload): Promise<Category> {
 		return deentityifyCategoryEntity(await this.categoriesRepository.save(createCategoryPayload));
 	}
+
+	public async deleteCategoryById(id: string): Promise<boolean> {
+		try {
+			await this.categoriesRepository.delete({id});
+			return true;
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new CategoriesServiceCategoryWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
+	}
 }

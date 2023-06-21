@@ -39,4 +39,16 @@ export default class DataSourcesService {
 			await this.dataSourcesRepository.save(createDataSourcePayload)
 		);
 	}
+
+	public async deleteDataSourceById(id: string): Promise<boolean> {
+		try {
+			await this.dataSourcesRepository.delete({id});
+			return true;
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new DataSourcesServiceDataSourceWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
+	}
 }

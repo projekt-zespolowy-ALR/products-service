@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Delete,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
@@ -71,5 +72,26 @@ export default class ProductsController {
 		return await this.productsService.createProduct(
 			payloadifyCreateProductRequestBody(createProductRequestBody)
 		);
+	}
+
+	@Delete("/products/:productId")
+	public async deleteProductById(
+		@Param(
+			"productId",
+			new ParseUUIDPipe({
+				version: "4",
+			})
+		)
+		productId: string
+	): Promise<boolean> {
+		try {
+			const targetProduct = await this.productsService.deleteProductById(productId);
+			return targetProduct;
+		} catch (error) {
+			if (error instanceof ProductsServiceProductWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Product with id "${productId}" not found`);
+			}
+			throw error;
+		}
 	}
 }
