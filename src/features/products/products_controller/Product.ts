@@ -7,7 +7,7 @@ export default class Product {
 
 	public readonly volumeLiters!: number | null;
 
-	public readonly name!: string;
+	public readonly name!: string | null;
 
-	public readonly brandId!: string;
+	public readonly brandId!: string | null;
 }
