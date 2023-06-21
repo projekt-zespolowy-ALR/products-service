@@ -5,8 +5,8 @@ import {IngredientInIngredientListEntity} from "../../products/ingredients_of_pr
 export default class IngredientEntity {
 	@PrimaryGeneratedColumn("uuid", {name: "id"})
 	public readonly id!: string;
-	@Column({name: "latin_name", type: "text"})
-	public readonly latinName!: string;
+	@Column({name: "latin_name", type: "text", nullable: true})
+	public readonly latinName!: string | null;
 
 	@Column({name: "slug", type: "text"})
 	public readonly slug!: string;

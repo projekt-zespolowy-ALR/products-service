@@ -5,6 +5,7 @@ import IngredientsModule from "./ingredients/ingredients_module/IngredientsModul
 import ProductsModule from "./products/products_module/ProductsModule.js";
 import DataSourcesModule from "./data_sources/data_sources_module/DataSourcesModule.js";
 import UserFavoriteProductsModule from "./user_favorite_products/user_favorite_products_module/UserFavoriteProductsModule.js";
+import DumpModule from "./dump/DumpModule.js";
 
 @Module({
 	imports: [
@@ -14,6 +15,7 @@ import UserFavoriteProductsModule from "./user_favorite_products/user_favorite_p
 		ProductsModule,
 		DataSourcesModule,
 		UserFavoriteProductsModule,
+		DumpModule,
 	],
 	controllers: [],
 	providers: [],

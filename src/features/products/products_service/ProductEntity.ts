@@ -28,15 +28,15 @@ export default class ProductEntity {
 	@Column({name: "volume_liters", type: "double precision", nullable: true})
 	public readonly volumeLiters!: number | null;
 
-	@Column({name: "name", type: "text"})
-	public readonly name!: string;
+	@Column({name: "name", type: "text", nullable: true})
+	public readonly name!: string | null;
 
 	@ManyToOne(() => BrandEntity, (brand) => brand.products)
 	@JoinColumn({referencedColumnName: "id", name: "brand_id"})
-	public readonly brand!: Relation<BrandEntity>;
+	public readonly brand!: Relation<BrandEntity> | null;
 
-	@Column({name: "brand_id", type: "uuid"})
-	public readonly brandId!: string;
+	@Column({name: "brand_id", type: "uuid", nullable: true})
+	public readonly brandId!: string | null;
 
 	@OneToMany(() => UserFavoriteProductEntity, (userFavoriteProduct) => userFavoriteProduct.product)
 	public readonly userFavoriteProducts!: Relation<UserFavoriteProductEntity>[];
