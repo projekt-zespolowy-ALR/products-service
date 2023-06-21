@@ -17,7 +17,7 @@ export default class ProductsService {
 	) {
 		this.productsRepository = productsRepository;
 	}
-	public async getProducts(pagingOptions: PagingOptions): Promise<Page<Product>> {
+	public async getProducts(pagingOptions: PagingOptions, findOptions = {}): Promise<Page<Product>> {
 		return (await paginatedFindAndCount(this.productsRepository, pagingOptions)).map(
 			deentityifyProductEntity
 		);
@@ -34,5 +34,17 @@ export default class ProductsService {
 	}
 	public async createProduct(createProductPayload: CreateProductPayload): Promise<Product> {
 		return deentityifyProductEntity(await this.productsRepository.save(createProductPayload));
+	}
+
+	public async deleteProductById(id: string): Promise<boolean> {
+		try {
+			await this.productsRepository.delete({id});
+			return true;
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new ProductsServiceProductWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
 	}
 }

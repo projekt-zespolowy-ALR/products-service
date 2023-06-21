@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Delete,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
@@ -71,5 +72,26 @@ export default class IngredientsController {
 		return await this.ingredientsService.createIngredient(
 			payloadifyCreateIngredientRequestBody(createIngredientRequestBody)
 		);
+	}
+
+	@Delete("/ingredients/:ingredientId")
+	public async deleteIngredientById(
+		@Param(
+			"ingredientId",
+			new ParseUUIDPipe({
+				version: "4",
+			})
+		)
+		ingredientId: string
+	): Promise<boolean> {
+		try {
+			const targetIngredient = await this.ingredientsService.deleteIngredientById(ingredientId);
+			return targetIngredient;
+		} catch (error) {
+			if (error instanceof IngredientsServiceIngredientWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Ingredient with id "${ingredientId}" not found`);
+			}
+			throw error;
+		}
 	}
 }

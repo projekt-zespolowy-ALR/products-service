@@ -2,6 +2,7 @@ import {
 	Body,
 	Controller,
 	Get,
+	Delete,
 	NotFoundException,
 	Param,
 	ParseUUIDPipe,
@@ -71,5 +72,26 @@ export default class BrandsController {
 		return await this.brandsService.createBrand(
 			payloadifyCreateBrandRequestBody(createBrandRequestBody)
 		);
+	}
+
+	@Delete("/brands/:brandId")
+	public async deleteBrandById(
+		@Param(
+			"brandId",
+			new ParseUUIDPipe({
+				version: "4",
+			})
+		)
+		brandId: string
+	): Promise<boolean> {
+		try {
+			const targetBrand = await this.brandsService.deleteBrandById(brandId);
+			return targetBrand;
+		} catch (error) {
+			if (error instanceof BrandsServiceBrandWithGivenIdNotFoundError) {
+				throw new NotFoundException(`Brand with id "${brandId}" not found`);
+			}
+			throw error;
+		}
 	}
 }

@@ -39,4 +39,16 @@ export default class IngredientsService {
 			await this.ingredientsRepository.save(createIngredientPayload)
 		);
 	}
+
+	public async deleteIngredientById(id: string): Promise<boolean> {
+		try {
+			await this.ingredientsRepository.delete({id});
+			return true;
+		} catch (error) {
+			if (error instanceof EntityNotFoundError) {
+				throw new IngredientsServiceIngredientWithGivenIdNotFoundError(id);
+			}
+			throw error;
+		}
+	}
 }
