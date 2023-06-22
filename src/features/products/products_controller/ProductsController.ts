@@ -51,6 +51,14 @@ export default class ProductsController {
 						field: "price",
 						direction: "DESC",
 					},
+					"name-asc": {
+						field: "name",
+						direction: "ASC",
+					},
+					"name-desc": {
+						field: "name",
+						direction: "DESC",
+					},
 					"": null,
 				} as const
 			)[sort ?? ""] ?? null
