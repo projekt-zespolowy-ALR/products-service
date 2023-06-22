@@ -19,7 +19,7 @@ export class IngredientListEntity {
 	@Column({type: "uuid", unique: true, nullable: false, name: "product_id"})
 	public productId!: string;
 
-	@OneToOne(() => ProductEntity, (product) => product.ingredientList)
+	@OneToOne(() => ProductEntity, (product) => product.ingredientList, {onDelete: "CASCADE"})
 	@JoinColumn({name: "product_id", referencedColumnName: "id"})
 	public product!: Relation<ProductEntity>;
 

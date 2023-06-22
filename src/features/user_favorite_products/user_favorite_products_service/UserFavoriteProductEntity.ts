@@ -16,7 +16,9 @@ export default class UserFavoriteProductEntity {
 	@PrimaryColumn({name: "product_id", type: "uuid"})
 	public readonly productId!: string;
 
-	@ManyToOne(() => ProductEntity, (productEntity) => productEntity.userFavoriteProducts)
+	@ManyToOne(() => ProductEntity, (productEntity) => productEntity.userFavoriteProducts, {
+		onDelete: "CASCADE",
+	})
 	@JoinColumn({name: "product_id", referencedColumnName: "id"})
 	public readonly product!: Relation<ProductEntity>;
 }

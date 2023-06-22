@@ -11,7 +11,9 @@ export class IngredientInIngredientListEntity {
 	@PrimaryColumn({type: "uuid", name: "ingredient_id"})
 	public ingredientId!: string;
 
-	@ManyToOne(() => IngredientListEntity, (ingredientList) => ingredientList.ingredientsInList)
+	@ManyToOne(() => IngredientListEntity, (ingredientList) => ingredientList.ingredientsInList, {
+		onDelete: "CASCADE",
+	})
 	@JoinColumn({name: "ingredients_list_id", referencedColumnName: "id"})
 	public ingredientList!: Relation<IngredientListEntity>;
 
