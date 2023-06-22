@@ -23,7 +23,7 @@ export default class ProductsService {
 		pagingOptions: PagingOptions,
 		search: string | null,
 		sortField: null | {
-			field: "offer.price" | "product.name";
+			field: "offer.pricePln" | "product.name";
 			direction: "ASC" | "DESC";
 		}
 	): Promise<Page<Product>> {
@@ -55,7 +55,7 @@ export default class ProductsService {
 					await Promise.resolve(
 						this.productsRepository
 							.createQueryBuilder("product")
-							.leftJoin("product.offers", "offer")
+							.leftJoinAndSelect("product.offers", "offer")
 					)
 						.then((qb) =>
 							search === null ? qb : qb.where("product.name LIKE :search", {search: `%${search}%`})
