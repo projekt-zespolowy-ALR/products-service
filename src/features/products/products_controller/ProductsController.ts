@@ -44,19 +44,19 @@ export default class ProductsController {
 			(
 				{
 					"price-asc": {
-						field: "offers.price",
+						field: "offer.price",
 						direction: "ASC",
 					},
 					"price-desc": {
-						field: "offers.price",
+						field: "offer.price",
 						direction: "DESC",
 					},
 					"name-asc": {
-						field: "name",
+						field: "product.name",
 						direction: "ASC",
 					},
 					"name-desc": {
-						field: "name",
+						field: "product.name",
 						direction: "DESC",
 					},
 					"": null,

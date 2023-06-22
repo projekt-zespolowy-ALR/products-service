@@ -23,7 +23,7 @@ export default class ProductsService {
 		pagingOptions: PagingOptions,
 		search: string | null,
 		sortField: null | {
-			field: "offers.price" | "name";
+			field: "offer.price" | "product.name";
 			direction: "ASC" | "DESC";
 		}
 	): Promise<Page<Product>> {
@@ -61,9 +61,7 @@ export default class ProductsService {
 							search === null ? qb : qb.where("product.name LIKE :search", {search: `%${search}%`})
 						)
 						.then((qb) =>
-							sortField === null
-								? qb
-								: qb.orderBy(`product.${sortField.field}`, sortField.direction)
+							sortField === null ? qb : qb.orderBy(sortField.field, sortField.direction)
 						),
 					pagingOptions
 				)
