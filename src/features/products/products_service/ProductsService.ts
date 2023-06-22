@@ -10,6 +10,7 @@ import type Product from "../products_controller/Product.js";
 import deentityifyProductEntity from "./deentityifyProductEntity.js";
 import type CreateProductPayload from "./CreateProductPayload.js";
 import ProductsServiceProductWithGivenIdNotFoundError from "./ProductsServiceProductWithGivenIdNotFoundError.js";
+import paginateSelectQueryBuilder from "../../../paging/paginateSelectQueryBuilder.js";
 @Injectable()
 export default class ProductsService {
 	private readonly productsRepository: Repository<ProductEntity>;
@@ -22,34 +23,52 @@ export default class ProductsService {
 		pagingOptions: PagingOptions,
 		search: string | null,
 		sortField: null | {
-			field: "price" | "name";
+			field: "offers.price" | "name";
 			direction: "ASC" | "DESC";
 		}
 	): Promise<Page<Product>> {
 		return (
-			await paginatedFindAndCount(this.productsRepository, pagingOptions, {
-				where: {
-					...(search !== null && {
-						name: Like(`%${search}%`),
-					}),
-				},
-				order: {
-					...(sortField !== null &&
-						(
-							{
-								"price": {
-									"offers": {
-										"pricePln": sortField.direction,
-									},
-								},
-								"name": {
-									"name": sortField.direction,
-								},
-							} as const
-						)[sortField.field]),
-				},
-			})
-		).map(deentityifyProductEntity);
+			// await paginatedFindAndCount(this.productsRepository, pagingOptions, {
+			// 	where: {
+			// 		...(search !== null && {
+			// 			name: Like(`%${search}%`),
+			// 		}),
+			// 	},
+			// 	order: {
+			// 		...(sortField !== null &&
+			// 			(
+			// 				{
+			// 					"price": {
+			// 						"offers": {
+			// 							"pricePln": sortField.direction,
+			// 						},
+			// 					},
+			// 					"name": {
+			// 						"name": sortField.direction,
+			// 					},
+			// 				} as const
+			// 			)[sortField.field]),
+			// 	},
+			// })
+			(
+				await paginateSelectQueryBuilder(
+					await Promise.resolve(
+						this.productsRepository
+							.createQueryBuilder("product")
+							.leftJoin("product.offers", "offer")
+					)
+						.then((qb) =>
+							search === null ? qb : qb.where("product.name LIKE :search", {search: `%${search}%`})
+						)
+						.then((qb) =>
+							sortField === null
+								? qb
+								: qb.orderBy(`product.${sortField.field}`, sortField.direction)
+						),
+					pagingOptions
+				)
+			).map(deentityifyProductEntity)
+		);
 	}
 	public async getProductById(id: string): Promise<Product> {
 		try {
