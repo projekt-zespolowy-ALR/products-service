@@ -38,7 +38,13 @@ export default class ProductEntity {
 	@Column({name: "brand_id", type: "uuid", nullable: true})
 	public readonly brandId!: string | null;
 
-	@OneToMany(() => UserFavoriteProductEntity, (userFavoriteProduct) => userFavoriteProduct.product)
+	@OneToMany(
+		() => UserFavoriteProductEntity,
+		(userFavoriteProduct) => userFavoriteProduct.product,
+		{
+			onDelete: "SET NULL",
+		}
+	)
 	public readonly userFavoriteProducts!: Relation<UserFavoriteProductEntity>[];
 
 	@OneToMany(() => OfferEntity, (offer) => offer.product)
@@ -49,6 +55,8 @@ export default class ProductEntity {
 	})
 	public readonly ingredientList!: Relation<IngredientListEntity> | null;
 
-	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product)
+	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product, {
+		onDelete: "SET NULL",
+	})
 	public readonly productInCategories!: Relation<ProductInCategoryEntity>[];
 }
