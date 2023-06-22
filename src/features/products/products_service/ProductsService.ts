@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {Injectable} from "@nestjs/common";
-import {EntityNotFoundError, Repository} from "typeorm";
+import {EntityNotFoundError, Like, Repository} from "typeorm";
 import ProductEntity from "./ProductEntity.js";
 import {InjectRepository} from "@nestjs/typeorm";
 import type Page from "../../../paging/Page.js";
@@ -18,10 +18,19 @@ export default class ProductsService {
 	) {
 		this.productsRepository = productsRepository;
 	}
-	public async getProducts(pagingOptions: PagingOptions, findOptions = {}): Promise<Page<Product>> {
-		return (await paginatedFindAndCount(this.productsRepository, pagingOptions)).map(
-			deentityifyProductEntity
-		);
+	public async getProducts(
+		pagingOptions: PagingOptions,
+		search: string | null
+	): Promise<Page<Product>> {
+		return (
+			await paginatedFindAndCount(this.productsRepository, pagingOptions, {
+				where: {
+					...(search !== null && {
+						name: Like(`%${search}%`),
+					}),
+				},
+			})
+		).map(deentityifyProductEntity);
 	}
 	public async getProductById(id: string): Promise<Product> {
 		try {
