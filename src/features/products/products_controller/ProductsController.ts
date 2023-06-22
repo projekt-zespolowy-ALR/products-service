@@ -32,9 +32,11 @@ export default class ProductsController {
 				whitelist: true, // Do not put other query parameters into the object
 			})
 		)
-		pagingOptions: PagingOptions
+		pagingOptions: PagingOptions,
+		@Query("search")
+		search: string | undefined
 	): Promise<Page<Product>> {
-		return await this.productsService.getProducts(pagingOptions);
+		return await this.productsService.getProducts(pagingOptions, search ?? null);
 	}
 
 	@Get("/products/:productId")
