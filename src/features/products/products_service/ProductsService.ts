@@ -22,7 +22,7 @@ export default class ProductsService {
 		pagingOptions: PagingOptions,
 		search: string | null,
 		sortField: null | {
-			field: "price";
+			field: "price" | "name";
 			direction: "ASC" | "DESC";
 		}
 	): Promise<Page<Product>> {
@@ -35,11 +35,18 @@ export default class ProductsService {
 				},
 				order: {
 					...(sortField !== null &&
-						sortField.field === "price" && {
-							"offers": {
-								"pricePln": sortField.direction,
-							},
-						}),
+						(
+							{
+								"price": {
+									"offers": {
+										"pricePln": sortField.direction,
+									},
+								},
+								"name": {
+									"name": sortField.direction,
+								},
+							} as const
+						)[sortField.field]),
 				},
 			})
 		).map(deentityifyProductEntity);
