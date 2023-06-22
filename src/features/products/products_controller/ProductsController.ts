@@ -34,9 +34,27 @@ export default class ProductsController {
 		)
 		pagingOptions: PagingOptions,
 		@Query("search")
-		search: string | undefined
+		search: string | undefined,
+		@Query("sort")
+		sort: string | undefined
 	): Promise<Page<Product>> {
-		return await this.productsService.getProducts(pagingOptions, search ?? null);
+		return await this.productsService.getProducts(
+			pagingOptions,
+			search ?? null,
+			(
+				{
+					"price-asc": {
+						field: "price",
+						direction: "ASC",
+					},
+					"price-desc": {
+						field: "price",
+						direction: "DESC",
+					},
+					"": null,
+				} as const
+			)[sort ?? ""] ?? null
+		);
 	}
 
 	@Get("/products/:productId")

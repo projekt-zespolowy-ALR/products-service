@@ -20,7 +20,11 @@ export default class ProductsService {
 	}
 	public async getProducts(
 		pagingOptions: PagingOptions,
-		search: string | null
+		search: string | null,
+		sortField: null | {
+			field: "price";
+			direction: "ASC" | "DESC";
+		}
 	): Promise<Page<Product>> {
 		return (
 			await paginatedFindAndCount(this.productsRepository, pagingOptions, {
@@ -28,6 +32,14 @@ export default class ProductsService {
 					...(search !== null && {
 						name: Like(`%${search}%`),
 					}),
+				},
+				order: {
+					...(sortField !== null &&
+						sortField.field === "price" && {
+							"offers": {
+								"pricePln": sortField.direction,
+							},
+						}),
 				},
 			})
 		).map(deentityifyProductEntity);
