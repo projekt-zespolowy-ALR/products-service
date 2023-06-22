@@ -44,7 +44,9 @@ export default class ProductEntity {
 	@OneToMany(() => OfferEntity, (offer) => offer.product)
 	public readonly offers!: Relation<OfferEntity>[];
 
-	@OneToOne(() => IngredientListEntity, (ingredientList) => ingredientList.product)
+	@OneToOne(() => IngredientListEntity, (ingredientList) => ingredientList.product, {
+		onDelete: "SET NULL",
+	})
 	public readonly ingredientList!: Relation<IngredientListEntity> | null;
 
 	@OneToMany(() => ProductInCategoryEntity, (productInCategory) => productInCategory.product)

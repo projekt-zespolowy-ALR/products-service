@@ -22,11 +22,11 @@ export class OfferEntity {
 	@Column({name: "price_pln", type: "numeric", precision: 10, scale: 2, nullable: true})
 	public readonly pricePln!: string | null;
 
-	@ManyToOne(() => ProductEntity, (product) => product.offers)
+	@ManyToOne(() => ProductEntity, (product) => product.offers, {onDelete: "CASCADE"})
 	@JoinColumn({referencedColumnName: "id", name: "product_id"})
 	public readonly product!: Relation<ProductEntity>;
 
-	@ManyToOne(() => DataSourceEntity, (dataSource) => dataSource.offers)
+	@ManyToOne(() => DataSourceEntity, (dataSource) => dataSource.offers, {onDelete: "CASCADE"})
 	@JoinColumn({referencedColumnName: "id", name: "data_source_id"})
 	public readonly dataSource!: Relation<DataSourceEntity>;
 }

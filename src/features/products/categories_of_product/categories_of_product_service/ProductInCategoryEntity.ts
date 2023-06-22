@@ -10,14 +10,18 @@ export class ProductInCategoryEntity {
 	@PrimaryColumn({name: "category_id", type: "uuid"})
 	public readonly categoryId!: string;
 
-	@ManyToOne(() => ProductEntity, (productEntity) => productEntity.productInCategories)
+	@ManyToOne(() => ProductEntity, (productEntity) => productEntity.productInCategories, {
+		onDelete: "CASCADE",
+	})
 	@JoinColumn({
 		name: "product_id",
 		referencedColumnName: "id",
 	})
 	public readonly product!: Relation<ProductEntity>;
 
-	@ManyToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.productInCategories)
+	@ManyToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.productInCategories, {
+		onDelete: "CASCADE",
+	})
 	@JoinColumn({
 		name: "category_id",
 		referencedColumnName: "id",
